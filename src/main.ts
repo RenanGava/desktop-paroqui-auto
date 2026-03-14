@@ -1,7 +1,8 @@
 import { app, BrowserWindow } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
-import { initPuppeteer } from './puppeteer';
+import { PupAutomation } from './puppeteer';
+import fieis from './services/fieis';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -15,8 +16,12 @@ const createWindow = async () => {
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      contextIsolation:  true,
+      nodeIntegration: false
     },
   });
+
+  await PupAutomation.getInstance()
 
 
 
@@ -29,8 +34,6 @@ const createWindow = async () => {
     );
   }
 
-  await initPuppeteer()
-
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
 };
@@ -38,7 +41,10 @@ const createWindow = async () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.on('ready', async () => {
+  createWindow()
+  fieis()
+});
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits

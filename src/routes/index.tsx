@@ -1,5 +1,6 @@
 import { Route, Routes, HashRouter, Link } from "react-router";
 import React from "react";
+import { Dash } from "../pages/Dash";
 
 // eslint-disable-next-line import/no-unresolved
 
@@ -13,7 +14,7 @@ export function MainRouter() {
         <Link to={"/dashboard"}>Dashboard</Link>
       </div>
       <Routes>
-        
+        <Route element={ <Dash/>} path="/" index={true}/>
       </Routes>
     </HashRouter>
   );

@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.1.4",
+    "axios": "^1.13.6",
     "electron-squirrel-startup": "^1.0.1",
     "puppeteer": "^24.39.0",
     "puppeteer-core": "^24.39.0",

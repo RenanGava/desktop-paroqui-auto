@@ -1,19 +1,67 @@
-import puppeteer from 'puppeteer'
+import puppeteer, { Browser, Page } from 'puppeteer'
 
 
 
-export async function initPuppeteer(){
+class PupAutomation {
 
-    const browser = await puppeteer.launch({
-        headless: false,
-        args: ['--no-sandbox']
-    })
+    private static INSTANCE: PupAutomation;
+    private page: Page | null;
+    private browser: Browser | null;
 
-    const page = await browser.newPage()
-    await page.goto('http://www.google.com')
-    await page.type('textarea[id="APjFqb"]', 'Ola mundo kkkkkkk')
+    public static async getInstance() {
 
-    console.log(page.url());
-    
+        if (!PupAutomation.INSTANCE) {
+            console.log('Create Instance');
+            
+            PupAutomation.INSTANCE = new PupAutomation()
+
+            return PupAutomation.INSTANCE
+        }
+
+        console.log('Recover Instance');
+        return PupAutomation.INSTANCE
+    }
+
+
+    async getPup() {
+
+        if (!this.browser && !this.page) {
+            this.browser = await puppeteer.launch({
+                headless: false,
+                args: [
+                    '--no-sandbox',
+                    
+                ]
+            })
+
+
+            const pages = await this.browser.pages()
+            this.page = pages[0]
+
+            return {
+                page: this.page,
+                browser: this.browser
+            }
+        }
+
+        return {
+            page: this.page,
+            browser: this.browser
+        }
+
+    }
+
+
+    async closeAllTabs(){
+        const pages = await this.browser.pages()
+
+        pages.forEach(page => {
+            page.close()
+        })
+    }
 
 }
+
+
+
+export { PupAutomation }
