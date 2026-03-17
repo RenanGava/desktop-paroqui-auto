@@ -1,20 +1,37 @@
-import { Route, Routes, HashRouter, Link } from "react-router";
+import {
+  Route,
+  Routes,
+  HashRouter,
+  Link,
+} from "react-router";
 import React from "react";
-import { Dash } from "../pages/Dash";
+import { Dash } from "../pages/Dizimo";
+import { Tabs } from "antd";
+import type { TabsProps } from "antd";
 
 // eslint-disable-next-line import/no-unresolved
 
+const screens: TabsProps["items"] = [
+  {
+    key: "1",
+    label: <Link to={"/"}>Dizimo</Link>,
+  },
+  {
+    key: "2",
+    label: <Link to={"/oferta"}>oferta</Link>,
+  },
+];
 
 export function MainRouter() {
   return (
     <HashRouter>
-      <div style={{ gap: 10, display: "flex" }}>
-        <Link to={"/login"}>Login</Link>
-        <Link to={"/register"}>Registrar</Link>
-        <Link to={"/dashboard"}>Dashboard</Link>
-      </div>
+      <Tabs
+        defaultActiveKey="1"
+        items={screens}
+      />
+
       <Routes>
-        <Route element={ <Dash/>} path="/" index={true}/>
+        <Route element={<Dash />} path="/" index={true} />
       </Routes>
     </HashRouter>
   );

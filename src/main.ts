@@ -2,7 +2,7 @@ import { app, BrowserWindow } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import { PupAutomation } from './puppeteer';
-import fieis from './services/fieis';
+import './services/fieis';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -20,9 +20,6 @@ const createWindow = async () => {
       nodeIntegration: false
     },
   });
-
-  await PupAutomation.getInstance()
-
 
 
   // and load the index.html of the app.
@@ -43,7 +40,6 @@ const createWindow = async () => {
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
   createWindow()
-  fieis()
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

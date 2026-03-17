@@ -9,16 +9,14 @@ class PupAutomation {
     private browser: Browser | null;
 
     public static async getInstance() {
-
         if (!PupAutomation.INSTANCE) {
-            console.log('Create Instance');
+            
             
             PupAutomation.INSTANCE = new PupAutomation()
 
             return PupAutomation.INSTANCE
         }
-
-        console.log('Recover Instance');
+        
         return PupAutomation.INSTANCE
     }
 
@@ -30,7 +28,6 @@ class PupAutomation {
                 headless: false,
                 args: [
                     '--no-sandbox',
-                    
                 ]
             })
 
@@ -55,9 +52,9 @@ class PupAutomation {
     async closeAllTabs(){
         const pages = await this.browser.pages()
 
-        pages.forEach(page => {
-            page.close()
-        })
+        for await (const page of pages){
+            await page.close()
+        }
     }
 
 }

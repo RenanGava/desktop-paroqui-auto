@@ -1,19 +1,20 @@
-import * as React from 'react'
-import { createRoot } from 'react-dom/client'
-import { MainRouter } from './routes'
+import * as React from "react";
+import { createRoot } from "react-dom/client";
+import { MainRouter } from "./routes";
+import { GlobalStyle } from "./global/global";
 
 
+function App() {
+  return (
+    <>
 
-
-
-function App(){
-    return(<>
-    <MainRouter/>
-    </>)
+      <GlobalStyle />
+      <MainRouter />
+    
+    </>
+  );
 }
 
+const rootElement = createRoot(document.getElementById("root"));
 
-
-const rootElement = createRoot(document.getElementById('root'))
-
-rootElement.render(<App/>)
+rootElement.render(<App />);

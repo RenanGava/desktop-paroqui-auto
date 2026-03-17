@@ -4,7 +4,7 @@ import { contextBridge, ipcRenderer } from 'electron'
 
 
 contextBridge.exposeInMainWorld('api', {
-    getData: async () => {
-        ipcRenderer.invoke('getFieis')
+    loginTheos: async () => {
+        ipcRenderer.invoke('loginTheos')
     }
 })
