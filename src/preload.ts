@@ -3,6 +3,12 @@
 import { contextBridge, ipcRenderer } from 'electron'
 
 
+contextBridge.exposeInMainWorld('env', {
+    variable: async () => ipcRenderer.invoke('tete')
+}
+)
+
+
 contextBridge.exposeInMainWorld('api', {
     loginTheos: async () => {
         ipcRenderer.invoke('loginTheos')

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "esnext",
     "module": "commonjs",
     "allowJs": true,
     "skipLibCheck": true,

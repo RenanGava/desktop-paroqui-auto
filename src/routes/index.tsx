@@ -5,9 +5,10 @@ import {
   Link,
 } from "react-router";
 import React from "react";
-import { Dash } from "../pages/Dizimo";
+import { DizimoDash } from "../pages/Dizimo";
 import { Tabs } from "antd";
 import type { TabsProps } from "antd";
+import { OfertaDash } from "../pages/Ofertas";
 
 // eslint-disable-next-line import/no-unresolved
 
@@ -31,7 +32,8 @@ export function MainRouter() {
       />
 
       <Routes>
-        <Route element={<Dash />} path="/" index={true} />
+        <Route element={<DizimoDash />} path="/" index={true} />
+        <Route element={<OfertaDash />} path="/oferta" index={true} />
       </Routes>
     </HashRouter>
   );

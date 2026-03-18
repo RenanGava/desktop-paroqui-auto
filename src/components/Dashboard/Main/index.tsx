@@ -2,21 +2,7 @@ import React from "react";
 import { Container, TableContent, TBody, THeader } from "./style";
 import { Dropdown, Button, MenuProps } from "antd";
 import { List, PencilLine, Send } from "lucide-react";
-
-const items: MenuProps["items"] = [
-  {
-    key: "1",
-    label: "Editar",
-    icon: <PencilLine size={12}/>,
-    onClick: teste1,
-  },
-  {
-    key: "2",
-    label: "Enviar",
-    icon: <Send size={12}/>,
-    onClick: teste2,
-  },
-];
+import { useDizimo } from "../../../hooks/useDizimo";
 
 function teste1(e: any) {
   console.log("teste1", e);
@@ -26,11 +12,13 @@ function teste2(e: any) {
   console.log("teste2", e);
 }
 
-const menu: MenuProps = {
-  items,
-};
+
 
 export function DashMainData() {
+
+  const {} = useDizimo()
+
+
   return (
     <Container>
       <TableContent>
@@ -51,17 +39,30 @@ export function DashMainData() {
             <td>
               <Dropdown
                 menu={{
-                  items: items,
-                  
+                  items: [
+                    {
+                      key: "1",
+                      label: "Editar",
+                      icon: <PencilLine size={12} />,
+                      onClick: teste1,
+                    },
+                    {
+                      key: "2",
+                      label: "Enviar",
+                      icon: <Send size={12} />,
+                      onClick: teste2,
+                    },
+                  ],
+
                 }}
                 placement="top"
               >
-                <List size={20}/>
+                <List size={20} />
               </Dropdown>
             </td>
           </tr>
         </TBody>
       </TableContent>
-    </Container>
+    </Container >
   );
 }

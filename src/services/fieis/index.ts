@@ -1,14 +1,18 @@
 import { ipcMain, IpcMainInvokeEvent } from "electron";
 import { PupAutomation } from "../../puppeteer";
 import url from "../../puppeteer/url";
-import "dotenv/config";
+import { config } from "dotenv";
+import {} from '../../../'
+config({
+    path: process.env.NODE_ENV === 'development'? '.env.local': '.env.production'
+})
 
 ipcMain.handle("loginTheos", async () => {
   const pupInstance = await PupAutomation.getInstance();
   const { browser } = await pupInstance.getPup();
   const [page] = await browser.pages();
-
-  console.log(process.env.NODE_ENV);
+  console.log(process.env.EMAIL);
+  
 
   // pvaguadalupe@gmail.com
   // 1109
@@ -41,6 +45,5 @@ ipcMain.handle("sendAll-dizimo", async (event: IpcMainInvokeEvent, data) => {
     const pupInstance = await PupAutomation.getInstance()
     const { browser, page } = await pupInstance.getPup()
     await page.goto(url.lancamentoDizimoPage)
-
     return;
 });
