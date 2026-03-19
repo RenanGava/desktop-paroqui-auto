@@ -7,7 +7,7 @@ import { useDizimo } from "../../../hooks/useDizimo";
 
 
 export function DizimoTable() {
-  const { listDizimo } = useDizimo();
+  const { listDizimo, getDizimos } = useDizimo();
 
   return (
     <Container>
@@ -18,13 +18,14 @@ export function DizimoTable() {
             <th>Fiel</th>
             <th>Valor</th>
             <th>Comunidade</th>
+            <th>Enviar Todos</th>
           </tr>
         </THeader>
         <TBody>
           {listDizimo.map((dizimo) => {
             return (
               <tr key={dizimo.id}>
-                <td>{dizimo.id}</td>
+                <td>{dizimo.fiel.dizimistaId}</td>
                 <td>{dizimo.fiel.nome}</td>
                 <td>{(parseInt(dizimo.valor)/100)}</td>
                 <td>{dizimo.comunidade.nome}</td>

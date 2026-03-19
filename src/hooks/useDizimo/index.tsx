@@ -13,7 +13,7 @@ interface IListDizimo {
         documentId: string;
         nome: string;
     };
-    fiel:{
+    fiel: {
         id: number;
         documentId: string;
         nome: string;
@@ -25,35 +25,35 @@ interface IListDizimo {
 
 
 
-export function useDizimo(){
+export function useDizimo() {
 
     const [listDizimo, setListDizimo] = useState<IListDizimo[]>([])
 
 
     useEffect(() => {
 
-        async function getDizimos(){
+        async function getDizimos() {
 
             const configRequest = stringify({
                 fields: ['documentId', 'data_lancamento', 'valor'],
-                populate:{
+                populate: {
                     comunidade: {
                         fields: ['documentId', 'nome']
                     },
-                    fiel:{
+                    fiel: {
                         fields: ['nome', 'documentId', 'dizimistaId']
                     }
                 }
-            },{
+            }, {
                 encodeValuesOnly: true
             })
-            
 
-            const dizimos = await api.get('/dizimos?'+configRequest)
+
+            const dizimos = await api.get('/dizimos?' + configRequest)
             const dizimoList = dizimos.data.data as IListDizimo[]
 
             setListDizimo(dizimoList)
-            
+
         }
 
 
@@ -61,7 +61,37 @@ export function useDizimo(){
     }, [])
 
 
+
+
+    async function getDizimos(initiDate:string, lastDate:string) {
+
+
+        const configRequest = stringify({
+            fields: ['documentId', 'data_lancamento', 'valor'],
+            filters: {
+                data_lancamento: [initiDate, lastDate]
+            },
+            populate: {
+                comunidade: {
+                    fields: ['documentId', 'nome']
+                },
+                fiel: {
+                    fields: ['nome', 'documentId', 'dizimistaId']
+                }
+            }
+        }, {
+            encodeValuesOnly: true
+        })
+
+        const dizimos = await api.get('/dizimos?' + configRequest)
+        const dizimoList = dizimos.data.data as IListDizimo[]
+
+        setListDizimo(dizimoList)
+    }
+
+
     return {
-        listDizimo
+        listDizimo,
+        getDizimos
     }
 }
