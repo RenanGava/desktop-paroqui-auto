@@ -1,12 +1,14 @@
-export {}
+export {};
 
 declare global {
-    interface Window {
-        api: {
-            loginTheos: () => Promise<void>
-        },
-        env: {
-            API_URL: string
-        }
-    }
+  interface Window {
+    api: {
+      loginTheos: () => Promise<void>;
+    };
+    env: {
+      API_URL: string;
+      EMAIL: string;
+      SENHA: string
+    };
+  }
 }

@@ -12,12 +12,8 @@ function teste2(e: any) {
   console.log("teste2", e);
 }
 
-
-
-export function DashMainData() {
-
-  const {} = useDizimo()
-
+export function DizimoTable() {
+  const { listDizimo } = useDizimo();
 
   return (
     <Container>
@@ -31,38 +27,41 @@ export function DashMainData() {
           </tr>
         </THeader>
         <TBody>
-          <tr>
-            <td>1</td>
-            <td>Renan Dellecrode Gava</td>
-            <td>100,00</td>
-            <td>Alto Boa Vista</td>
-            <td>
-              <Dropdown
-                menu={{
-                  items: [
-                    {
-                      key: "1",
-                      label: "Editar",
-                      icon: <PencilLine size={12} />,
-                      onClick: teste1,
-                    },
-                    {
-                      key: "2",
-                      label: "Enviar",
-                      icon: <Send size={12} />,
-                      onClick: teste2,
-                    },
-                  ],
-
-                }}
-                placement="top"
-              >
-                <List size={20} />
-              </Dropdown>
-            </td>
-          </tr>
+          {listDizimo.map((dizimo) => {
+            return (
+              <tr key={dizimo.id}>
+                <td>{dizimo.id}</td>
+                <td>{dizimo.fiel.nome}</td>
+                <td>{(parseInt(dizimo.valor)/100)}</td>
+                <td>{dizimo.comunidade.nome}</td>
+                <td>
+                  <Dropdown
+                    menu={{
+                      items: [
+                        {
+                          key: "1",
+                          label: "Editar",
+                          icon: <PencilLine size={12} />,
+                          onClick: teste1,
+                        },
+                        {
+                          key: "2",
+                          label: "Enviar",
+                          icon: <Send size={12} />,
+                          onClick: teste2,
+                        },
+                      ],
+                    }}
+                    placement="top"
+                  >
+                    <List size={20} />
+                  </Dropdown>
+                </td>
+              </tr>
+            );
+          })}
         </TBody>
       </TableContent>
-    </Container >
+    </Container>
   );
 }

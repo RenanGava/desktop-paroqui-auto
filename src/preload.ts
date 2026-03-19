@@ -4,7 +4,7 @@ import { contextBridge, ipcRenderer } from 'electron'
 
 
 contextBridge.exposeInMainWorld('env', {
-    variable: async () => ipcRenderer.invoke('tete')
+    ...ipcRenderer.sendSync('envs')
 }
 )
 

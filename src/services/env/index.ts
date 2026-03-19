@@ -1,17 +1,17 @@
-import { ipcMain } from 'electron'
-import 'dotenv/config'
-
+import { ipcMain } from "electron";
+import "dotenv/config";
 
 const URL =
-    process.env.NODE_ENV === "development"
-        ? process.env.API_LOCAL_URL
-        : process.env.API_URL;
+  process.env.NODE_ENV === "development"
+    ? process.env.API_LOCAL_URL
+    : process.env.API_URL;
 
+ipcMain.on("envs", (event) => {
+  console.log(process.env.NODE_ENV);
 
-ipcMain.handle('tete', async (event, data) => {
-    console.log(process.env.EMAIL);
-    
-    return {
-        API_URL: URL
-    }
-})
+  event.returnValue = {
+    API_URL: URL,
+    EMAIL: process.env.EMAIL,
+    SENHA: process.env.SENHA
+  };
+});
