@@ -4,13 +4,7 @@ import { Dropdown, Button, MenuProps } from "antd";
 import { List, PencilLine, Send } from "lucide-react";
 import { useDizimo } from "../../../hooks/useDizimo";
 
-function teste1(e: any) {
-  console.log("teste1", e);
-}
 
-function teste2(e: any) {
-  console.log("teste2", e);
-}
 
 export function DizimoTable() {
   const { listDizimo } = useDizimo();
@@ -42,17 +36,19 @@ export function DizimoTable() {
                           key: "1",
                           label: "Editar",
                           icon: <PencilLine size={12} />,
-                          onClick: teste1,
+                          onClick: () => {console.log('Aqui Estou Editando')},
                         },
                         {
                           key: "2",
                           label: "Enviar",
                           icon: <Send size={12} />,
-                          onClick: teste2,
+                          onClick: () => {console.log('Aqui Estou Enviando')},
                         },
                       ],
                     }}
                     placement="top"
+                    trigger={['click', 'hover']}
+                    arrow={true}
                   >
                     <List size={20} />
                   </Dropdown>
