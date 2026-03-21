@@ -1,67 +1,58 @@
 import React, { useState, Key } from "react";
 import { Container } from "./styles";
-import { DizimoTable } from "../../components/Dashboard/Main";
-import { useNavigate } from 'react-router'
-import { Button, Flex, Modal, Space, Table, Tag } from 'antd'
+import { DizimoTable } from "../../components/Dashboard";
+import { useNavigate } from "react-router";
+import { Button, Flex, Table, DatePicker, Modal } from "antd";
 import { useDizimo } from "../../hooks/useDizimo";
 import dayjs from "dayjs";
+import UTC from "dayjs/plugin/utc";
+dayjs.extend(UTC);
 
-
-const { Column, ColumnGroup } = Table
-interface IListDizimo {
-  id: Key;
-  valor: string;
-  documentId: string;
-  data_lancamento: string;
-  comunidade: {
-    id: number;
-    documentId: string;
-    nome: string;
-  };
-  fiel: {
-    id: number;
-    documentId: string;
-    nome: string;
-    dizimistaId: string
-  }
-
-}
-
-
+const { Column, ColumnGroup } = Table;
 
 export function DizimoDash() {
+  const [IsModalOpen, setIsMOdalOpen] = useState(false);
+  const { listDizimo, getDizimos, selectDate, setSelectDate } = useDizimo();
+  const format = "DD/MM/YYYY";
 
-  const [IsModalOpen, setIsMOdalOpen] = useState(false)
-  const { listDizimo } = useDizimo()
-
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
 
   return (
     <Container>
       <header>
-
-      </header>
-      {/* <DizimoTable/> */}
-      <Table<IListDizimo> dataSource={listDizimo}>
-        <Column title='ID' dataIndex='id' key='id' />
-        <Column title="Nome" dataIndex={['fiel', 'nome']} key="nome" />
-        <Column title="Data Lancamento" dataIndex="data_lancamento" key="data_lancamento" 
-            render={(value, data, index) => {
-              return dayjs(value).format('DD/MM/YYYY')
+        <Flex gap="small" align="center">
+          <DatePicker
+            defaultValue={dayjs().startOf("month")}
+            format={format}
+            onChange={(date) => {
+              console.log();
+              setSelectDate({
+                ...selectDate,
+                initDate: date.format("YYYY-MM-DD"),
+              });
             }}
-        />
-        <Column
-          title="Action"
-          key="action"
-          render={(_: any, fiel: IListDizimo) => (
-            <Space size="medium">
-              <a>Invite {fiel.fiel.nome}</a>
-              <a>Delete</a>
-            </Space>
-          )}
-        />
-      </Table>
+          />
+          <span>-</span>
+          <DatePicker
+            defaultValue={dayjs().endOf("month")}
+            format={"DD/MM/YYYY"}
+            onChange={(date) => {
+              console.log();
+              setSelectDate({
+                ...selectDate,
+                lastdate: date.format("YYYY-MM-DD"),
+              });
+            }}
+          />
+          <Button
+            type="primary"
+            onClick={() => getDizimos(selectDate.initDate, selectDate.lastdate)}
+          >
+            Buscar
+          </Button>
+        </Flex>
+      </header>
+      <DizimoTable dizimos={listDizimo} />
     </Container>
   );
 }

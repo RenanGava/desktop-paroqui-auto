@@ -25,5 +25,6 @@
  *  });
  * ```
  */
-
 import './app';
+
+window.api.loginTheos()

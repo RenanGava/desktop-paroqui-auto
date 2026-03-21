@@ -12,5 +12,8 @@ contextBridge.exposeInMainWorld('env', {
 contextBridge.exposeInMainWorld('api', {
     loginTheos: async () => {
         ipcRenderer.invoke('loginTheos')
+    },
+    sendOneDizimo: async (data: IListDizimo) => {
+        ipcRenderer.invoke('send-dizimo', data)
     }
 })

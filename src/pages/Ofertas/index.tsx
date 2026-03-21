@@ -1,6 +1,6 @@
 import React, { MouseEvent } from "react";
 import { Container } from "./styles";
-import { DizimoTable } from "../../components/Dashboard/Main";
+import { DizimoTable } from "../../components/Dashboard";
 
 export function OfertaDash() {
   async function handleClick(e: MouseEvent<HTMLButtonElement>) {

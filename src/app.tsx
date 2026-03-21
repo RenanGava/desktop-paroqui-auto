@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { MainRouter } from "./routes";
 import { GlobalStyle } from "./global/global";
