@@ -2,7 +2,7 @@ import { ipcMain, IpcMainInvokeEvent } from "electron";
 import { PupAutomation } from "../../puppeteer";
 import url from "../../puppeteer/url";
 import { config } from "dotenv";
-import {} from "../../../";
+// import {} from "../../../";
 import dayjs from "dayjs";
 config({
   path:
@@ -40,8 +40,20 @@ ipcMain.handle(
     const pupInstance = await PupAutomation.getInstance();
     const { browser, page } = await pupInstance.getPup();
     await page.goto(url.lancamentoDizimoPage);
-    await page.waitForNavigation();
-    await page.waitForSelector('input#anoReferente')
+    // await page.waitForNavigation();
+    // await page.waitForSelector('input[id="tipoLeitura0"]', {
+    //   visible: true
+    // })
+    const formatValue = (parseFloat(data.valor) / 100)
+      .toFixed(2)
+      .replace(".", ",");
+
+
+    await page.locator('input[id="tipoLeitura0"]').click({
+      count: 3
+    })
+
+    await page.type('input[id="tipoLeitura0"]', data.fiel.dizimistaId);
 
     await page.evaluate((data) => {
       const formatValue = (parseFloat(data.valor) / 100)
@@ -50,10 +62,15 @@ ipcMain.handle(
 
       const dateSplit = data.data_lancamento.split("-");
 
-      document.querySelector<HTMLInputElement>("#anoReferente").value =
-        dateSplit[2];
-      document.querySelector<HTMLInputElement>("#dataOferta").value = "3";
+      console.log(data)
+      document.querySelector<HTMLInputElement>('#tipoLeitura0')
+        .value = data.fiel.dizimistaId
+      document.querySelector<HTMLInputElement>('#mesReferente').value = dateSplit[1]
+      document.querySelector<HTMLInputElement>("#anoReferente")
+        .value = dateSplit[0];
+      document.querySelector<HTMLInputElement>("#dataOferta").value = dayjs(data.data_lancamento).format('DD/MM/YYYY')
     }, data);
+
 
     // await page.click('input[id="anoReferente"]', {
     //   count: 3,
@@ -73,11 +90,6 @@ ipcMain.handle(
     //     count: 3
     // })
     // await page.type('input[id="valorOferta"]', formatValue);
-    // await page.click('input[id="tipoLeitura0"]', {
-    //     count: 3
-    // })
-
-    // await page.type('input[id="tipoLeitura0"]', data.fiel.dizimistaId);
 
     // await page.click('button[id="btnNovo"]')
     return;
