@@ -48,10 +48,9 @@ ipcMain.handle(
       .toFixed(2)
       .replace(".", ",");
 
-
     await page.locator('input[id="tipoLeitura0"]').click({
-      count: 3
-    })
+      count: 3,
+    });
 
     await page.type('input[id="tipoLeitura0"]', data.fiel.dizimistaId);
 
@@ -61,37 +60,31 @@ ipcMain.handle(
         .replace(".", ",");
 
       const dateSplit = data.data_lancamento.split("-");
+      const dateReverse = `${dateSplit[2]}/${dateSplit[1]}/${dateSplit[0]}`
 
-      console.log(data)
-      document.querySelector<HTMLInputElement>('#tipoLeitura0')
-        .value = data.fiel.dizimistaId
-      document.querySelector<HTMLInputElement>('#mesReferente').value = dateSplit[1]
-      document.querySelector<HTMLInputElement>("#anoReferente")
-        .value = dateSplit[0];
-      document.querySelector<HTMLInputElement>("#dataOferta").value = dayjs(data.data_lancamento).format('DD/MM/YYYY')
+      console.log(dateReverse);
+      const dizimistaId = document.querySelector<HTMLInputElement>("#tipoLeitura0");
+      const mes = document.querySelector<HTMLInputElement>("#mesReferente");
+      const ano = document.querySelector<HTMLInputElement>("#anoReferente");
+      const date = document.querySelector<HTMLInputElement>("#dataOferta");
+      const valueDizimo = document.querySelector<HTMLInputElement>('#valorOferta')
+      const btnNovo = document.querySelector<HTMLButtonElement>('btnNovo')
+
+      dizimistaId.value = data.fiel.dizimistaId;
+      mes.value = dateSplit[1];
+      ano.value = dateSplit[0];
+      date.value = dateReverse
+      // valueDizimo.value = (parseInt(data.valor)/100).toFixed(2).replace('.', ',')
+
     }, data);
 
+    
+    await page.click('input[id="valorOferta"]', {
+        count: 3
+    })
+    await page.type('input[id="valorOferta"]', formatValue);
 
-    // await page.click('input[id="anoReferente"]', {
-    //   count: 3,
-    // });
-    // await page.type('input[id="anoReferente"]', dateSplit[0], {
-    //     delay: 100
-    // })
-
-    // await page.click('input[id="dataOferta"]', {
-    //   count: 3,
-    // });
-    // await page.type(
-    //   'input[id="dataOferta"]',
-    //   dayjs(data.data_lancamento).format("DD/MM/YYYY"),
-    // );
-    // await page.click('input[id="valorOferta"]', {
-    //     count: 3
-    // })
-    // await page.type('input[id="valorOferta"]', formatValue);
-
-    // await page.click('button[id="btnNovo"]')
+    await page.click('button[id="btnNovo"]')
     return;
   },
 );
