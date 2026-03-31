@@ -10,6 +10,8 @@ declare global {
       id: number;
       documentId: string;
       nome: string;
+      theosId: string;
+      centroCustoId: string
     };
     fiel: {
       id: number;

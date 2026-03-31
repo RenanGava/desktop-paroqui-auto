@@ -2,6 +2,7 @@ import React, { Key, useEffect, useState } from "react";
 import { api } from "../../utils/axios";
 import { stringify } from "qs";
 import dayjs from "dayjs";
+import Item from "antd/es/list/Item";
 
 interface SelectDate {
   initDate: string;
@@ -10,6 +11,7 @@ interface SelectDate {
 
 export function useDizimo() {
   const [listDizimo, setListDizimo] = useState<IListDizimo[]>([]);
+  const [dizimoForEdit, setDizimoForEdit] = useState<IListDizimo>(null)
   const [selectDate, setSelectDate] = useState<SelectDate>({} as SelectDate);
 
   useEffect(() => {
@@ -19,6 +21,7 @@ export function useDizimo() {
     const year = dayjs().year();
 
     console.log(dayjs().utc().toISOString());
+
 
     setSelectDate({
       initDate: `${year}-${month}-01`,
@@ -31,7 +34,7 @@ export function useDizimo() {
           fields: ["documentId", "data_lancamento", "valor"],
           populate: {
             comunidade: {
-              fields: ["documentId", "nome"],
+              fields: ["documentId", "nome", "theosId", "centroCustoId"],
             },
             fiel: {
               fields: ["nome", "documentId", "dizimistaId"],
@@ -45,6 +48,8 @@ export function useDizimo() {
 
       const dizimos = await api.get("/dizimos?" + configRequest);
       const dizimoList = dizimos.data.data as IListDizimo[];
+
+      console.log(dizimoList);
 
       setListDizimo(dizimoList);
     }
@@ -66,7 +71,7 @@ export function useDizimo() {
         },
         populate: {
           comunidade: {
-            fields: ["documentId", "nome"],
+            fields: ["documentId", "nome", "theosId", "centroCustoId"],
           },
           fiel: {
             fields: ["nome", "documentId", "dizimistaId"],
@@ -82,20 +87,40 @@ export function useDizimo() {
     const dizimos = await api.get("/dizimos?" + configRequest);
     const dizimoList = dizimos.data.data as IListDizimo[];
 
+    console.log(dizimoList);
     setListDizimo(dizimoList);
   }
 
   async function submitDizimo(dizimo: IListDizimo) {
-    await window.api.sendOneDizimo(dizimo);
-    console.log("Veio da func Enviar", dizimo);
-    console.log("Veio da Lista de Dizimo", listDizimo[0]);
+    const teste = await window.api.sendOneDizimo(dizimo);
+    const configRequest = stringify(
+      {
+        filters: {
+          id: {
+            $eq: dizimo.id
+          }
+        },
+        populate: ['comunidade', 'fiel']
+      },
+      {
+        encodeValuesOnly: true,
+      },
+    );
+    
+    const response = await api.delete('/dizimos/'+dizimo.documentId)
+    setListDizimo(prev => prev.filter( item => item.id != dizimo.id))
   }
+
+  async function editDizimo(dizimo?: IListDizimo){}
 
   return {
     getDizimos,
     setSelectDate,
     submitDizimo,
+    editDizimo,
+    setDizimoForEdit,
     listDizimo,
     selectDate,
+    dizimoForEdit
   };
 }

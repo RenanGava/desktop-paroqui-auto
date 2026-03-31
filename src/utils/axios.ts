@@ -1,17 +1,19 @@
-import axios from "axios";
+import axios, {
+  AxiosError,
+  AxiosInterceptorManager,
+  InternalAxiosRequestConfig,
+} from "axios";
 
-
-const URL = window.env.API_URL
+const URL = window.env.API_URL;
 
 const api = axios.create({
   baseURL: URL,
 });
 
-api.interceptors.request.use( config => {
+api.interceptors.request.use((config) => {
+  console.log(config.baseURL);
 
-    console.log(config.baseURL);
-    
-    return config
-})
+  return config;
+});
 
 export { api };

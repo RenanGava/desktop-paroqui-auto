@@ -9,6 +9,7 @@ import { DizimoDash } from "../pages/Dizimo";
 import { Tabs } from "antd";
 import type { TabsProps } from "antd";
 import { OfertaDash } from "../pages/Ofertas";
+import { Header } from "../components/Header";
 
 // eslint-disable-next-line import/no-unresolved
 
@@ -26,11 +27,7 @@ const screens: TabsProps["items"] = [
 export function MainRouter() {
   return (
     <HashRouter>
-      <Tabs
-        defaultActiveKey="1"
-        items={screens}
-      />
-
+      <Header/>
       <Routes>
         <Route element={<DizimoDash />} path="/" index={true} />
         <Route element={<OfertaDash />} path="/oferta" index={true} />

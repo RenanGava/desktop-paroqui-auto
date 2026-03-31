@@ -1,13 +1,9 @@
-import React, { Key } from "react";
+import React, { Key, useState } from "react";
 import {
-  Dropdown,
-  MenuProps,
   Button,
   Flex,
   Modal,
-  Space,
   Table,
-  Tag,
   Tooltip,
 } from "antd";
 import { List, PencilLine, SendHorizonal, Trash } from "lucide-react";
@@ -16,15 +12,16 @@ import dayjs from "dayjs";
 
 interface DizimoTableProps {
   dizimos: IListDizimo[];
+  submitDizimo: (dizimo: IListDizimo) => Promise<void>;
+  setIsOpen(dizimo: IListDizimo): void
 }
 
-export function DizimoTable({ dizimos }: DizimoTableProps) {
-  const { submitDizimo } = useDizimo();
+export function DizimoTable({ dizimos, submitDizimo, setIsOpen }: DizimoTableProps) {
   const { Column } = Table;
 
   return (
     <>
-      <Table<IListDizimo> dataSource={dizimos}>
+      <Table<IListDizimo> dataSource={dizimos} rowKey="id">
         <Column title="ID" dataIndex="id" key="id" width={80} />
         <Column
           title="Nome"
@@ -62,19 +59,26 @@ export function DizimoTable({ dizimos }: DizimoTableProps) {
           width={120}
           render={(_: any, dizimo: IListDizimo) => (
             <Flex gap={"small"} justify="center">
-              <Tooltip title="Editar">
-                <Button color="green" variant="solid" size="small">
+              <Tooltip title="Editar" key={"edit"}>
+                <Button
+                  color="green"
+                  variant="solid"
+                  size="small"
+                  onClick={() => {
+                    setIsOpen({...dizimo})
+                  }}
+                >
                   <PencilLine color="#000" size={16} />
                 </Button>
               </Tooltip>
 
-              <Tooltip title="Deletar">
+              <Tooltip title="Deletar" key={"del"}>
                 <Button color="danger" variant="solid" size="small">
                   <Trash color="#000" size={16} />
                 </Button>
               </Tooltip>
 
-              <Tooltip title="Enviar">
+              <Tooltip title="Enviar" key={"enviar"}>
                 <Button
                   color="blue"
                   variant="solid"
@@ -88,6 +92,7 @@ export function DizimoTable({ dizimos }: DizimoTableProps) {
           )}
         />
       </Table>
+
     </>
   );
 }

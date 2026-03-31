@@ -27,4 +27,4 @@
  */
 import './app';
 
-window.api.loginTheos()
+// window.api.loginTheos()
