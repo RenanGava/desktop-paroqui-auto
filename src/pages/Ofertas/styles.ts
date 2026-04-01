@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 export const Container = styled.div`
     width: 100%;
-    background-color: aliceblue;
+    /* background-color: aliceblue; */
     padding: 1rem;
 
 `

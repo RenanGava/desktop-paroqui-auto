@@ -1,6 +1,6 @@
 import React, { useState, Key } from "react";
 import { Container } from "./styles";
-import { DizimoTable } from "../../components/Dashboard";
+import { DizimoTable } from "../../components/Dashboard/Dizimo";
 import { useNavigate } from "react-router";
 import {
   Button,
@@ -27,14 +27,15 @@ export function DizimoDash() {
     listDizimo,
     selectDate,
     dizimoForEdit,
+    contextHolder,
     getDizimos,
     setSelectDate,
     submitDizimo,
     editDizimo,
     setDizimoForEdit,
+    deleteDizimo
   } = useDizimo();
   const format = "DD/MM/YYYY";
-  const [value, setValue] = useState("0");
 
   const navigate = useNavigate();
 
@@ -98,12 +99,16 @@ export function DizimoDash() {
         dizimos={[...listDizimo]}
         submitDizimo={submitDizimo}
         setIsOpen={handleOpenAndSetDizimoEdit}
+        deleteDizimo={deleteDizimo}
       />
 
       <Modal
         title="Editar Dizimo"
         open={open}
-        onOk={() => setOpen(false)}
+        onOk={async () => {
+          setOpen(false)
+          await editDizimo(dizimoForEdit)
+        }}
         onCancel={() => {
           setOpen(false);
           setDizimoForEdit(null);
@@ -151,6 +156,7 @@ export function DizimoDash() {
           </Flex>
         </Flex>
       </Modal>
+      {contextHolder}
     </Container>
   );
 }

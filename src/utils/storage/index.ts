@@ -20,4 +20,4 @@ function setKey(key:Key, value:any){
 }
 
 
-export { getKey };
+export { getKey, setKey };

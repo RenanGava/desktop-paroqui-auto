@@ -13,11 +13,12 @@ const screens: TabsProps["items"] = [
   },
   {
     key: "2",
-    label: <Link to={"/oferta"}>oferta</Link>,
+    label: <Link to={"/oferta"}>Oferta</Link>,
+    
   },
   {
     key: "3",
-    label: <Link to={"/coleta"}>coleta</Link>,
+    label: <Link to={"/coleta"}>Coleta</Link>,
   },
 ];
 
@@ -25,7 +26,14 @@ export function Header() {
   return (
     <Container>
       <Content>
-        <Tabs defaultActiveKey="1" items={screens} type="card" size="large" />
+        <Tabs
+          defaultActiveKey="2"
+          items={screens}
+          type="line"
+          size="large"
+          centered={true}
+          color="#000"
+        />
       </Content>
     </Container>
   );

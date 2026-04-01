@@ -20,4 +20,9 @@ declare global {
       dizimistaId: string;
     };
   }
+
+
+  interface IListOferta{
+    
+  }
 }

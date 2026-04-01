@@ -2,7 +2,7 @@ import React, { Key, useEffect, useState } from "react";
 import { api } from "../../utils/axios";
 import { stringify } from "qs";
 import dayjs from "dayjs";
-import Item from "antd/es/list/Item";
+import { message } from "antd";
 
 interface SelectDate {
   initDate: string;
@@ -11,8 +11,9 @@ interface SelectDate {
 
 export function useDizimo() {
   const [listDizimo, setListDizimo] = useState<IListDizimo[]>([]);
-  const [dizimoForEdit, setDizimoForEdit] = useState<IListDizimo>(null)
+  const [dizimoForEdit, setDizimoForEdit] = useState<IListDizimo>(null);
   const [selectDate, setSelectDate] = useState<SelectDate>({} as SelectDate);
+  const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
     const lastDay = dayjs().daysInMonth().toString();
@@ -21,7 +22,6 @@ export function useDizimo() {
     const year = dayjs().year();
 
     console.log(dayjs().utc().toISOString());
-
 
     setSelectDate({
       initDate: `${year}-${month}-01`,
@@ -92,26 +92,66 @@ export function useDizimo() {
   }
 
   async function submitDizimo(dizimo: IListDizimo) {
-    const teste = await window.api.sendOneDizimo(dizimo);
-    const configRequest = stringify(
-      {
-        filters: {
-          id: {
-            $eq: dizimo.id
-          }
+    try {
+      const teste = await window.api.sendOneDizimo(dizimo);
+      const configRequest = stringify(
+        {
+          filters: {
+            id: {
+              $eq: dizimo.id,
+            },
+          },
+          populate: ["comunidade", "fiel"],
         },
-        populate: ['comunidade', 'fiel']
-      },
-      {
-        encodeValuesOnly: true,
-      },
-    );
-    
-    const response = await api.delete('/dizimos/'+dizimo.documentId)
-    setListDizimo(prev => prev.filter( item => item.id != dizimo.id))
+        {
+          encodeValuesOnly: true,
+        },
+      );
+
+      const response = await api.delete("/dizimos/" + dizimo.documentId);
+      setListDizimo((prev) => prev.filter((item) => item.id != dizimo.id));
+    } catch (error) {
+      messageApi.open({
+        type: "error",
+        content: "Erro ao enviar o Dízimo " + error.message,
+      });
+    }
   }
 
-  async function editDizimo(dizimo?: IListDizimo){}
+  async function editDizimo(dizimo?: IListDizimo) {
+    if (Number(dizimo.valor) / 100 < 1) {
+      messageApi.open({
+        type: "error",
+        content: "Erro ao editar lancamento " + dizimo.fiel.nome,
+      });
+      return;
+    }
+
+    const res = await api.put("/dizimos/" + dizimo.documentId, {
+      data: {
+        valor: dizimo.valor,
+      },
+    });
+    setListDizimo((prev) => {
+      return prev.map((item) => {
+        return item.id === dizimo.id ? dizimo : item;
+      });
+    });
+  }
+
+  async function deleteDizimo(id: string) {
+    messageApi.open({
+      type: "warning",
+      content: "Dizimo apagado com sucesso",
+    });
+    await api.delete("/dizimos/" + id);
+
+    setListDizimo( prev => {
+      return prev.filter( diz => {
+        return diz.documentId !== id
+      })
+    })
+  }
 
   return {
     getDizimos,
@@ -119,8 +159,10 @@ export function useDizimo() {
     submitDizimo,
     editDizimo,
     setDizimoForEdit,
+    deleteDizimo,
     listDizimo,
     selectDate,
-    dizimoForEdit
+    dizimoForEdit,
+    contextHolder,
   };
 }
