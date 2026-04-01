@@ -23,6 +23,16 @@ declare global {
 
 
   interface IListOferta{
-    
+    id: number;
+    valor: string;
+    documentId: string;
+    data_lancamento: string;
+    comunidade: {
+      id: number;
+      documentId: string;
+      nome: string;
+      theosId: string;
+      centroCustoId: string
+    }
   }
 }

@@ -5,12 +5,17 @@ import dayjs from "dayjs";
 
 interface OfertaTableProps {
   ofertas: IListOferta[];
+  submit: (oferta: IListDizimo) => Promise<void>
+  edit: (oferta: IListDizimo) => Promise<void>
+  deleteFn: (id: string) => Promise<void>
   
 }
 
 export function OfertaTable({
   ofertas,
-
+  edit,
+  submit,
+  deleteFn
 }: OfertaTableProps) {
   const { Column } = Table;
 
@@ -19,16 +24,10 @@ export function OfertaTable({
       <Table<IListOferta> dataSource={ofertas} rowKey="id">
         <Column title="ID" dataIndex="id" key="id" width={80} />
         <Column
-          title="Nome"
-          dataIndex={["fiel", "nome"]}
-          key="nome"
+          title="Comunidade"
+          dataIndex={["comunidade", "nome"]}
+          key="comunidade"
           width={200}
-        />
-        <Column
-          title="Cod. Dizimo"
-          width={120}
-          dataIndex={["fiel", "dizimistaId"]}
-          key="dizimistaId"
         />
         <Column
           title="Data Lancamento"

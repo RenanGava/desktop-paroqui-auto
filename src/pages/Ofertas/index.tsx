@@ -9,13 +9,13 @@ import { useNavigate } from "react-router";
 export function OfertaDash() {
   const [open, setOpen] = useState(false);
 
-  const { selectDate, setSelectDate, contextHolder } = useOferta();
+  const { selectDate, setSelectDate, contextHolder, listOferta } = useOferta();
   const format = "DD/MM/YYYY";
 
   const navigate = useNavigate();
 
   function handleOpenAndSetDizimoEdit(dizimo: IListDizimo) {
-    
+
     setOpen(true);
   }
 
@@ -64,24 +64,29 @@ export function OfertaDash() {
           />
           <Button
             type="primary"
-            onClick={() => {}}
+            onClick={() => { }}
           >
             Buscar
           </Button>
         </Flex>
       </header>
-      <OfertaTable ofertas={[]} />
+      <OfertaTable
+        ofertas={listOferta}
+        submit={async () => { }}
+        deleteFn={async () => { }}
+        edit={async () => { }}
+      />
 
       <Modal
         title="Editar Dizimo"
         open={open}
         onOk={async () => {
           setOpen(false);
-          
+
         }}
         onCancel={() => {
           setOpen(false);
-          
+
         }}
         width={{
           xs: "90%",
@@ -101,7 +106,7 @@ export function OfertaDash() {
               key={"nome"}
               onChange={(e) => {
                 e.preventDefault();
-               
+
               }}
             />
           </Flex>
@@ -111,7 +116,7 @@ export function OfertaDash() {
               placeholder="Nome"
               value={formatedValueForDecimal('0')}
               onChange={(e) => {
-                
+
               }}
             />
           </Flex>

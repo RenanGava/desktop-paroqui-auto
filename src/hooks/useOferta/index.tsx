@@ -10,7 +10,7 @@ interface SelectDate {
 }
 
 export function useOferta() {
-  const [listDizimo, setListDizimo] = useState<IListOferta[]>([]);
+  const [listOferta, setListOferta] = useState<IListOferta[]>([]);
   const [dizimoForEdit, setDizimoForEdit] = useState<IListDizimo>(null);
   const [selectDate, setSelectDate] = useState<SelectDate>({} as SelectDate);
   const [messageApi, contextHolder] = message.useMessage();
@@ -21,62 +21,59 @@ export function useOferta() {
     const month = dayjs().month() + 1;
     const year = dayjs().year();
 
-    console.log(dayjs().utc().toISOString());
 
     setSelectDate({
       initDate: `${year}-${month}-01`,
       lastdate: `${year}-${month}-${day}`,
     });
 
-    async function getDizimos() {
+    async function getOfertas() {
       const configRequest = stringify(
         {
           fields: ["documentId", "data_lancamento", "valor"],
           populate: {
             comunidade: {
               fields: ["documentId", "nome", "theosId", "centroCustoId"],
-            },
-            fiel: {
-              fields: ["nome", "documentId", "dizimistaId"],
-            },
+            }
           },
+
         },
         {
           encodeValuesOnly: true,
         },
       );
 
-      const dizimos = await api.get("/dizimos?" + configRequest);
-      const dizimoList = dizimos.data.data as IListDizimo[];
+      const ofertas = await api.get("/ofertas?" + configRequest);
+      const ofertasList = ofertas.data.data as IListOferta[];
 
-      console.log(dizimoList);
+      console.log(ofertas);
 
-      setListDizimo(dizimoList);
+      setListOferta(ofertasList);
     }
 
-    getDizimos();
+    getOfertas();
   }, []);
 
   async function getDizimos(initiDate: string, lastDate: string) {
-   
+
   }
 
   async function submitDizimo(dizimo: IListDizimo) {
-   
+
   }
 
   async function editDizimo(dizimo?: IListDizimo) {
-   
+
   }
 
   async function deleteDizimo(id: string) {
-   
+
   }
 
   return {
-   selectDate,
-   contextHolder,
-   setSelectDate,
-   
+    selectDate,
+    listOferta,
+    contextHolder,
+    setSelectDate,
   };
 }
