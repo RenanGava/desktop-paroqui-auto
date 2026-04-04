@@ -1,5 +1,5 @@
 import React, { MouseEvent, useState } from "react";
-import { Container } from "./styles";
+import { Container, Content } from "./styles";
 import { OfertaTable } from "../../components/Dashboard/Oferta";
 import { Button, DatePicker, Flex, Input, Modal, Typography } from "antd";
 import dayjs from "dayjs";
@@ -9,13 +9,23 @@ import { useNavigate } from "react-router";
 export function OfertaDash() {
   const [open, setOpen] = useState(false);
 
-  const { selectDate, setSelectDate, contextHolder, listOferta } = useOferta();
+  const {
+    selectDate,
+    contextHolder,
+    listOferta,
+    ofertaForEdit,
+    getDizimos,
+    setSelectDate,
+    setOfertaForEdit,
+    editDizimo,
+    deleteOferta
+  } = useOferta();
   const format = "DD/MM/YYYY";
 
   const navigate = useNavigate();
 
-  function handleOpenAndSetDizimoEdit(dizimo: IListDizimo) {
-
+  function handleOpenAndSetOfertaEdit(oferta: IListOferta) {
+    setOfertaForEdit(oferta)
     setOpen(true);
   }
 
@@ -37,56 +47,59 @@ export function OfertaDash() {
 
   return (
     <Container>
-      <header>
-        <Flex gap="small" align="center">
-          <DatePicker
-            defaultValue={dayjs().startOf("month")}
-            format={format}
-            onChange={(date) => {
-              console.log();
-              setSelectDate({
-                ...selectDate,
-                initDate: date.format("YYYY-MM-DD"),
-              });
-            }}
-          />
-          <span>-</span>
-          <DatePicker
-            defaultValue={dayjs().endOf("month")}
-            format={"DD/MM/YYYY"}
-            onChange={(date) => {
-              console.log();
-              setSelectDate({
-                ...selectDate,
-                lastdate: date.format("YYYY-MM-DD"),
-              });
-            }}
-          />
-          <Button
-            type="primary"
-            onClick={() => { }}
-          >
-            Buscar
-          </Button>
-        </Flex>
-      </header>
-      <OfertaTable
-        ofertas={listOferta}
-        submit={async () => { }}
-        deleteFn={async () => { }}
-        edit={async () => { }}
-      />
+      <Content>
+        <header>
+          <Flex gap="small" align="center">
+            <DatePicker
+              defaultValue={dayjs().startOf("month")}
+              format={format}
+              onChange={(date) => {
+                console.log();
+                setSelectDate({
+                  ...selectDate,
+                  initDate: date.format("YYYY-MM-DD"),
+                });
+              }}
+            />
+            <span>-</span>
+            <DatePicker
+              defaultValue={dayjs().endOf("month")}
+              format={"DD/MM/YYYY"}
+              onChange={(date) => {
+                console.log();
+                setSelectDate({
+                  ...selectDate,
+                  lastdate: date.format("YYYY-MM-DD"),
+                });
+              }}
+            />
+            <Button
+              type="primary"
+              onClick={async () => {
+                await getDizimos(selectDate.initDate, selectDate.lastdate);
+              }}
+            >
+              Buscar
+            </Button>
+          </Flex>
+        </header>
+        <OfertaTable
+          ofertas={listOferta}
+          submit={async () => {}}
+          deleteFn={deleteOferta}
+          edit={handleOpenAndSetOfertaEdit}
+        />
+      </Content>
 
       <Modal
         title="Editar Dizimo"
         open={open}
         onOk={async () => {
+          editDizimo(ofertaForEdit)
           setOpen(false);
-
         }}
         onCancel={() => {
           setOpen(false);
-
         }}
         width={{
           xs: "90%",
@@ -98,25 +111,19 @@ export function OfertaDash() {
         }}
       >
         <Flex orientation="vertical" gap={5}>
-          <Flex orientation="vertical">
-            <Typography.Title level={5}>Nome</Typography.Title>
-            <Input
-              placeholder="Nome"
-              value={''}
-              key={"nome"}
-              onChange={(e) => {
-                e.preventDefault();
-
-              }}
-            />
-          </Flex>
           <Flex orientation="vertical" gap={0}>
             <Typography.Title level={5}>Valor</Typography.Title>
             <Input
               placeholder="Nome"
-              value={formatedValueForDecimal('0')}
+              value={formatedValueForDecimal(ofertaForEdit?.valor)}
               onChange={(e) => {
+                setOfertaForEdit(prev => {
 
+                  return {
+                    ...prev,
+                    valor: e.target.value.replace(/\D/g, "")
+                  }
+                })
               }}
             />
           </Flex>

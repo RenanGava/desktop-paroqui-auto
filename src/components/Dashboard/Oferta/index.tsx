@@ -5,8 +5,8 @@ import dayjs from "dayjs";
 
 interface OfertaTableProps {
   ofertas: IListOferta[];
-  submit: (oferta: IListDizimo) => Promise<void>
-  edit: (oferta: IListDizimo) => Promise<void>
+  submit: (oferta: IListOferta) => Promise<void>
+  edit: (oferta: IListOferta) => void
   deleteFn: (id: string) => Promise<void>
   
 }
@@ -59,7 +59,7 @@ export function OfertaTable({
                   variant="solid"
                   size="small"
                   onClick={() => {
-                    
+                    edit(oferta)
                   }}
                 >
                   <PencilLine color="#000" size={16} />
@@ -68,11 +68,11 @@ export function OfertaTable({
 
               <Tooltip title="Deletar" key={"del"}>
                 <Popconfirm
-                  title="Deletar este Dízimo?"
+                  title="Deletar esta oferta?"
                   okText="Sim"
                   okType="danger"
-                  onConfirm={() =>{
-                    
+                  onConfirm={async () =>{
+                    await deleteFn(oferta.documentId)
                   }}
                   cancelText="Não"
                 >
@@ -91,7 +91,9 @@ export function OfertaTable({
                   color="blue"
                   variant="solid"
                   size="small"
-                  onClick={() => {}}
+                  onClick={async () => {
+                    await submit(oferta)
+                  }}
                 >
                   <SendHorizonal color="#000" size={16} />
                 </Button>
