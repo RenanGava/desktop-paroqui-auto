@@ -15,5 +15,8 @@ contextBridge.exposeInMainWorld('api', {
     },
     sendOneDizimo: async (data: IListDizimo) => {
         return ipcRenderer.invoke('send-dizimo', data)
+    },
+    sendOneOferta: async (data:IListOferta) => {
+        return ipcRenderer.invoke('sendOne-oferta', data)
     }
 })

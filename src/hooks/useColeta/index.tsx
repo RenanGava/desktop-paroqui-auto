@@ -9,9 +9,9 @@ interface SelectDate {
   lastdate: string;
 }
 
-export function useOferta() {
-  const [listOferta, setListOferta] = useState<IListOferta[]>([]);
-  const [ofertaForEdit, setOfertaForEdit] = useState<IListOferta>(null);
+export function useColeta() {
+  const [listColeta, setListColeta] = useState<IListOferta[]>([]);
+  const [coletaForEdit, setColetaForEdit] = useState<IListOferta>(null);
   const [selectDate, setSelectDate] = useState<SelectDate>({} as SelectDate);
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -26,7 +26,7 @@ export function useOferta() {
       lastdate: `${year}-${month}-${day}`,
     });
 
-    async function getOfertas() {
+    async function getColetas() {
       const configRequest = stringify(
         {
           fields: ["documentId", "data_lancamento", "valor"],
@@ -41,18 +41,18 @@ export function useOferta() {
         },
       );
 
-      const ofertas = await api.get("/ofertas?" + configRequest);
+      const ofertas = await api.get("/coletas?" + configRequest);
       const ofertasList = ofertas.data.data as IListOferta[];
 
       console.log(ofertas);
 
-      setListOferta(ofertasList);
+      setListColeta(ofertasList);
     }
 
-    getOfertas();
+    getColetas();
   }, []);
 
-  async function getDizimos(initiDate: string, lastDate: string) {
+  async function getColetas(initiDate: string, lastDate: string) {
     const configRequest = stringify(
       {
         fields: ["documentId", "data_lancamento", "valor"],
@@ -80,7 +80,7 @@ export function useOferta() {
 
     console.log(ofertas);
 
-    setListOferta(ofertasList);
+    setListColeta(ofertasList);
   }
 
   async function submitOferta(dizimo: IListOferta) {
@@ -101,15 +101,15 @@ export function useOferta() {
 
   }
 
-  async function editDizimo(oferta?: IListOferta) {
-    setListOferta((prev) => {
+  async function editColeta(oferta?: IListOferta) {
+    setListColeta((prev) => {
       return prev.map((item) => {
         return item.id === oferta.id? oferta: item
       });
     });
   }
 
-  async function deleteOferta(id: string) {
+  async function deleteColeta(id: string) {
 
     console.log(id);
     api.delete('/ofertas/'+id).then( res =>{
@@ -122,7 +122,7 @@ export function useOferta() {
       console.log(res);
       
 
-      setListOferta((prev) => {
+      setListColeta((prev) => {
       return prev.filter((item) => {
         return item.documentId !== id
       });
@@ -134,14 +134,14 @@ export function useOferta() {
 
   return {
     selectDate,
-    listOferta,
+    listColeta,
     contextHolder,
-    ofertaForEdit,
-    setOfertaForEdit,
+    coletaForEdit,
+    setColetaForEdit,
     setSelectDate,
-    getDizimos,
-    editDizimo,
-    deleteOferta,
+    getColetas,
+    editColeta,
+    deleteColeta,
     submitOferta,
   };
 }

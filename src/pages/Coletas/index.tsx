@@ -1,32 +1,32 @@
 import React, { MouseEvent, useState } from "react";
 import { Container, Content } from "./styles";
-import { OfertaTable } from "../../components/Dashboard/Oferta";
+import { OfertaTable } from "../../components/Dashboard/Coleta";
 import { Button, DatePicker, Flex, Input, Modal, Typography } from "antd";
 import dayjs from "dayjs";
-import { useOferta } from "../../hooks/useOferta";
+import { useColeta } from "../../hooks/useColeta";
 import { useNavigate } from "react-router";
 
-export function OfertaDash() {
+export function ColetaDash() {
   const [open, setOpen] = useState(false);
 
   const {
-    selectDate,
+    coletaForEdit,
     contextHolder,
-    listOferta,
-    ofertaForEdit,
-    getDizimos,
+    deleteColeta,
+    editColeta,
+    getColetas,
+    listColeta,
+    selectDate,
+    setColetaForEdit,
     setSelectDate,
-    setOfertaForEdit,
-    editDizimo,
-    submitOferta,
-    deleteOferta
-  } = useOferta();
+    submitOferta
+  } = useColeta();
   const format = "DD/MM/YYYY";
 
   const navigate = useNavigate();
 
   function handleOpenAndSetOfertaEdit(oferta: IListOferta) {
-    setOfertaForEdit(oferta)
+    setColetaForEdit(oferta)
     setOpen(true);
   }
 
@@ -77,7 +77,7 @@ export function OfertaDash() {
             <Button
               type="primary"
               onClick={async () => {
-                await getDizimos(selectDate.initDate, selectDate.lastdate);
+                await getColetas(selectDate.initDate, selectDate.lastdate);
               }}
             >
               Buscar
@@ -85,9 +85,9 @@ export function OfertaDash() {
           </Flex>
         </header>
         <OfertaTable
-          ofertas={listOferta}
+          ofertas={listColeta}
           submit={submitOferta}
-          deleteFn={deleteOferta}
+          deleteFn={deleteColeta}
           edit={handleOpenAndSetOfertaEdit}
         />
       </Content>
@@ -96,7 +96,7 @@ export function OfertaDash() {
         title="Editar Dizimo"
         open={open}
         onOk={async () => {
-          editDizimo(ofertaForEdit)
+          editColeta(coletaForEdit)
           setOpen(false);
         }}
         onCancel={() => {
@@ -116,9 +116,9 @@ export function OfertaDash() {
             <Typography.Title level={5}>Valor</Typography.Title>
             <Input
               placeholder="Nome"
-              value={formatedValueForDecimal(ofertaForEdit?.valor)}
+              value={formatedValueForDecimal(coletaForEdit?.valor)}
               onChange={(e) => {
-                setOfertaForEdit(prev => {
+                setColetaForEdit(prev => {
 
                   return {
                     ...prev,

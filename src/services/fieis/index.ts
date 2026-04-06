@@ -134,7 +134,7 @@ ipcMain.handle(
       data: dateReverse,
       anoReferente: dateSplit[0],
       mesReferente: dateSplit[1],
-      valor: parseFloat(data.valor)/100,
+      valor: parseFloat(data.valor) / 100,
       tipoRecebimento: {
         tipo: 0,
         descricao: "Caixa",
@@ -158,13 +158,56 @@ ipcMain.handle(
     });
 
     console.log(resDizimo.data);
-    
+
 
     return;
   },
 );
 
-ipcMain.handle("sendOne-oferta", (event, data) => {});
+ipcMain.handle("sendOne-oferta", async (event, data: IListOferta) => {
+
+  try {
+    await theosApi.post('/EclesialParoquia/api/v1/ofertaLancamento', {
+      "anonima": true,
+      "data": dayjs(data.data_lancamento).format('DD/MM/YYYY'),
+      "tipoRecebimento": {
+        "tipo": 0,
+        "descricao": "Caixa",
+        "isCaixa": true,
+        "liberado": true,
+        "codigo": "00000000",
+        "visible": true
+      },
+      "tipo": {
+        "id": 5,
+        "nome": "Oferta Comum",
+        "classificacaoFinanceira": {
+          "descricao": "Oferta (Integração)",
+          "codigo": 27,
+          "historicoQuitacaoId": 11500,
+          "complementoHistoricoQuitacao": null,
+          "destino": 0,
+          "situacao": 0,
+          "dioceseId": null,
+          "id": 22404
+        }
+      },
+      "valor": Number(data.valor) / 100,
+      "lancamentoViaPix": false,
+      "comunidade": {
+        "nome": data.comunidade.nome,
+        "id": data.comunidade.theosId,
+        "centroCusto": {
+          "id": data.comunidade.centroCustoId
+        }
+      }
+    })
+  } catch (error) {
+    throw error
+  }
+
+
+});
 
 ipcMain.handle("sendAll-dizimo", async (event: IpcMainInvokeEvent, data) => {
   const pupInstance = await PupAutomation.getInstance();
