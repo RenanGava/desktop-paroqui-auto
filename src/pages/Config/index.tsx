@@ -8,8 +8,8 @@ export function TiposConfig() {
 
   return (
     <Flex justify="center" gap={10} wrap>
-      {/* <SyncColetas />
-      <SyncComunidades/> */}
+      {/* <SyncColetas /> */}
+      <SyncComunidades/>
       <SyncFieis/>
     </Flex>
   );

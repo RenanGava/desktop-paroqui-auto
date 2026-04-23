@@ -2,7 +2,6 @@ import { stringify } from "qs";
 import React, { useEffect, useState } from "react";
 import { api } from "../../../utils/axios";
 import { message } from "antd";
-import { fiel } from "src/utils/theosData";
 
 export function useConfigFieisApp() {
   const [amount, setAmount] = useState(0);
@@ -22,34 +21,40 @@ export function useConfigFieisApp() {
       const fieis = await window.api.syncFieis();
       const { data } = await api.get("/comunidades?" + configReq);
       const strapiComunidades = data.data as IListComunidades[];
-      console.log(fieis[0]);
-      
+
       const mapUserData = fieis.map((fiel) => {
 
-        const findedComunidade = strapiComunidades.find(comunidade => {
-          console.log(fiel.comunidadeTheosId ,comunidade.theosId);
-          
-          return fiel.comunidadeTheosId === comunidade.theosId
-        })
-
-
-        return {
-          cpf: fiel.cpf,
-          nome: fiel.nome,
-          dizimistaId: fiel.dizimistaId,
-          data_nascimento: fiel.data_nascimento,
-          comunidade: {
-            connect: [
-              {
-                documentId: findedComunidade?.documentId,
+        return strapiComunidades.map(comunidade => {
+          console.log(fiel.comunidadeTheosId, comunidade.theosId);
+          if (fiel.comunidadeTheosId === comunidade.theosId) {
+            return {
+              cpf: fiel.cpf,
+              nome: fiel.nome,
+              dizimistaId: fiel.dizimistaId,
+              data_nascimento: fiel.data_nascimento,
+              comunidade: {
+                connect: [
+                  {
+                    documentId: comunidade.documentId,
+                  },
+                ],
               },
-            ],
-          },
-        };
+            } as const
+
+
+          }
+          
+        }).filter( fiel => fiel !== undefined)
+
       });
 
-      setQtdFieisParoquiAuto(strapiComunidades.length);
-      console.log(mapUserData);
+      // setQtdFieisParoquiAuto(strapiComunidades.length);
+      const listFielData = mapUserData.map(item => item[0])
+      listFielData.map(item => item.cpf === null && console.log(item.cpf))
+      console.log([...new Set(listFielData)].length);
+      
+
+      // await api.post('/fieis/fielSync', listFielData)
 
       // percorremos a lista de coletas para achar os itens que nao existem
       // no nosso banco de dados "paroquiAuto"
