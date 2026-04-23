@@ -10,8 +10,8 @@ interface SelectDate {
 }
 
 export function useColeta() {
-  const [listColeta, setListColeta] = useState<IListOferta[]>([]);
-  const [coletaForEdit, setColetaForEdit] = useState<IListOferta>(null);
+  const [listColeta, setListColeta] = useState<IListColeta[]>([]);
+  const [coletaForEdit, setColetaForEdit] = useState<IListColeta | null>(null);
   const [selectDate, setSelectDate] = useState<SelectDate>({} as SelectDate);
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -34,6 +34,16 @@ export function useColeta() {
             comunidade: {
               fields: ["documentId", "nome", "theosId", "centroCustoId"],
             },
+            tipo_coleta: {
+              fields: [
+                "documentId",
+                "tipo",
+                "theosContaId",
+                "theosTipoDocId",
+                "theosHistoricoId",
+                "theosColetaId",
+              ],
+            },
           },
         },
         {
@@ -42,7 +52,7 @@ export function useColeta() {
       );
 
       const ofertas = await api.get("/coletas?" + configRequest);
-      const ofertasList = ofertas.data.data as IListOferta[];
+      const ofertasList = ofertas.data.data as IListColeta[];
 
       console.log(ofertas);
 
@@ -68,6 +78,16 @@ export function useColeta() {
           comunidade: {
             fields: ["documentId", "nome", "theosId", "centroCustoId"],
           },
+          tipo_coleta: {
+            fields: [
+              "documentId",
+              "tipo",
+              "theosContaId",
+              "theosTipoDocId",
+              "theosHistoricoId",
+              "theosColetaId",
+            ],
+          },
         },
       },
       {
@@ -75,61 +95,61 @@ export function useColeta() {
       },
     );
 
-    const ofertas = await api.get("/ofertas?" + configRequest);
-    const ofertasList = ofertas.data.data as IListOferta[];
+    const ofertas = await api.get("/coletas?" + configRequest);
+    const ofertasList = ofertas.data.data as IListColeta[];
 
     console.log(ofertas);
 
     setListColeta(ofertasList);
   }
 
-  async function submitOferta(dizimo: IListOferta) {
+  async function submitColeta(coleta: IListColeta) {
+    console.log(coleta);
 
     try {
-      await window.api.sendOneOferta(dizimo)
-      messageApi.open({
-        type:"success",
-        content: 'Oferta Enviada com sucesso!'
+      await window.api.sendOneColeta(coleta);
+
+      await api.delete("/coletas/" + coleta.documentId);
+      setListColeta( prev =>{
+
+        return prev.filter( col => col.documentId !== coleta.documentId)
       })
+      messageApi.open({
+        type: "success",
+        content: "Coleta Enviada com sucesso!",
+      });
     } catch (error) {
       messageApi.open({
-        type:"warning",
-        content: 'Oferta Apagada com sucesso!'
-      })
+        type: "warning",
+        content: "Coleta Apagada com sucesso!",
+      });
     }
-    
-
   }
 
-  async function editColeta(oferta?: IListOferta) {
+  async function editColeta(coleta: IListColeta | null) {
     setListColeta((prev) => {
       return prev.map((item) => {
-        return item.id === oferta.id? oferta: item
+        return item.id === coleta?.id ? coleta : item;
       });
     });
   }
 
   async function deleteColeta(id: string) {
-
     console.log(id);
-    api.delete('/ofertas/'+id).then( res =>{
-
+    await api.delete("/coletas/" + id).then((res) => {
       messageApi.open({
-        type:"warning",
-        content: 'Oferta Apagada com sucesso!'
-      })
+        type: "warning",
+        content: "Coleta Apagada com sucesso!",
+      });
 
       console.log(res);
-      
 
       setListColeta((prev) => {
-      return prev.filter((item) => {
-        return item.documentId !== id
+        return prev.filter((item) => {
+          return item.documentId !== id;
+        });
       });
     });
-    })
-
-
   }
 
   return {
@@ -142,6 +162,6 @@ export function useColeta() {
     getColetas,
     editColeta,
     deleteColeta,
-    submitOferta,
+    submitColeta,
   };
 }

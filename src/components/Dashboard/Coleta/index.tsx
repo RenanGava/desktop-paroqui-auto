@@ -4,15 +4,15 @@ import { List, PencilLine, SendHorizonal, Trash } from "lucide-react";
 import dayjs from "dayjs";
 
 interface OfertaTableProps {
-  ofertas: IListOferta[];
-  submit: (oferta: IListOferta) => Promise<void>
-  edit: (oferta: IListOferta) => void
+  coletas: IListColeta[];
+  submit: (oferta: IListColeta) => Promise<void>
+  edit: (oferta: IListColeta) => void
   deleteFn: (id: string) => Promise<void>
   
 }
 
-export function OfertaTable({
-  ofertas,
+export function ColetaTable({
+  coletas,
   edit,
   submit,
   deleteFn
@@ -21,11 +21,17 @@ export function OfertaTable({
 
   return (
     <>
-      <Table<IListOferta> dataSource={ofertas} rowKey="id">
+      <Table<IListColeta> dataSource={coletas} rowKey="id" >
         <Column title="ID" dataIndex="id" key="id" width={80} />
         <Column
           title="Comunidade"
           dataIndex={["comunidade", "nome"]}
+          key="comunidade"
+          width={200}
+        />
+        <Column
+          title="Comunidade"
+          dataIndex={["tipo_coleta", "tipo"]}
           key="comunidade"
           width={200}
         />
@@ -51,7 +57,7 @@ export function OfertaTable({
           title="Funções"
           key="action"
           width={120}
-          render={(_: any, oferta: IListOferta) => (
+          render={(_: any, coleta: IListColeta) => (
             <Flex gap={"small"} justify="center">
               <Tooltip title="Editar" key={"edit"}>
                 <Button
@@ -59,7 +65,7 @@ export function OfertaTable({
                   variant="solid"
                   size="small"
                   onClick={() => {
-                    edit(oferta)
+                    edit(coleta)
                   }}
                 >
                   <PencilLine color="#000" size={16} />
@@ -72,7 +78,7 @@ export function OfertaTable({
                   okText="Sim"
                   okType="danger"
                   onConfirm={async () =>{
-                    await deleteFn(oferta.documentId)
+                    await deleteFn(coleta.documentId)
                   }}
                   cancelText="Não"
                 >
@@ -92,7 +98,7 @@ export function OfertaTable({
                   variant="solid"
                   size="small"
                   onClick={async () => {
-                    await submit(oferta)
+                    await submit(coleta)
                   }}
                 >
                   <SendHorizonal color="#000" size={16} />

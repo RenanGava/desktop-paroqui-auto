@@ -11,7 +11,7 @@ interface SelectDate {
 
 export function useOferta() {
   const [listOferta, setListOferta] = useState<IListOferta[]>([]);
-  const [ofertaForEdit, setOfertaForEdit] = useState<IListOferta>(null);
+  const [ofertaForEdit, setOfertaForEdit] = useState<IListOferta | null>(null);
   const [selectDate, setSelectDate] = useState<SelectDate>({} as SelectDate);
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -52,7 +52,7 @@ export function useOferta() {
     getOfertas();
   }, []);
 
-  async function getDizimos(initiDate: string, lastDate: string) {
+  async function getOfertas(initiDate: string, lastDate: string) {
     const configRequest = stringify(
       {
         fields: ["documentId", "data_lancamento", "valor"],
@@ -83,53 +83,67 @@ export function useOferta() {
     setListOferta(ofertasList);
   }
 
-  async function submitOferta(dizimo: IListOferta) {
-
+  async function submitOferta(oferta: IListOferta) {
     try {
-      await window.api.sendOneOferta(dizimo)
+      await window.api.sendOneOferta(oferta);
       messageApi.open({
-        type:"success",
-        content: 'Oferta Enviada com sucesso!'
-      })
+        type: "success",
+        content: "Oferta Enviada com sucesso!",
+      });
+      await api.delete("/ofertas/" + oferta.documentId);
+      setListOferta((prev) =>
+        prev.filter((ofer) => {
+          return ofer.documentId !== oferta.documentId;
+        }),
+      );
     } catch (error) {
       messageApi.open({
-        type:"warning",
-        content: 'Oferta Apagada com sucesso!'
-      })
+        type: "warning",
+        content: "Oferta Apagada com sucesso!",
+      });
     }
-    
-
   }
 
-  async function editDizimo(oferta?: IListOferta) {
-    setListOferta((prev) => {
-      return prev.map((item) => {
-        return item.id === oferta.id? oferta: item
+  async function editDizimo(oferta: IListOferta | null) {
+    try {
+      await api.put("/ofertas/" + oferta?.documentId, {
+        data: {
+          valor: oferta?.valor,
+        },
       });
-    });
+      setListOferta((prev) => {
+        return prev.map((item) => {
+          return item.id === oferta?.id ? oferta : item;
+        });
+      });
+      messageApi.open({
+        type: "success",
+        content: "Oferta Editada com sucesso!",
+      });
+    } catch (error) {
+      messageApi.open({
+        type: "error",
+        content: "Houve um erro ao editar",
+      });
+    }
   }
 
   async function deleteOferta(id: string) {
-
     console.log(id);
-    api.delete('/ofertas/'+id).then( res =>{
-
+    await api.delete("/ofertas/" + id).then((res) => {
       messageApi.open({
-        type:"warning",
-        content: 'Oferta Apagada com sucesso!'
-      })
+        type: "warning",
+        content: "Oferta Apagada com sucesso!",
+      });
 
       console.log(res);
-      
 
       setListOferta((prev) => {
-      return prev.filter((item) => {
-        return item.documentId !== id
+        return prev.filter((item) => {
+          return item.documentId !== id;
+        });
       });
     });
-    })
-
-
   }
 
   return {
@@ -139,7 +153,7 @@ export function useOferta() {
     ofertaForEdit,
     setOfertaForEdit,
     setSelectDate,
-    getDizimos,
+    getOfertas,
     editDizimo,
     deleteOferta,
     submitOferta,

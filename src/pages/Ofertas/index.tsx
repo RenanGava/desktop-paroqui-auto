@@ -5,6 +5,7 @@ import { Button, DatePicker, Flex, Input, Modal, Typography } from "antd";
 import dayjs from "dayjs";
 import { useOferta } from "../../hooks/useOferta";
 import { useNavigate } from "react-router";
+import { formatedValueForDecimal } from "../../utils/formatedValue";
 
 export function OfertaDash() {
   const [open, setOpen] = useState(false);
@@ -14,36 +15,20 @@ export function OfertaDash() {
     contextHolder,
     listOferta,
     ofertaForEdit,
-    getDizimos,
+    getOfertas,
     setSelectDate,
     setOfertaForEdit,
     editDizimo,
     submitOferta,
-    deleteOferta
+    deleteOferta,
   } = useOferta();
   const format = "DD/MM/YYYY";
 
   const navigate = useNavigate();
 
   function handleOpenAndSetOfertaEdit(oferta: IListOferta) {
-    setOfertaForEdit(oferta)
+    setOfertaForEdit(oferta);
     setOpen(true);
-  }
-
-  function formatedValueForDecimal(value: string) {
-    const turnIntoDecimal = Number.parseFloat(value) / 100;
-
-    if (turnIntoDecimal > 0) {
-      // setFormatedDizimo(turnIntoDecimal);
-      const formated = turnIntoDecimal.toLocaleString("pt-BR", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
-
-      return formated;
-    } else {
-      return "0";
-    }
   }
 
   return (
@@ -58,7 +43,7 @@ export function OfertaDash() {
                 console.log();
                 setSelectDate({
                   ...selectDate,
-                  initDate: date.format("YYYY-MM-DD"),
+                  initDate: dayjs(date).format("YYYY-MM-DD"),
                 });
               }}
             />
@@ -70,14 +55,14 @@ export function OfertaDash() {
                 console.log();
                 setSelectDate({
                   ...selectDate,
-                  lastdate: date.format("YYYY-MM-DD"),
+                  lastdate: dayjs(date).format("YYYY-MM-DD"),
                 });
               }}
             />
             <Button
               type="primary"
               onClick={async () => {
-                await getDizimos(selectDate.initDate, selectDate.lastdate);
+                await getOfertas(selectDate.initDate, selectDate.lastdate);
               }}
             >
               Buscar
@@ -96,7 +81,7 @@ export function OfertaDash() {
         title="Editar Dizimo"
         open={open}
         onOk={async () => {
-          editDizimo(ofertaForEdit)
+          editDizimo(ofertaForEdit);
           setOpen(false);
         }}
         onCancel={() => {
@@ -118,13 +103,14 @@ export function OfertaDash() {
               placeholder="Nome"
               value={formatedValueForDecimal(ofertaForEdit?.valor)}
               onChange={(e) => {
-                setOfertaForEdit(prev => {
-
-                  return {
-                    ...prev,
-                    valor: e.target.value.replace(/\D/g, "")
-                  }
-                })
+                setOfertaForEdit((prev) =>
+                  prev
+                    ? {
+                        ...prev,
+                        valor: e.target.value.replace(/\D/g, ""),
+                      }
+                    : null,
+                );
               }}
             />
           </Flex>

@@ -19,5 +19,12 @@ function setKey(key:Key, value:any){
     return store.set('key', value)
 }
 
+function clearKeys(){
 
-export { getKey, setKey };
+    //@ts-ignore
+    store.clear()
+    
+}
+
+
+export { getKey, setKey, clearKeys };

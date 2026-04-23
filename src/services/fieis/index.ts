@@ -6,39 +6,44 @@ import { api } from "../../utils/axios";
 import dayjs from "dayjs";
 import "../../utils/storage";
 import { theosApi } from "../../utils/theosData/api";
+import { requestFieis } from "./funcs/recursivePagination";
 config({
   path:
     process.env.NODE_ENV === "development" ? ".env.local" : ".env.production",
 });
 
-ipcMain.handle("loginTheos", async () => {
-  const pupInstance = await PupAutomation.getInstance();
-  const { browser } = await pupInstance.getPup();
-  const [page] = await browser.pages();
-  console.log(process.env.EMAIL);
 
+ipcMain.handle('getFieis', async () => {
+  const fieis = await requestFieis()
+
+  return fieis
+})
+
+// ipcMain.handle("loginTheos", async () => {
+  // const pupInstance = await PupAutomation.getInstance();
+  // const { browser } = await pupInstance.getPup();
+  // const [page] = await browser.pages();
+  // console.log(process.env.EMAIL);
   // pvaguadalupe@gmail.com
   // 1109
-  await page.goto(url.loginPage);
-  await page.waitForSelector('input[name="email"]');
-  await page.type('input[name="email"]', "pvaguadalupe@gmail.com");
-  await page.type('input[name="senha"]', "1109");
-  await page.click("button#login-input-entrar");
-  await page.waitForNavigation();
+  // await page.goto(url.loginPage);
+  // await page.waitForSelector('input[name="email"]');
+  // await page.type('input[name="email"]', "pvaguadalupe@gmail.com");
+  // await page.type('input[name="senha"]', "1109");
+  // await page.click("button#login-input-entrar");
+  // await page.waitForNavigation();
   //   page.on('response', async (res) => {
   //     const response = res.request()
-
   //     const cep = (await res.json()).organismoCep
   //     if(cep !== undefined){
   //         console.log({cep: cep});
-
   //     }
   //   })
-});
+// });
 
-ipcMain.handle(
-  "send-dizimo",
-  async (event: IpcMainInvokeEvent, data: IListDizimo) => {
+// ipcMain.handle(
+//   "send-dizimo",
+//   async (event: IpcMainInvokeEvent, data: IListDizimo) => {
     // const pupInstance = await PupAutomation.getInstance();
     // const { browser, page } = await pupInstance.getPup();
     // await page.goto(url.lancamentoDizimoPage);
@@ -82,25 +87,25 @@ ipcMain.handle(
 
     // await page.click('button[id="btnNovo"]')
 
-    const dateSplit = data.data_lancamento.split("-");
-    const dateReverse = `${dateSplit[2]}/${dateSplit[1]}/${dateSplit[0]}`;
-    const fielData = await theosApi.post(
-      "/EclesialFieisCadastros/api/v1/Fiel/search",
-      {
-        page: 1,
-        pageSize: 50,
-        filter: [
-          {
-            property: "dizimistaId",
-            condition: 0,
-            conditionStart: parseInt(data.fiel.dizimistaId),
-            conditionEnd: null,
-            textCondition:
-              "Código dizimista igual " + parseInt(data.fiel.dizimistaId),
-          },
-        ],
-      },
-    );
+    // const dateSplit = data.data_lancamento.split("-");
+    // const dateReverse = `${dateSplit[2]}/${dateSplit[1]}/${dateSplit[0]}`;
+    // const fielData = await theosApi.post(
+    //   "/EclesialFieisCadastros/api/v1/Fiel/search",
+    //   {
+    //     page: 1,
+    //     pageSize: 50,
+    //     filter: [
+    //       {
+    //         property: "dizimistaId",
+    //         condition: 0,
+    //         conditionStart: parseInt(data.fiel.dizimistaId),
+    //         conditionEnd: null,
+    //         textCondition:
+    //           "Código dizimista igual " + parseInt(data.fiel.dizimistaId),
+    //       },
+    //     ],
+    //   },
+    // );
     // {
     //   id: 8095992,
     //   nome: "RENAN DELLECRODE GAVA",
@@ -128,90 +133,88 @@ ipcMain.handle(
     //   inativo: 0,
     // };
 
-    const fiel = fielData.data.result.data[0];
+//     const fiel = fielData.data.result.data[0];
 
-    const resDizimo = await theosApi.post("/EclesialParoquia/api/v1/dizimo", {
-      data: dateReverse,
-      anoReferente: dateSplit[0],
-      mesReferente: dateSplit[1],
-      valor: parseFloat(data.valor) / 100,
-      tipoRecebimento: {
-        tipo: 0,
-        descricao: "Caixa",
-      },
-      fiel: {
-        dizimistaId: data.fiel.dizimistaId,
-        id: fiel.id,
-        nome: data.fiel.nome,
-        nomeComunidade: data.comunidade.nome,
-        comunidadeId: data.comunidade.theosId,
-        comunidadeIdCentrosCustos: data.comunidade.centroCustoId,
-        // cnpjCpf: data.fiel.cpf,
-      },
-      comunidade: {
-        id: data.comunidade.theosId,
-        nome: data.comunidade.nome,
-        centroCusto: {
-          id: data.comunidade.centroCustoId,
-        },
-      },
-    });
+//     const resDizimo = await theosApi.post("/EclesialParoquia/api/v1/dizimo", {
+//       data: dateReverse,
+//       anoReferente: dateSplit[0],
+//       mesReferente: dateSplit[1],
+//       valor: parseFloat(data.valor) / 100,
+//       tipoRecebimento: {
+//         tipo: 0,
+//         descricao: "Caixa",
+//       },
+//       fiel: {
+//         dizimistaId: data.fiel.dizimistaId,
+//         id: fiel.id,
+//         nome: data.fiel.nome,
+//         nomeComunidade: data.comunidade.nome,
+//         comunidadeId: data.comunidade.theosId,
+//         comunidadeIdCentrosCustos: data.comunidade.centroCustoId,
+//         // cnpjCpf: data.fiel.cpf,
+//       },
+//       comunidade: {
+//         id: data.comunidade.theosId,
+//         nome: data.comunidade.nome,
+//         centroCusto: {
+//           id: data.comunidade.centroCustoId,
+//         },
+//       },
+//     });
 
-    console.log(resDizimo.data);
+//     console.log(resDizimo.data);
+
+//     return;
+//   },
+// );
+
+// ipcMain.handle("sendOne-oferta", async (event, data: IListOferta) => {
+//   try {
+//     await theosApi.post("/EclesialParoquia/api/v1/ofertaLancamento", {
+//       anonima: true,
+//       data: dayjs(data.data_lancamento).format("DD/MM/YYYY"),
+//       tipoRecebimento: {
+//         tipo: 0,
+//         descricao: "Caixa",
+//         isCaixa: true,
+//         liberado: true,
+//         codigo: "00000000",
+//         visible: true,
+//       },
+//       tipo: {
+//         id: 5,
+//         nome: "Oferta Comum",
+//         classificacaoFinanceira: {
+//           descricao: "Oferta (Integração)",
+//           codigo: 27,
+//           historicoQuitacaoId: 11500,
+//           complementoHistoricoQuitacao: null,
+//           destino: 0,
+//           situacao: 0,
+//           dioceseId: null,
+//           id: 22404,
+//         },
+//       },
+//       valor: Number(data.valor) / 100,
+//       lancamentoViaPix: false,
+//       comunidade: {
+//         nome: data.comunidade.nome,
+//         id: data.comunidade.theosId,
+//         centroCusto: {
+//           id: data.comunidade.centroCustoId,
+//         },
+//       },
+//     });
+//   } catch (error) {
+//     throw error;
+//   }
+// });
 
 
-    return;
-  },
-);
 
-ipcMain.handle("sendOne-oferta", async (event, data: IListOferta) => {
-
-  try {
-    await theosApi.post('/EclesialParoquia/api/v1/ofertaLancamento', {
-      "anonima": true,
-      "data": dayjs(data.data_lancamento).format('DD/MM/YYYY'),
-      "tipoRecebimento": {
-        "tipo": 0,
-        "descricao": "Caixa",
-        "isCaixa": true,
-        "liberado": true,
-        "codigo": "00000000",
-        "visible": true
-      },
-      "tipo": {
-        "id": 5,
-        "nome": "Oferta Comum",
-        "classificacaoFinanceira": {
-          "descricao": "Oferta (Integração)",
-          "codigo": 27,
-          "historicoQuitacaoId": 11500,
-          "complementoHistoricoQuitacao": null,
-          "destino": 0,
-          "situacao": 0,
-          "dioceseId": null,
-          "id": 22404
-        }
-      },
-      "valor": Number(data.valor) / 100,
-      "lancamentoViaPix": false,
-      "comunidade": {
-        "nome": data.comunidade.nome,
-        "id": data.comunidade.theosId,
-        "centroCusto": {
-          "id": data.comunidade.centroCustoId
-        }
-      }
-    })
-  } catch (error) {
-    throw error
-  }
-
-
-});
-
-ipcMain.handle("sendAll-dizimo", async (event: IpcMainInvokeEvent, data) => {
-  const pupInstance = await PupAutomation.getInstance();
-  const { browser, page } = await pupInstance.getPup();
-  await page.goto(url.lancamentoDizimoPage);
-  return;
-});
+// ipcMain.handle("sendAll-dizimo", async (event: IpcMainInvokeEvent, data) => {
+//   const pupInstance = await PupAutomation.getInstance();
+//   const { browser, page } = await pupInstance.getPup();
+//   await page.goto(url.lancamentoDizimoPage);
+//   return;
+// });

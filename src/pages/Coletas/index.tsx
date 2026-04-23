@@ -1,10 +1,11 @@
 import React, { MouseEvent, useState } from "react";
 import { Container, Content } from "./styles";
-import { OfertaTable } from "../../components/Dashboard/Coleta";
+import { ColetaTable } from "../../components/Dashboard/Coleta";
 import { Button, DatePicker, Flex, Input, Modal, Typography } from "antd";
 import dayjs from "dayjs";
 import { useColeta } from "../../hooks/useColeta";
 import { useNavigate } from "react-router";
+import { formatedValueForDecimal } from "../../utils/formatedValue";
 
 export function ColetaDash() {
   const [open, setOpen] = useState(false);
@@ -12,38 +13,22 @@ export function ColetaDash() {
   const {
     coletaForEdit,
     contextHolder,
+    listColeta,
+    selectDate,
     deleteColeta,
     editColeta,
     getColetas,
-    listColeta,
-    selectDate,
     setColetaForEdit,
     setSelectDate,
-    submitOferta
+    submitColeta,
   } = useColeta();
   const format = "DD/MM/YYYY";
 
   const navigate = useNavigate();
 
-  function handleOpenAndSetOfertaEdit(oferta: IListOferta) {
-    setColetaForEdit(oferta)
+  function handleOpenAndSetOfertaEdit(oferta: IListColeta) {
+    setColetaForEdit(oferta);
     setOpen(true);
-  }
-
-  function formatedValueForDecimal(value: string) {
-    const turnIntoDecimal = Number.parseFloat(value) / 100;
-
-    if (turnIntoDecimal > 0) {
-      // setFormatedDizimo(turnIntoDecimal);
-      const formated = turnIntoDecimal.toLocaleString("pt-BR", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
-
-      return formated;
-    } else {
-      return "0";
-    }
   }
 
   return (
@@ -58,7 +43,7 @@ export function ColetaDash() {
                 console.log();
                 setSelectDate({
                   ...selectDate,
-                  initDate: date.format("YYYY-MM-DD"),
+                  initDate: dayjs(date).format("YYYY-MM-DD"),
                 });
               }}
             />
@@ -70,7 +55,7 @@ export function ColetaDash() {
                 console.log();
                 setSelectDate({
                   ...selectDate,
-                  lastdate: date.format("YYYY-MM-DD"),
+                  lastdate: dayjs(date).format("YYYY-MM-DD"),
                 });
               }}
             />
@@ -84,9 +69,9 @@ export function ColetaDash() {
             </Button>
           </Flex>
         </header>
-        <OfertaTable
-          ofertas={listColeta}
-          submit={submitOferta}
+        <ColetaTable
+          coletas={listColeta}
+          submit={submitColeta}
           deleteFn={deleteColeta}
           edit={handleOpenAndSetOfertaEdit}
         />
@@ -96,7 +81,7 @@ export function ColetaDash() {
         title="Editar Dizimo"
         open={open}
         onOk={async () => {
-          editColeta(coletaForEdit)
+          editColeta(coletaForEdit);
           setOpen(false);
         }}
         onCancel={() => {
@@ -118,13 +103,14 @@ export function ColetaDash() {
               placeholder="Nome"
               value={formatedValueForDecimal(coletaForEdit?.valor)}
               onChange={(e) => {
-                setColetaForEdit(prev => {
-
-                  return {
-                    ...prev,
-                    valor: e.target.value.replace(/\D/g, "")
-                  }
-                })
+                setColetaForEdit((prev) =>
+                  prev
+                    ? {
+                        ...prev,
+                        valor: e.target.value.replace(/\D/g, ""),
+                      }
+                    : null,
+                );
               }}
             />
           </Flex>

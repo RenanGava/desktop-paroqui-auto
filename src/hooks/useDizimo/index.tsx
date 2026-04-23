@@ -11,7 +11,7 @@ interface SelectDate {
 
 export function useDizimo() {
   const [listDizimo, setListDizimo] = useState<IListDizimo[]>([]);
-  const [dizimoForEdit, setDizimoForEdit] = useState<IListDizimo>(null);
+  const [dizimoForEdit, setDizimoForEdit] = useState<IListDizimo | null>(null);
   const [selectDate, setSelectDate] = useState<SelectDate>({} as SelectDate);
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -110,7 +110,7 @@ export function useDizimo() {
 
       const response = await api.delete("/dizimos/" + dizimo.documentId);
       setListDizimo((prev) => prev.filter((item) => item.id != dizimo.id));
-    } catch (error) {
+    } catch (error: any) {
       messageApi.open({
         type: "error",
         content: "Erro ao enviar o Dízimo " + error.message,
@@ -118,23 +118,23 @@ export function useDizimo() {
     }
   }
 
-  async function editDizimo(dizimo?: IListDizimo) {
-    if (Number(dizimo.valor) / 100 < 1) {
+  async function editDizimo(dizimo: IListDizimo | null) {
+    if (Number(dizimo?.valor) / 100 < 1) {
       messageApi.open({
         type: "error",
-        content: "Erro ao editar lancamento " + dizimo.fiel.nome,
+        content: "Erro ao editar lancamento " + dizimo?.fiel.nome,
       });
       return;
     }
 
-    const res = await api.put("/dizimos/" + dizimo.documentId, {
+    const res = await api.put("/dizimos/" + dizimo?.documentId, {
       data: {
-        valor: dizimo.valor,
+        valor: dizimo?.valor,
       },
     });
     setListDizimo((prev) => {
       return prev.map((item) => {
-        return item.id === dizimo.id ? dizimo : item;
+        return item.id === dizimo?.id ? dizimo : item;
       });
     });
   }

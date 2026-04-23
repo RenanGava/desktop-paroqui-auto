@@ -16,6 +16,7 @@ import { useDizimo } from "../../hooks/useDizimo";
 import dayjs from "dayjs";
 import UTC from "dayjs/plugin/utc";
 import { User } from "lucide-react";
+import { formatedValueForDecimal } from "../../utils/formatedValue";
 dayjs.extend(UTC);
 
 const { Column, ColumnGroup } = Table;
@@ -33,7 +34,7 @@ export function DizimoDash() {
     submitDizimo,
     editDizimo,
     setDizimoForEdit,
-    deleteDizimo
+    deleteDizimo,
   } = useDizimo();
   const format = "DD/MM/YYYY";
 
@@ -42,22 +43,6 @@ export function DizimoDash() {
   function handleOpenAndSetDizimoEdit(dizimo: IListDizimo) {
     setDizimoForEdit(dizimo);
     setOpen(true);
-  }
-
-  function formatedValueForDecimal(value: string) {
-    const turnIntoDecimal = Number.parseFloat(value) / 100;
-
-    if (turnIntoDecimal > 0) {
-      // setFormatedDizimo(turnIntoDecimal);
-      const formated = turnIntoDecimal.toLocaleString("pt-BR", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
-
-      return formated;
-    } else {
-      return "0";
-    }
   }
 
   return (
@@ -71,7 +56,7 @@ export function DizimoDash() {
               console.log();
               setSelectDate({
                 ...selectDate,
-                initDate: date.format("YYYY-MM-DD"),
+                initDate: dayjs(date).format("YYYY-MM-DD"),
               });
             }}
           />
@@ -83,7 +68,7 @@ export function DizimoDash() {
               console.log();
               setSelectDate({
                 ...selectDate,
-                lastdate: date.format("YYYY-MM-DD"),
+                lastdate: dayjs(date).format("YYYY-MM-DD"),
               });
             }}
           />
@@ -106,8 +91,8 @@ export function DizimoDash() {
         title="Editar Dizimo"
         open={open}
         onOk={async () => {
-          setOpen(false)
-          await editDizimo(dizimoForEdit)
+          setOpen(false);
+          await editDizimo(dizimoForEdit);
         }}
         onCancel={() => {
           setOpen(false);
@@ -131,13 +116,17 @@ export function DizimoDash() {
               key={"nome"}
               onChange={(e) => {
                 e.preventDefault();
-                setDizimoForEdit((prev) => ({
-                  ...prev,
-                  fiel: {
-                    ...prev.fiel,
-                    nome: e.target.value,
-                  },
-                }));
+                setDizimoForEdit((prev) =>
+                  prev
+                    ? {
+                        ...prev,
+                        fiel: {
+                          ...prev.fiel,
+                          nome: e.target.value,
+                        },
+                      }
+                    : null,
+                );
               }}
             />
           </Flex>
@@ -147,10 +136,17 @@ export function DizimoDash() {
               placeholder="Nome"
               value={formatedValueForDecimal(dizimoForEdit?.valor)}
               onChange={(e) => {
-                setDizimoForEdit((prev) => ({
-                  ...prev,
-                  valor: e.target.value.replace(/\D/g, ""),
-                }));
+                setDizimoForEdit((prev) =>
+                  prev
+                    ? {
+                        ...prev,
+                        fiel: {
+                          ...prev.fiel,
+                          nome: e.target.value,
+                        },
+                      }
+                    : null,
+                );
               }}
             />
           </Flex>

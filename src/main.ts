@@ -2,6 +2,10 @@ import started from 'electron-squirrel-startup';
 import { app, BrowserWindow } from 'electron';
 import path from 'node:path';
 import './services/fieis';
+import './services/coletas';
+import './services/dizimo';
+import './services/comunidade';
+import './services/ofertas';
 import './services/env';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
