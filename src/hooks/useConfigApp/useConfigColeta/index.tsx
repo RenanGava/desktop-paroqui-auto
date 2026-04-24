@@ -7,9 +7,11 @@ export function useConfigColetaApp() {
   const [amount, setAmount] = useState(0);
   const [coletasUnSync, setColetasUnSync] = useState<ITiposColetas[]>();
   const [qtdColetasParoquiAuto, setQtdColetasParoquiAuto] = useState(0)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     async function handleCompareColetasDB() {
+      setIsLoading(true)
       const configReq = stringify({
         fields: ["tipo", "theosContaId", "theosHistoricoId", "theosColetaId"],
       });
@@ -37,11 +39,13 @@ export function useConfigColetaApp() {
 
       setAmount(isDiferentColetas.length);
       setColetasUnSync(isDiferentColetas);
+      setIsLoading(false)
     }
     handleCompareColetasDB();
   }, []);
 
   async function handleSyncAllColetasDB() {
+    setIsLoading(true)
     console.log("Cadastrando tudo de uma vez");
 
     const coletas = await window.api.syncColetas();
@@ -59,11 +63,13 @@ export function useConfigColetaApp() {
         }),
       ),
     ]);
+    setIsLoading(false)
   }
 
   // aqui sincroniza somente as coletas que estao diferentes entre
   // o sistema Theos e o ParoquiAuto
   async function handleSyncColetasDB() {
+    setIsLoading(true)
     console.log("Cadasrando novos itens ou que faltavam", coletasUnSync)
 
     if(coletasUnSync?.length === 0 || coletasUnSync === undefined){
@@ -79,11 +85,13 @@ export function useConfigColetaApp() {
             theosContaId: coleta.theosContaId,
             theosColetaId: coleta.theosColetaId,
             theosTipoDocId: coleta.theosTipoDocId,
-            theosHistoricoId: coleta.theosHistoricoId,
+            theosHistoricoId: coleta.theosHistoricoId, 
           },
         }),
       ),
     ]);
+
+    setIsLoading(false)
   }
 
   return {

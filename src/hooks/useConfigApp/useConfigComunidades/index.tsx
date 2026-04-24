@@ -8,9 +8,12 @@ export function useConfigComunidadesApp() {
   const [comunidadesUnSync, setComunidadesUnSync] =
     useState<IListComunidades[]>();
   const [qtdComunidadesParoquiAuto, setQtdComunidadesParoquiAuto] = useState(0);
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     async function handleCompareColetasDB() {
+
+      setIsLoading(true)
       const configReq = stringify({
         fields: ["nome", "theosId", "centroCustoId", "id"],
         pagination: {
@@ -43,11 +46,13 @@ export function useConfigComunidadesApp() {
 
       setAmount(isDiferentComunidades.length);
       setComunidadesUnSync(isDiferentComunidades);
+      setIsLoading(false)
     }
     handleCompareColetasDB();
   }, []);
 
   async function handleSyncAllComunidadesDB() {
+    setIsLoading(true)
     console.log("caiu aqui");
 
     const comunidades = await window.api.syncComunidades();
@@ -65,11 +70,13 @@ export function useConfigComunidadesApp() {
     ]);
     setAmount(0)
     setQtdComunidadesParoquiAuto(0)
+    setIsLoading(false)
   }
 
   // aqui sincroniza somente as coletas que estao diferentes entre
   // o sistema Theos e o ParoquiAuto
   async function handleSyncComunidadesDB() {
+    setIsLoading(true)
     console.log("Cadasrando novos itens ou que faltavam", comunidadesUnSync);
 
     if (comunidadesUnSync?.length === 0 || comunidadesUnSync === undefined) {
@@ -94,12 +101,14 @@ export function useConfigComunidadesApp() {
 
     setAmount(0)
     setQtdComunidadesParoquiAuto(0)
+    setIsLoading(false)
   }
 
   return {
     amount,
     comunidadesUnSync,
     qtdComunidadesParoquiAuto,
+    isLoading,
     setAmount,
     setComunidadesUnSync,
     handleSyncComunidadesDB,

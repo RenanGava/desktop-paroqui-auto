@@ -1,16 +1,12 @@
 import { Card } from "antd";
 import React from "react";
-import { useConfigComunidadesApp } from "../../../../hooks/useConfigApp/useConfigComunidades";
 import { useConfigFieisApp } from "../../../../hooks/useConfigApp/useConfigFieis";
+import { LoadingOutlined } from "@ant-design/icons";
+import { Flex, Spin } from "antd";
 
 export function SyncFieis() {
-  const {
-    amount,
-    fieisUnSync,
-    qtdFieisParoquiAuto,
-    handleSyncAllFieisDB,
-    handleSyncFieisDB
-  } = useConfigFieisApp();
+  const { amount, qtdFieisParoquiAuto, handleSyncFieisDB, isLoading } =
+    useConfigFieisApp();
 
   return (
     <Card
@@ -18,14 +14,20 @@ export function SyncFieis() {
       style={{ width: 300 }}
       hoverable
       onClick={async (e) => {
-        qtdFieisParoquiAuto < 1 && (await handleSyncAllFieisDB());
-        qtdFieisParoquiAuto >= 1 && (await handleSyncFieisDB());
+        await handleSyncFieisDB();
       }}
     >
-      <Card.Meta description={`Coletas não sincronizadas do Theos ${amount}`} />
-      <Card.Meta
-        description={`Itens Cadastrados no App ${qtdFieisParoquiAuto}`}
-      />
+      {isLoading && <Spin indicator={<LoadingOutlined spin />} size="small" />}
+      {!isLoading && (
+        <>
+          <Card.Meta
+            description={`Fieis não sincronizadoss do Theos ${amount}`}
+          />
+          <Card.Meta
+            description={`Itens Cadastrados no App ${qtdFieisParoquiAuto}`}
+          />
+        </>
+      )}
     </Card>
   );
 }
