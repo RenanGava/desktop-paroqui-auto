@@ -1,6 +1,7 @@
 import started from 'electron-squirrel-startup';
 import { app, BrowserWindow } from 'electron';
-import { updateElectronApp } from 'update-electron-app'
+import { updateElectronApp, UpdateSourceType } from 'update-electron-app'
+import electronLogger from 'electron-log'
 import path from 'node:path';
 import './services/fieis';
 import './services/coletas';
@@ -14,7 +15,14 @@ if (started) {
   app.quit();
 }
 
-updateElectronApp()
+updateElectronApp({
+  updateSource:{
+    repo: 'https://github.com/RenanGava/desktop-paroqui-auto',
+    type: UpdateSourceType.ElectronPublicUpdateService
+  },
+  updateInterval: '1h',
+  logger: electronLogger
+})
 
 const createWindow = async () => {
   // Create the browser window.
