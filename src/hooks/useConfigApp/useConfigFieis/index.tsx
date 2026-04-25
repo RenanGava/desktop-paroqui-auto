@@ -2,7 +2,6 @@ import { stringify } from "qs";
 import React, { useEffect, useState } from "react";
 import { api } from "../../../utils/axios";
 import { message } from "antd";
-import { fiel } from "src/utils/theosData";
 
 export function useConfigFieisApp() {
   const [amount, setAmount] = useState(0);
