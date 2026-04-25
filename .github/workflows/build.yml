@@ -2,8 +2,8 @@ name: Build/release
 
 on:
   push:
-    branches:
-      - build-binary
+    tags:
+      - "v*"
 
 jobs:
   release:
@@ -23,6 +23,7 @@ jobs:
         with:
           node-version: 20
           cache: 'yarn'
+
 
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
