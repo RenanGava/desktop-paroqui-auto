@@ -1,5 +1,6 @@
 import started from 'electron-squirrel-startup';
 import { app, BrowserWindow } from 'electron';
+import { updateElectronApp } from 'update-electron-app'
 import path from 'node:path';
 import './services/fieis';
 import './services/coletas';
@@ -13,6 +14,8 @@ if (started) {
   app.quit();
 }
 
+updateElectronApp()
+
 const createWindow = async () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -24,6 +27,7 @@ const createWindow = async () => {
       nodeIntegration: false
     },
   });
+  mainWindow.setMenu(null)
 
 
   // and load the index.html of the app.
@@ -36,7 +40,7 @@ const createWindow = async () => {
   }
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
