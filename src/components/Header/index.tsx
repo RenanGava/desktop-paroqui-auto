@@ -38,9 +38,10 @@ export function Header() {
   }, [location])
   return (
     <Container>
+      <h1>Ola mundo</h1>
       <Content>
         <Tabs
-          defaultActiveKey="3"
+          defaultActiveKey="1"
           items={screens}
           type="line"
           size="large"
