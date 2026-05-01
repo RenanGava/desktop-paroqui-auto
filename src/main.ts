@@ -1,28 +1,23 @@
-import started from 'electron-squirrel-startup';
-import { app, BrowserWindow } from 'electron';
-import { updateElectronApp, UpdateSourceType } from 'update-electron-app'
-import electronLogger from 'electron-log'
-import path from 'node:path';
-import './services/fieis';
-import './services/coletas';
-import './services/dizimo';
-import './services/comunidade';
-import './services/ofertas';
-import './services/env';
+import started from "electron-squirrel-startup";
+import { app, BrowserWindow } from "electron";
+import {
+  updateElectronApp,
+  UpdateSourceType,
+  makeUserNotifier,
+} from "update-electron-app";
+import electronLogger from "electron-log";
+import path from "node:path";
+import "./services/fieis";
+import "./services/coletas";
+import "./services/dizimo";
+import "./services/comunidade";
+import "./services/ofertas";
+import "./services/env";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
   app.quit();
 }
-
-updateElectronApp({
-  updateSource:{
-    repo: 'https://github.com/RenanGava/desktop-paroqui-auto',
-    type: UpdateSourceType.ElectronPublicUpdateService
-  },
-  updateInterval: '1h',
-  logger: electronLogger
-})
 
 const createWindow = async () => {
   // Create the browser window.
@@ -30,13 +25,12 @@ const createWindow = async () => {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      contextIsolation:  true,
-      nodeIntegration: false
+      preload: path.join(__dirname, "preload.js"),
+      contextIsolation: true,
+      nodeIntegration: false,
     },
   });
-  mainWindow.setMenu(null)
-
+  // mainWindow.setMenu(null);
 
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
@@ -48,26 +42,32 @@ const createWindow = async () => {
   }
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', async () => {
-  createWindow()
+app.on("ready", async () => {
+  createWindow();
+  updateElectronApp({
+    repo: "RenanGava/desktop-paroqui-auto",
+    updateInterval: "1h",
+    logger: electronLogger,
+    notifyUser: true
+  });
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
     app.quit();
   }
 });
 
-app.on('activate', () => {
+app.on("activate", () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
