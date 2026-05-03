@@ -40,7 +40,7 @@ export function Header() {
     <Container>
       <Content>
         <Tabs
-          defaultActiveKey="3"
+          defaultActiveKey="1"
           items={screens}
           type="line"
           size="large"
