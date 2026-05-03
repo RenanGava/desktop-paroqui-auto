@@ -10,7 +10,7 @@ export function SyncFieis() {
 
   return (
     <Card
-      title="Sincronizar Comunidades"
+      title="Sincronizar Fieis"
       style={{ width: 300 }}
       hoverable
       onClick={async (e) => {

@@ -76,7 +76,7 @@ declare global {
     dizimistaId: string;
     cpf: string;
     nome: string;
-    data_nascimento: string;
+    // data_nascimento: string;
     comunidadeTheosId: string;
   }
 }

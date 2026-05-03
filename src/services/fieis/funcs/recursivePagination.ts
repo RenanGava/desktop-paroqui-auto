@@ -77,15 +77,14 @@ export async function requestFieis() {
         fieisTheos.map( (fiel, index) => {
 
             
-            if(fiel.dizimistaId !== null && fiel.dataNascimento !== null){
-                const date = fiel.dataNascimento.split('/')
+            if(fiel.dizimistaId !== null /*&& fiel.dataNascimento !== null*/){
+                // const date = fiel.dataNascimento.split('/')
     
-                const formatedDate = `${date[2]}-${date[1]}-${date[0]}`
+                // const formatedDate = `${date[2]}-${date[1]}-${date[0]}`
                 listAllFieis.push({
                 dizimistaId: fiel.dizimistaId,
                 cpf: fiel.cnpjCpf,
                 nome: fiel.nome,
-                data_nascimento: formatedDate,
                 comunidadeTheosId: fiel.comunidadeId.toString()
             })}
         })

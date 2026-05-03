@@ -2,7 +2,6 @@ import { stringify } from "qs";
 import React, { useEffect, useState } from "react";
 import { api } from "../../../utils/axios";
 import { message } from "antd";
-import { fiel } from "src/utils/theosData";
 
 export function useConfigFieisApp() {
   const [amount, setAmount] = useState(0);
@@ -54,7 +53,6 @@ export function useConfigFieisApp() {
                 cpf: fiel.cpf,
                 nome: fiel.nome,
                 dizimistaId: fiel.dizimistaId,
-                data_nascimento: fiel.data_nascimento,
                 comunidade: {
                   connect: [
                     {
@@ -104,7 +102,6 @@ export function useConfigFieisApp() {
               cpf: fiel.cpf,
               nome: fiel.nome,
               dizimistaId: fiel.dizimistaId,
-              data_nascimento: fiel.data_nascimento,
               comunidade: {
                 connect: [
                   {

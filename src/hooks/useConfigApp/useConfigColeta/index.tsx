@@ -35,7 +35,7 @@ export function useConfigColetaApp() {
         })
         .filter((coleta) => coleta !== undefined);
 
-      console.log('dentro do useEffect',isDiferentColetas);
+      console.log('dentro do useEffect', isDiferentColetas);
 
       setAmount(isDiferentColetas.length);
       setColetasUnSync(isDiferentColetas);
@@ -72,24 +72,31 @@ export function useConfigColetaApp() {
     setIsLoading(true)
     console.log("Cadasrando novos itens ou que faltavam", coletasUnSync)
 
-    if(coletasUnSync?.length === 0 || coletasUnSync === undefined){
+    if (coletasUnSync?.length === 0 || coletasUnSync === undefined) {
       console.log("Cadasrando novos itens ou que faltavam IF", coletasUnSync)
       return
     }
 
-    await Promise.all([
-      ...coletasUnSync.map(async (coleta) =>
-        api.post("/tipo-coletas", {
-          data: {
-            tipo: coleta.tipo,
-            theosContaId: coleta.theosContaId,
-            theosColetaId: coleta.theosColetaId,
-            theosTipoDocId: coleta.theosTipoDocId,
-            theosHistoricoId: coleta.theosHistoricoId, 
-          },
-        }),
-      ),
-    ]);
+    try {
+      await Promise.all([
+        ...coletasUnSync.map(async (coleta) =>
+          api.post("/tipo-coletas", {
+            data: {
+              tipo: coleta.tipo,
+              theosContaId: coleta.theosContaId,
+              theosColetaId: coleta.theosColetaId,
+              theosTipoDocId: coleta.theosTipoDocId,
+              theosHistoricoId: coleta.theosHistoricoId,
+            },
+          }),
+        ),
+      ]);
+      setAmount(0)
+      setQtdColetasParoquiAuto(coletasUnSync.length)
+      setIsLoading(false)
+    } catch (error) {
+
+    }
 
     setIsLoading(false)
   }
@@ -98,6 +105,7 @@ export function useConfigColetaApp() {
     amount,
     coletasUnSync,
     qtdColetasParoquiAuto,
+    isLoading,
     setAmount,
     setColetasUnSync,
     handleSyncColetasDB,

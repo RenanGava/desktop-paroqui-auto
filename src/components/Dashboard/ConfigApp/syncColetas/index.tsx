@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Card, Button } from "antd";
+import { Card, Button, Spin } from "antd";
 import { useConfigColetaApp } from "../../../../hooks/useConfigApp/useConfigColeta";
+import { LoadingOutlined } from "@ant-design/icons";
 
 export function SyncColetas() {
   const {
@@ -8,6 +9,7 @@ export function SyncColetas() {
     handleSyncColetasDB,
     handleSyncAllColetasDB,
     qtdColetasParoquiAuto,
+    isLoading
   } = useConfigColetaApp();
 
   return (
@@ -20,10 +22,15 @@ export function SyncColetas() {
         qtdColetasParoquiAuto >= 1 && (await handleSyncColetasDB());
       }}
     >
-      <Card.Meta description={`Coletas não sincronizadas do Theos ${amount}`} />
-      <Card.Meta
-        description={`Itens Cadastrados no App ${qtdColetasParoquiAuto}`}
-      />
+      {!isLoading ? (
+        <>
+          <Card.Meta description={`Coletas não sincronizadas do Theos ${amount}`} />
+          <Card.Meta
+            description={`Itens Cadastrados no App ${qtdColetasParoquiAuto}`}
+          />
+        </>
+      ) : <Spin indicator={<LoadingOutlined spin />} size="small" />}
+      
     </Card>
   );
 }
