@@ -79,6 +79,7 @@ export function DizimoDash() {
             Buscar
           </Button>
           <Typography.Text>{window.env.API_URL}</Typography.Text>
+          <Typography.Text>{window.env.API_URL}</Typography.Text>
         </Flex>
       </header>
       <DizimoTable
