@@ -4,7 +4,7 @@ import axios, {
   InternalAxiosRequestConfig,
 } from "axios";
 
-const URL = window.env.API_URL;
+const URL = import.meta.env.DEV ? 'http://localhost:80/api': import.meta.env.VITE_API_URL
 
 const api = axios.create({
   baseURL: URL,
