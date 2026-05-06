@@ -35,7 +35,7 @@ export function useConfigColetaApp() {
         })
         .filter((coleta) => coleta !== undefined);
 
-      console.log('dentro do useEffect',isDiferentColetas);
+      // console.log('dentro do useEffect',isDiferentColetas);
 
       setAmount(isDiferentColetas.length);
       setColetasUnSync(isDiferentColetas);

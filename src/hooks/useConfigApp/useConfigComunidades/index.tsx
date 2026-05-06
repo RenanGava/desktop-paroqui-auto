@@ -26,7 +26,7 @@ export function useConfigComunidadesApp() {
       const { data } = await api.get("/comunidades?" + configReq);
       const strapiComunidades = data.data as IListComunidades[];
       setQtdComunidadesParoquiAuto(strapiComunidades.length);
-      console.log(comunidades);
+      // console.log(comunidades);
 
       // percorremos a lista de coletas para achar os itens que nao existem
       // no nosso banco de dados "paroquiAuto"

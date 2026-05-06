@@ -17,19 +17,13 @@ export function useConfigFieisApp() {
       const allFieis = await api.get("/fieis");
 
       if (isSincronized === "ok") {
-        console.log(isSincronized);
         setIsNotSincronized(true);
       }
+
       setQtdFieisParoquiAuto(allFieis.data.meta.pagination.total);
       await getFieisTheos()
       setIsLoading(false);
 
-      setInterval(
-        () => {
-          handleCompareFieisDB();
-        },
-        1 * 60 * 1000,
-      );
     }
 
     async function getFieisTheos() {
@@ -42,18 +36,20 @@ export function useConfigFieisApp() {
       });
 
       const fieis = await window.api.syncFieis();
+
       const { data } = await api.get("/comunidades?" + configReq);
       const strapiComunidades = data.data as IListComunidades[];
 
       const mapUserData = fieis.map((fiel) => {
+
         return strapiComunidades
           .map((comunidade) => {
             if (fiel.comunidadeTheosId === comunidade.theosId) {
+
               return {
-                cpf: fiel.cpf,
+                cpf: fiel?.cpf,
                 nome: fiel.nome,
                 dizimistaId: fiel.dizimistaId,
-                data_nascimento: fiel.data_nascimento,
                 comunidade: {
                   connect: [
                     {
@@ -61,22 +57,26 @@ export function useConfigFieisApp() {
                     },
                   ],
                 },
-              } as const;
+              }
             }
           })
           .filter((fiel) => fiel !== undefined);
       });
+
+      console.log(mapUserData);
+
       const listFielData = mapUserData.map((item) => item[0]);
 
       const removeDuplicatesFieis = [
-        ...new Map(listFielData.map((fiel) => [fiel.cpf, fiel])).values(),
+        ...new Map(listFielData.map((fiel) => [fiel.cpf, fiel]
+        )).values(),
       ];
       setAmount(removeDuplicatesFieis.length)
     }
 
 
     handleCompareFieisDB();
-    
+
   }, []);
 
   async function handleSyncFieisDB() {
@@ -103,7 +103,6 @@ export function useConfigFieisApp() {
               cpf: fiel.cpf,
               nome: fiel.nome,
               dizimistaId: fiel.dizimistaId,
-              data_nascimento: fiel.data_nascimento,
               comunidade: {
                 connect: [
                   {
@@ -111,7 +110,7 @@ export function useConfigFieisApp() {
                   },
                 ],
               },
-            } as const;
+            }
           }
         })
         .filter((fiel) => fiel !== undefined);
