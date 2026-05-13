@@ -3,14 +3,19 @@ import { Card, Col, Row, Flex } from "antd";
 import { SyncColetas } from "../../components/Dashboard/ConfigApp/syncColetas";
 import { SyncComunidades } from "../../components/Dashboard/ConfigApp/syncComunidades";
 import { SyncFieis } from "../../components/Dashboard/ConfigApp/syncFieis";
+import { useConfigComunidadesApp } from "../../hooks/useConfigApp/useConfigComunidades";
 
 export function TiposConfig() {
+  const { qtdComunidadesParoquiAuto } = useConfigComunidadesApp()
+
+  console.log(qtdComunidadesParoquiAuto);
+  
 
   return (
     <Flex justify="center" gap={10} wrap>
       <SyncColetas />
       <SyncComunidades/>
-      <SyncFieis/>
+      {qtdComunidadesParoquiAuto > 1 && <SyncFieis/>}
     </Flex>
   );
 }

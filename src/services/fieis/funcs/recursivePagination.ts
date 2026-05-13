@@ -81,6 +81,7 @@ export async function requestFieis() {
                 // console.log(fiel.cnpjCpf);
     
                 // const formatedDate = `${date[2]}-${date[1]}-${date[0]}`
+
                 listAllFieis.push({
                 dizimistaId: fiel.dizimistaId,
                 cpf: fiel.cnpjCpf,
@@ -88,7 +89,6 @@ export async function requestFieis() {
                 comunidadeTheosId: fiel.comunidadeId.toString()
             })}
         })
-        
     }
     
 
