@@ -78,8 +78,6 @@ export function DizimoDash() {
           >
             Buscar
           </Button>
-          <Typography.Text>{import.meta.env.PROD.toString()}</Typography.Text>
-          <Typography.Text>{import.meta.env.DEV.toString()}</Typography.Text>
         </Flex>
       </header>
       <DizimoTable
