@@ -26,7 +26,7 @@ export function MainRouter() {
         <Route element={<DizimoDash />} path="/" />
         <Route element={<ColetaDash />} path="/coleta"/>
         <Route element={<OfertaDash />} path="/oferta" />
-        {/* <Route element={<TiposConfig />} path="/config" /> */}
+        <Route element={<TiposConfig />} path="/config" />
       </Routes>
     </HashRouter>
   );

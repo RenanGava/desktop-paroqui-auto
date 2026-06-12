@@ -14,7 +14,7 @@ export function useDizimo() {
   const [dizimoForEdit, setDizimoForEdit] = useState<IListDizimo | null>(null);
   const [selectDate, setSelectDate] = useState<SelectDate>({} as SelectDate);
   const [messageApi, contextHolder] = message.useMessage();
-
+  
   useEffect(() => {
     const lastDay = dayjs().daysInMonth().toString();
     const day = lastDay.length < 2 ? "0".concat(lastDay) : lastDay;

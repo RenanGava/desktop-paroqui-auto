@@ -42,6 +42,8 @@ export function DizimoDash() {
 
   function handleOpenAndSetDizimoEdit(dizimo: IListDizimo) {
     setDizimoForEdit(dizimo);
+    console.log('caiu aqui',dizimo)
+    
     setOpen(true);
   }
 
@@ -50,7 +52,7 @@ export function DizimoDash() {
 
 
       return prevState ? {
-        ...prevState,
+        ...prevState, 
         fiel: {
           ...prevState.fiel,
           nome: name,
@@ -58,6 +60,7 @@ export function DizimoDash() {
       } : null
     })
   }
+
   function handleChangeValue(value: string) {
     setDizimoForEdit(prevState => {
       return prevState ? {
@@ -134,7 +137,7 @@ export function DizimoDash() {
             <Typography.Title level={5}>Nome</Typography.Title>
             <Input
               placeholder="Nome"
-              value={dizimoForEdit?.fiel.nome}
+              value={dizimoForEdit!.fiel.nome}
               key={"nome"}
               onChange={(e) => {
                 e.preventDefault();
@@ -145,11 +148,13 @@ export function DizimoDash() {
           <Flex orientation="vertical" gap={0}>
             <Typography.Title level={5}>Valor</Typography.Title>
             <Input
-              placeholder="valor"
-              value={formatedValueForDecimal(dizimoForEdit?.valor)}
+              placeholder="Valor"
+              key={"valor"}
+              value={formatedValueForDecimal(dizimoForEdit!.valor)}
+              type={'number'}
               onChange={(e) => {
                 e.preventDefault()
-                handleChangeValue(e.target.value.replace(/\D/g, ""))
+                handleChangeValue(e.target.value)
               }}
             />
           </Flex>
