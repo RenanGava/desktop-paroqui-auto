@@ -9,6 +9,7 @@ import { OfertaDash } from "../pages/Ofertas";
 import { ColetaDash } from '../pages/Coletas'
 import { Header } from "../components/Header";
 import { TiposConfig } from "../pages/Config";
+import { FieisDash } from "../pages/Fieis";
 
 // eslint-disable-next-line import/no-unresolved
 
@@ -27,6 +28,7 @@ export function MainRouter() {
         <Route element={<ColetaDash />} path="/coleta"/>
         <Route element={<OfertaDash />} path="/oferta" />
         <Route element={<TiposConfig />} path="/config" />
+        <Route element={<FieisDash />} path="/fieis" />
       </Routes>
     </HashRouter>
   );

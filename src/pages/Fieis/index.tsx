@@ -17,11 +17,12 @@ import dayjs from "dayjs";
 import UTC from "dayjs/plugin/utc";
 import { User } from "lucide-react";
 import { formatedValueForDecimal } from "../../utils/formatedValue";
+import { useFieis } from "../../hooks/useFieis";
 dayjs.extend(UTC);
 
 const { Column, ColumnGroup } = Table;
 
-export function DizimoDash() {
+export function FieisDash() {
   const [open, setOpen] = useState(false);
 
   const {
@@ -36,6 +37,8 @@ export function DizimoDash() {
     setDizimoForEdit,
     deleteDizimo,
   } = useDizimo();
+
+  const {} = useFieis()
   const format = "DD/MM/YYYY";
 
   const navigate = useNavigate();
@@ -73,6 +76,7 @@ export function DizimoDash() {
   return (
     <Container>
       <header>
+        <h1>Fieis</h1>
         <Flex gap="small" align="center">
           <DatePicker
             defaultValue={dayjs().startOf("month")}
@@ -137,7 +141,7 @@ export function DizimoDash() {
             <Typography.Title level={5}>Nome</Typography.Title>
             <Input
               placeholder="Nome"
-              value={dizimoForEdit!.fiel.nome}
+              value={dizimoForEdit?.fiel.nome}
               key={"nome"}
               onChange={(e) => {
                 e.preventDefault();
@@ -150,7 +154,7 @@ export function DizimoDash() {
             <Input
               placeholder="Valor"
               key={"valor"}
-              value={formatedValueForDecimal(dizimoForEdit!.valor)}
+              value={formatedValueForDecimal(dizimoForEdit?.valor)}
               type={'number'}
               onChange={(e) => {
                 e.preventDefault()

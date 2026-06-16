@@ -4,14 +4,14 @@ import { List, PencilLine, SendHorizonal, Trash } from "lucide-react";
 import dayjs from "dayjs";
 
 interface FieisTableProps {
-  dizimos: IListDizimo[];
+  fieis: IListDizimo[];
   submitDizimo: (dizimo: IListDizimo) => Promise<void>;
   setIsOpen(dizimo: IListDizimo): void;
   deleteDizimo(id: string): Promise<void>;
 }
 
 export function FieisTable({
-  dizimos,
+  fieis,
   submitDizimo,
   setIsOpen,
   deleteDizimo,
@@ -20,7 +20,7 @@ export function FieisTable({
 
   return (
     <>
-      <Table<IListDizimo> dataSource={dizimos} rowKey="id">
+      <Table<IListDizimo> dataSource={fieis} rowKey="id">
         <Column title="ID" dataIndex="id" key="id" width={80} />
         <Column
           title="Nome"

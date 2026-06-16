@@ -22,6 +22,12 @@ const screens: TabsProps["items"] = [
 
 
   },
+  {
+    key: "4",
+    label: <Link to={"/fieis"}>Fieis</Link>,
+
+
+  },
   // {
   //   key: "4",
   //   label: <Link to={"/config"}>Config App</Link>,

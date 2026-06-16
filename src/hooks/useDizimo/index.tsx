@@ -28,7 +28,7 @@ export function useDizimo() {
       lastdate: `${year}-${month}-${day}`,
     });
 
-    async function getDizimos() {
+    async function getFieis() {
       const configRequest = stringify(
         {
           fields: ["documentId", "data_lancamento", "valor"],
@@ -49,12 +49,10 @@ export function useDizimo() {
       const dizimos = await api.get("/dizimos?" + configRequest);
       const dizimoList = dizimos.data.data as IListDizimo[];
 
-      console.log(dizimoList);
-
       setListDizimo(dizimoList);
     }
 
-    getDizimos();
+    getFieis();
   }, []);
 
   async function getDizimos(initiDate: string, lastDate: string) {
