@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import "../../utils/storage";
 import { theosApi } from "../../utils/theosData/api";
 import { requestFieis } from "./funcs/recursivePagination";
+import { createFieis } from "./funcs/createFieis";
 config({
   path:
     process.env.NODE_ENV === "development" ? ".env.local" : ".env.production",
@@ -17,6 +18,10 @@ ipcMain.handle('getFieis', async () => {
   const fieis = await requestFieis()
 
   return fieis
+})
+
+ipcMain.handle('createFiel', async (_, data) => {
+  const fieis = await createFieis(data)
 })
 
 // ipcMain.handle("loginTheos", async () => {

@@ -18,6 +18,7 @@ import UTC from "dayjs/plugin/utc";
 import { User } from "lucide-react";
 import { formatedValueForDecimal } from "../../utils/formatedValue";
 import { useFieis } from "../../hooks/useFieis";
+import { FieisTable } from "../../components/Dashboard/Fieis";
 dayjs.extend(UTC);
 
 const { Column, ColumnGroup } = Table;
@@ -38,15 +39,15 @@ export function FieisDash() {
     deleteDizimo,
   } = useDizimo();
 
-  const {} = useFieis()
+  const { fieis, selectedPage, setSelectedPage, pages, setPages } = useFieis()
   const format = "DD/MM/YYYY";
 
   const navigate = useNavigate();
 
   function handleOpenAndSetDizimoEdit(dizimo: IListDizimo) {
     setDizimoForEdit(dizimo);
-    console.log('caiu aqui',dizimo)
-    
+    console.log('caiu aqui', dizimo)
+
     setOpen(true);
   }
 
@@ -55,7 +56,7 @@ export function FieisDash() {
 
 
       return prevState ? {
-        ...prevState, 
+        ...prevState,
         fiel: {
           ...prevState.fiel,
           nome: name,
@@ -103,17 +104,22 @@ export function FieisDash() {
           />
           <Button
             type="primary"
-            onClick={() => getDizimos(selectDate.initDate, selectDate.lastdate)}
+            onClick={() => {
+              getDizimos(selectDate.initDate, selectDate.lastdate)
+            }}
           >
             Buscar
           </Button>
         </Flex>
       </header>
-      <DizimoTable
-        dizimos={[...listDizimo]}
+      <FieisTable
+        fieis={[...fieis]}
         submitDizimo={submitDizimo}
         setIsOpen={handleOpenAndSetDizimoEdit}
         deleteDizimo={deleteDizimo}
+        selectedPage={selectedPage}
+        setSelectedPage={setSelectedPage}
+        pages={pages}
       />
 
       <Modal

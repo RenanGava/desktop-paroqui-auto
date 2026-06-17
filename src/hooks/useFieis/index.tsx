@@ -1,11 +1,14 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { api } from "../../utils/axios"
 import { stringify } from "qs"
 
 
 
-export function useFieis(){
+export function useFieis() {
 
+    const [fieis, setFieis] = useState([])
+    const [selectedPage, setSelectedPage] = useState(1)
+    const [pages, setPages] = useState(0)
 
 
 
@@ -15,28 +18,30 @@ export function useFieis(){
 
     useEffect(() => {
 
-        async function getFieis(){
+        async function getFieis() {
 
             const configRequest = stringify({
-                filters:{
-                    dizimistaId:{
+                filters: {
+                    dizimistaId: {
                         $null: true
                     }
                 }
             })
+            const fieis = await api.get('/fieis?' + configRequest)
 
+            setFieis(fieis.data.data)
+            setSelectedPage((fieis.data.meta.pagination.page))
+            setPages(fieis.data.meta.pagination.pageCount)
 
-            const fieis = await api.get('/fieis?'+configRequest)
-
-            console.log('Caiu aqui',fieis.data);
-            
         }
 
         getFieis()
-
-        
     }, [])
 
 
-    return {}
+
+    
+
+
+    return { fieis, selectedPage, setSelectedPage, pages, setPages }
 }

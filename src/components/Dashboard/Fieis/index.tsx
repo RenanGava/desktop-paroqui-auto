@@ -4,53 +4,55 @@ import { List, PencilLine, SendHorizonal, Trash } from "lucide-react";
 import dayjs from "dayjs";
 
 interface FieisTableProps {
-  fieis: IListDizimo[];
+  fieis: any[];
   submitDizimo: (dizimo: IListDizimo) => Promise<void>;
   setIsOpen(dizimo: IListDizimo): void;
   deleteDizimo(id: string): Promise<void>;
+  selectedPage: number, 
+  setSelectedPage: (page: number) => void
+  pages: number
+  
 }
 
 export function FieisTable({
   fieis,
+  selectedPage,
+  pages, 
   submitDizimo,
   setIsOpen,
-  deleteDizimo,
+  setSelectedPage,
+  deleteDizimo
 }: FieisTableProps) {
   const { Column } = Table;
 
   return (
     <>
-      <Table<IListDizimo> dataSource={fieis} rowKey="id">
+      <Table<IListDizimo> dataSource={fieis} rowKey="id" pagination={{
+        async onChange(page, pageSise){
+          setSelectedPage(page)
+        },
+        total: pages,
+        current: selectedPage
+        
+      }}>
         <Column title="ID" dataIndex="id" key="id" width={80} />
         <Column
           title="Nome"
-          dataIndex={["fiel", "nome"]}
+          dataIndex={"nome"}
           key="nome"
           width={200}
         />
         <Column
-          title="Cod. Dizimo"
+          title="CPF"
           width={120}
-          dataIndex={["fiel", "dizimistaId"]}
+          dataIndex={"cpf"}
           key="dizimistaId"
         />
         <Column
-          title="Data Lancamento"
-          dataIndex="data_lancamento"
-          key="data_lancamento"
-          width={140}
-          render={(value) => {
-            return dayjs(value).format("DD/MM/YYYY");
-          }}
-        />
-        <Column
-          title="Valor"
-          dataIndex="valor"
-          key="valor"
+          title="Sexo"
           width={120}
-          render={(value) => {
-            return (parseInt(value) / 100).toString().replace(".", ",");
-          }}
+          dataIndex={"sexo"}
+          key="dizimistaId"
         />
         <Column
           title="Funções"
