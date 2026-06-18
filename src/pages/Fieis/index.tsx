@@ -27,7 +27,6 @@ export function FieisDash() {
   const [open, setOpen] = useState(false);
 
   const {
-    listDizimo,
     selectDate,
     dizimoForEdit,
     contextHolder,
@@ -36,15 +35,14 @@ export function FieisDash() {
     submitDizimo,
     editDizimo,
     setDizimoForEdit,
-    deleteDizimo,
   } = useDizimo();
 
-  const { fieis, selectedPage, setSelectedPage, pages, setPages } = useFieis()
+  const { fieis, selectedPage, setSelectedPage, pages, deleteFiel} = useFieis()
   const format = "DD/MM/YYYY";
 
   const navigate = useNavigate();
 
-  function handleOpenAndSetDizimoEdit(dizimo: IListDizimo) {
+  function handleOpenAndSetFielEdit(dizimo: IListDizimo) {
     setDizimoForEdit(dizimo);
     console.log('caiu aqui', dizimo)
 
@@ -114,9 +112,9 @@ export function FieisDash() {
       </header>
       <FieisTable
         fieis={[...fieis]}
-        submitDizimo={submitDizimo}
-        setIsOpen={handleOpenAndSetDizimoEdit}
-        deleteDizimo={deleteDizimo}
+        submitFiel={submitDizimo}
+        setIsOpen={handleOpenAndSetFielEdit}
+        deleteFiel={deleteFiel}
         selectedPage={selectedPage}
         setSelectedPage={setSelectedPage}
         pages={pages}

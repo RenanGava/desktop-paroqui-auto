@@ -5,9 +5,9 @@ import dayjs from "dayjs";
 
 interface FieisTableProps {
   fieis: any[];
-  submitDizimo: (dizimo: IListDizimo) => Promise<void>;
+  submitFiel: (dizimo: IListDizimo) => Promise<void>;
   setIsOpen(dizimo: IListDizimo): void;
-  deleteDizimo(id: string): Promise<void>;
+  deleteFiel(id: string): Promise<void>;
   selectedPage: number, 
   setSelectedPage: (page: number) => void
   pages: number
@@ -18,10 +18,10 @@ export function FieisTable({
   fieis,
   selectedPage,
   pages, 
-  submitDizimo,
+  submitFiel,
   setIsOpen,
   setSelectedPage,
-  deleteDizimo
+  deleteFiel
 }: FieisTableProps) {
   const { Column } = Table;
 
@@ -58,7 +58,7 @@ export function FieisTable({
           title="Funções"
           key="action"
           width={120}
-          render={(_: any, dizimo: IListDizimo) => (
+          render={(_: any, fiel: IListDizimo) => (
             <Flex gap={"small"} justify="center">
               <Tooltip title="Editar" key={"edit"}>
                 <Button
@@ -66,7 +66,7 @@ export function FieisTable({
                   variant="solid"
                   size="small"
                   onClick={() => {
-                    setIsOpen({ ...dizimo });
+                    setIsOpen({ ...fiel });
                   }}
                 >
                   <PencilLine color="#000" size={16} />
@@ -79,7 +79,7 @@ export function FieisTable({
                   okText="Sim"
                   okType="danger"
                   onConfirm={() =>{
-                    deleteDizimo(dizimo.documentId);
+                    deleteFiel(fiel.documentId);
                   }}
                   cancelText="Não"
                 >
@@ -98,7 +98,7 @@ export function FieisTable({
                   color="blue"
                   variant="solid"
                   size="small"
-                  onClick={() => submitDizimo(dizimo)}
+                  onClick={() => submitFiel(fiel)}
                 >
                   <SendHorizonal color="#000" size={16} />
                 </Button>

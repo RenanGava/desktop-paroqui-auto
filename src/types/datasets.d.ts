@@ -1,4 +1,4 @@
-export {};
+export { };
 
 declare global {
   interface IListDizimo {
@@ -77,5 +77,21 @@ declare global {
     cpf: string;
     nome: string;
     comunidadeTheosId: string;
+  }
+
+
+  interface FielProps {
+    id: number
+    documentId: string
+    cpf: string
+    sexo: string
+    nome: string
+    dizimistaId: string
+    comunidade: {
+      nome: string;
+      documentId: string;
+      theosId: string;
+      centroCustoId: string;
+    }
   }
 }
