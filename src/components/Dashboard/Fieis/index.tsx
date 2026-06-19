@@ -4,9 +4,9 @@ import { List, PencilLine, SendHorizonal, Trash } from "lucide-react";
 import dayjs from "dayjs";
 
 interface FieisTableProps {
-  fieis: any[];
-  submitFiel: (dizimo: IListDizimo) => Promise<void>;
-  setIsOpen(dizimo: IListDizimo): void;
+  fieis: FielProps[];
+  submitFiel: (dizimo: FielProps) => Promise<void>;
+  setIsOpen(dizimo: FielProps): void;
   deleteFiel(id: string): Promise<void>;
   selectedPage: number, 
   setSelectedPage: (page: number) => void
@@ -27,7 +27,7 @@ export function FieisTable({
 
   return (
     <>
-      <Table<IListDizimo> dataSource={fieis} rowKey="id" pagination={{
+      <Table<FielProps> dataSource={fieis} rowKey="id" pagination={{
         async onChange(page, pageSise){
           setSelectedPage(page)
         },
@@ -58,7 +58,7 @@ export function FieisTable({
           title="Funções"
           key="action"
           width={120}
-          render={(_: any, fiel: IListDizimo) => (
+          render={(_: any, fiel: FielProps) => (
             <Flex gap={"small"} justify="center">
               <Tooltip title="Editar" key={"edit"}>
                 <Button
@@ -98,7 +98,11 @@ export function FieisTable({
                   color="blue"
                   variant="solid"
                   size="small"
-                  onClick={() => submitFiel(fiel)}
+                  onClick={() => {
+                    submitFiel(fiel)
+                    console.log(fiel);
+                    
+                  }}
                 >
                   <SendHorizonal color="#000" size={16} />
                 </Button>

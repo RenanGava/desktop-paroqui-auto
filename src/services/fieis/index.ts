@@ -20,8 +20,10 @@ ipcMain.handle('getFieis', async () => {
   return fieis
 })
 
-ipcMain.handle('createFiel', async (_, data) => {
-  const fieis = await createFieis(data)
+ipcMain.handle('createFiel', async (_, data: FielProps) => {
+  const fiel = await createFieis(data)
+
+  return fiel
 })
 
 // ipcMain.handle("loginTheos", async () => {

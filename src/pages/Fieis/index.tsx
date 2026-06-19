@@ -29,7 +29,6 @@ export function FieisDash() {
   const {
     selectDate,
     dizimoForEdit,
-    contextHolder,
     getDizimos,
     setSelectDate,
     submitDizimo,
@@ -37,13 +36,13 @@ export function FieisDash() {
     setDizimoForEdit,
   } = useDizimo();
 
-  const { fieis, selectedPage, setSelectedPage, pages, deleteFiel} = useFieis()
+  const { fieis, selectedPage, setSelectedPage, pages, deleteFiel, submitFiel, contextHolder} = useFieis()
   const format = "DD/MM/YYYY";
 
   const navigate = useNavigate();
 
-  function handleOpenAndSetFielEdit(dizimo: IListDizimo) {
-    setDizimoForEdit(dizimo);
+  function handleOpenAndSetFielEdit(dizimo: FielProps) {
+    // setDizimoForEdit(dizimo);
     console.log('caiu aqui', dizimo)
 
     setOpen(true);
@@ -74,45 +73,10 @@ export function FieisDash() {
 
   return (
     <Container>
-      <header>
-        <h1>Fieis</h1>
-        <Flex gap="small" align="center">
-          <DatePicker
-            defaultValue={dayjs().startOf("month")}
-            format={format}
-            onChange={(date) => {
-              console.log();
-              setSelectDate({
-                ...selectDate,
-                initDate: dayjs(date).format("YYYY-MM-DD"),
-              });
-            }}
-          />
-          <span>-</span>
-          <DatePicker
-            defaultValue={dayjs().endOf("month")}
-            format={"DD/MM/YYYY"}
-            onChange={(date) => {
-              console.log();
-              setSelectDate({
-                ...selectDate,
-                lastdate: dayjs(date).format("YYYY-MM-DD"),
-              });
-            }}
-          />
-          <Button
-            type="primary"
-            onClick={() => {
-              getDizimos(selectDate.initDate, selectDate.lastdate)
-            }}
-          >
-            Buscar
-          </Button>
-        </Flex>
-      </header>
+      
       <FieisTable
         fieis={[...fieis]}
-        submitFiel={submitDizimo}
+        submitFiel={submitFiel}
         setIsOpen={handleOpenAndSetFielEdit}
         deleteFiel={deleteFiel}
         selectedPage={selectedPage}

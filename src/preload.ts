@@ -29,4 +29,7 @@ contextBridge.exposeInMainWorld("api", {
   syncFieis: async () => {
     return await ipcRenderer.invoke("getFieis");
   },
+  createFieis: async (data: FielProps) => {
+    return await ipcRenderer.invoke('createFiel', data)
+  }
 });

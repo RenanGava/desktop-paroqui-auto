@@ -10,6 +10,7 @@ declare global {
       syncColetas:() => Promise<ITiposColetas[]>
       syncComunidades:() => Promise<IListComunidades[]>
       syncFieis: () => Promise<IListFiel[]>
+      createFieis: (data: FielProps) => Promise<FielProps>
     };
     env: {
       API_URL: string;

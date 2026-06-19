@@ -14,6 +14,6 @@ api.interceptors.request.use((config) => {
   console.log(config.baseURL);
 
   return config;
-});
+})
 
 export { api };
