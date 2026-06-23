@@ -28,10 +28,10 @@ const screens: TabsProps["items"] = [
 
 
   },
-  // {
-  //   key: "4",
-  //   label: <Link to={"/config"}>Config App</Link>,
-  // },
+  {
+    key: "5",
+    label: <Link to={"/config"}>Config App</Link>,
+  },
 ];
 
 export function Header() {

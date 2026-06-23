@@ -10,6 +10,7 @@ export function useFieis() {
     // States Fieis
     const [fieis, setFieis] = useState<FielProps[]>([])
     const [selectedFiel, setSelectedFiel] = useState<FielProps>()
+    const [selectedCommunity, setSelectedCommunity] = useState<IListComunidades>()
 
     // Paginação dos dados
     const [selectedPage, setSelectedPage] = useState(1)
@@ -93,9 +94,15 @@ export function useFieis() {
                 dizimistaId: fielUpdated.dizimistaId
             }
         })
-
         console.log(fiel);
+    }
 
+    async function updateComunidade(fielId:string, newComunidadeId: string, prevComunidadeId:string){
+
+    }
+
+    async function updateDataFiel(){
+        
     }
 
     async function deleteFiel(documentId: string) {
@@ -121,6 +128,11 @@ export function useFieis() {
         getFieis,
         deleteFiel,
         submitFiel,
-        contextHolder
+        contextHolder,
+        setSelectedFiel,
+        selectedFiel,
+        updateComunidade,
+        selectedCommunity, 
+        setSelectedCommunity
     }
 }

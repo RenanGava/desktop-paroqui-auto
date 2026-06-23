@@ -1,4 +1,4 @@
-import React, { useState, Key } from "react";
+import React, { useState, Key, useEffect } from "react";
 import { Container } from "./styles";
 import { DizimoTable } from "../../components/Dashboard/Dizimo";
 import { useNavigate } from "react-router";
@@ -11,6 +11,8 @@ import {
   Input,
   Typography,
   InputNumber,
+  Select,
+  Space
 } from "antd";
 import { useDizimo } from "../../hooks/useDizimo";
 import dayjs from "dayjs";
@@ -19,12 +21,16 @@ import { User } from "lucide-react";
 import { formatedValueForDecimal } from "../../utils/formatedValue";
 import { useFieis } from "../../hooks/useFieis";
 import { FieisTable } from "../../components/Dashboard/Fieis";
+import { api } from "../../utils/axios";
+import { stringify } from "qs";
 dayjs.extend(UTC);
 
 const { Column, ColumnGroup } = Table;
 
 export function FieisDash() {
   const [open, setOpen] = useState(false);
+  const [comunities, setComunities] = useState<IListComunidades[]>([])
+  const isLoading = comunities.length > 0
 
   const {
     selectDate,
@@ -36,17 +42,43 @@ export function FieisDash() {
     setDizimoForEdit,
   } = useDizimo();
 
-  const { fieis, selectedPage, setSelectedPage, pages, deleteFiel, submitFiel, contextHolder} = useFieis()
+  const { 
+    fieis, 
+    selectedPage, 
+    setSelectedPage, 
+    pages, 
+    deleteFiel, 
+    submitFiel, 
+    contextHolder, 
+    selectedFiel, 
+    setSelectedFiel,
+    updateComunidade,
+    setSelectedCommunity
+  } = useFieis()
   const format = "DD/MM/YYYY";
 
   const navigate = useNavigate();
 
-  function handleOpenAndSetFielEdit(dizimo: FielProps) {
-    // setDizimoForEdit(dizimo);
-    console.log('caiu aqui', dizimo)
 
+  useEffect(() => {
+    const configReq = stringify({
+      fields: ['id', 'documentId', "theosId", "centroCustoId", "nome"],
+      pagination: {
+        pageSize: 100
+      }
+    })
+    api.get('/comunidades?' + configReq).then(res => {
+      const comunitiesList = res.data.data as IListComunidades[]
+      setComunities(comunitiesList)
+    })
+  }, [])
+
+  function handleOpenAndSetFielEdit(fiel: FielProps) {
+    setSelectedFiel(fiel);
+    console.log('caiu aqui', fiel)
     setOpen(true);
   }
+  
 
   function handleChangeName(name: string) {
     setDizimoForEdit(prevState => {
@@ -73,7 +105,7 @@ export function FieisDash() {
 
   return (
     <Container>
-      
+
       <FieisTable
         fieis={[...fieis]}
         submitFiel={submitFiel}
@@ -85,7 +117,7 @@ export function FieisDash() {
       />
 
       <Modal
-        title="Editar Dizimo"
+        title="Editar Dados Fiel"
         open={open}
         onOk={async () => {
           setOpen(false);
@@ -109,7 +141,7 @@ export function FieisDash() {
             <Typography.Title level={5}>Nome</Typography.Title>
             <Input
               placeholder="Nome"
-              value={dizimoForEdit?.fiel.nome}
+              value={selectedFiel?.nome}
               key={"nome"}
               onChange={(e) => {
                 e.preventDefault();
@@ -118,17 +150,50 @@ export function FieisDash() {
             />
           </Flex>
           <Flex orientation="vertical" gap={0}>
-            <Typography.Title level={5}>Valor</Typography.Title>
+            <Typography.Title level={5}>CPF</Typography.Title>
             <Input
               placeholder="Valor"
               key={"valor"}
-              value={formatedValueForDecimal(dizimoForEdit?.valor)}
+              value={selectedFiel?.cpf}
               type={'number'}
               onChange={(e) => {
                 e.preventDefault()
                 handleChangeValue(e.target.value)
               }}
             />
+          </Flex>
+          <Flex orientation="horizontal" gap={80} justify="center">
+            <Flex orientation="vertical" gap={0}>
+              <Typography.Title level={5}>Sexo</Typography.Title>
+              <Select
+                defaultValue="Sexo"
+                style={{ width: 120 }}
+                onChange={(val) => {
+                  setSelectedFiel(prevState => {
+                    return ({ ...prevState!, sexo: val })
+                  })
+                }}
+                options={[
+                  { value: 'F', label: 'Feminino' },
+                  { value: 'M', label: 'Masculino' }
+                ]}
+              />
+            </Flex>
+
+            <Flex orientation="vertical" gap={0}>
+              <Typography.Title level={5}>Comunidade</Typography.Title>
+              <Select
+                defaultValue={selectedFiel?.comunidade.nome}
+                style={{ width: 200 }}
+                onChange={(val) => {
+                  const findCommunity = comunities.find(com => com.documentId === val)
+                  setSelectedCommunity(findCommunity)
+                }}
+                loading={isLoading}
+                disabled={isLoading}
+                options={comunities.map(com => ({ value: com.documentId, label: com.nome }))}
+              />
+            </Flex>
           </Flex>
         </Flex>
       </Modal>
