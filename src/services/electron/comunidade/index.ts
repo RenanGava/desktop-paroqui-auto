@@ -1,5 +1,5 @@
 import { ipcMain, IpcMainInvokeEvent } from "electron";
-import { theosApi } from "../../utils/theosData/api";
+import { theosApi } from "../../../utils/theosData/api";
 
 ipcMain.handle("syncComunidades", async (event: IpcMainInvokeEvent) => {
   const resComunidade = await theosApi.post(

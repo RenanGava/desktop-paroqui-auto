@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { api } from "../../utils/axios"
 import { stringify } from "qs"
 import { message } from "antd"
+import axios from "axios"
 
 
 
@@ -94,15 +95,60 @@ export function useFieis() {
                 dizimistaId: fielUpdated.dizimistaId
             }
         })
-        console.log(fiel);
     }
 
-    async function updateComunidade(fielId:string, newComunidadeId: string, prevComunidadeId:string){
+    async function updateComunidade(fielUpdated: FielProps, newComunidadeId?: string) {
+
+        const configReq = stringify({
+            fields: ['id', 'documentId', 'cpf', 'sexo', 'nome', 'dizimistaId'],
+            populate: {
+                comunidade: {
+                    fields: ["documentId", "nome", "theosId", "centroCustoId"]
+                }
+            },
+            pagination: {
+                page: 1,
+                pageSize: 10
+            }
+        })
+
+        try {
+            const updateComunityDocumentId = !!newComunidadeId ? newComunidadeId : fielUpdated.comunidade.documentId
+            console.log(updateComunityDocumentId);
+            
+            const fielData = await api.put(`/fieis/${fielUpdated.documentId}?${configReq}`, {
+                data: {
+                    nome: fielUpdated.nome,
+                    sexo: fielUpdated.sexo,
+                    cpf: fielUpdated.cpf,
+                    comunidade: {
+                        set: [
+                            {
+                                documentId: updateComunityDocumentId
+                            }
+                        ]
+                    }
+                }
+            })
+
+            setFieis( prevState => {
+                return [...prevState.filter( fiel => fiel.documentId !== fielUpdated.documentId), fielUpdated]
+            })
+
+            messageApi.info('Fiel Atualizado!')
+        } catch (error) {
+
+            if (axios.isAxiosError(error)) {
+                console.log(error.toJSON());
+
+                messageApi.error(`HTTP ${error.message} Code ${error.status}`)
+            }
+        }
 
     }
 
-    async function updateDataFiel(){
-        
+    async function updateDataFiel() {
+
     }
 
     async function deleteFiel(documentId: string) {
@@ -132,7 +178,8 @@ export function useFieis() {
         setSelectedFiel,
         selectedFiel,
         updateComunidade,
-        selectedCommunity, 
-        setSelectedCommunity
+        selectedCommunity,
+        setSelectedCommunity,
+        messageApi
     }
 }

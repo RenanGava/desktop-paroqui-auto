@@ -7,12 +7,12 @@ import {
 } from "update-electron-app";
 import electronLogger from "electron-log";
 import path from "node:path";
-import "./services/fieis";
-import "./services/coletas";
-import "./services/dizimo";
-import "./services/comunidade";
-import "./services/ofertas";
-import "./services/env";
+import "./services/electron/fieis";
+import "./services/electron/coletas";
+import "./services/electron/dizimo";
+import "./services/electron/comunidade";
+import "./services/electron/ofertas";
+import "./services/global/env";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {

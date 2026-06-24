@@ -1,4 +1,4 @@
-import { theosApi } from "../../../utils/theosData/api";
+import { theosApi } from "../../../../utils/theosData/api";
 import dayjs from "dayjs";
 
 

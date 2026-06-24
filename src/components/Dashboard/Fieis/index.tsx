@@ -49,6 +49,12 @@ export function FieisTable({
           key="dizimistaId"
         />
         <Column
+          title="Comunidade"
+          width={140}
+          dataIndex={["comunidade", "nome"]}
+          key="nome"
+        />
+        <Column
           title="Sexo"
           width={120}
           dataIndex={"sexo"}

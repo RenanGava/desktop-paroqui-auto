@@ -13,6 +13,7 @@ export function SyncFieis() {
       title="Sincronizar Comunidades"
       style={{ width: 300 }}
       hoverable
+      
       onClick={async (e) => {
         await handleSyncFieisDB();
       }}

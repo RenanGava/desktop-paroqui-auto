@@ -1,4 +1,4 @@
-import { theosApi } from "../../../utils/theosData/api";
+import { theosApi } from "../../../../utils/theosData/api";
 
 async function calcNumberPages(itensPerPage: number) {
   const { data } = await theosApi.post(

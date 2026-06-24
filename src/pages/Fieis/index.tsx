@@ -30,7 +30,7 @@ const { Column, ColumnGroup } = Table;
 export function FieisDash() {
   const [open, setOpen] = useState(false);
   const [comunities, setComunities] = useState<IListComunidades[]>([])
-  const isLoading = comunities.length > 0
+  const [isLoading, setIsLoading] = useState(true)
 
   const {
     selectDate,
@@ -42,18 +42,20 @@ export function FieisDash() {
     setDizimoForEdit,
   } = useDizimo();
 
-  const { 
-    fieis, 
-    selectedPage, 
-    setSelectedPage, 
-    pages, 
-    deleteFiel, 
-    submitFiel, 
-    contextHolder, 
-    selectedFiel, 
+  const {
+    fieis,
+    selectedPage,
+    setSelectedPage,
+    pages,
+    deleteFiel,
+    submitFiel,
+    contextHolder,
+    selectedFiel,
     setSelectedFiel,
     updateComunidade,
-    setSelectedCommunity
+    setSelectedCommunity,
+    selectedCommunity,
+    messageApi
   } = useFieis()
   const format = "DD/MM/YYYY";
 
@@ -61,6 +63,8 @@ export function FieisDash() {
 
 
   useEffect(() => {
+
+
     const configReq = stringify({
       fields: ['id', 'documentId', "theosId", "centroCustoId", "nome"],
       pagination: {
@@ -71,6 +75,7 @@ export function FieisDash() {
       const comunitiesList = res.data.data as IListComunidades[]
       setComunities(comunitiesList)
     })
+    setIsLoading(false)
   }, [])
 
   function handleOpenAndSetFielEdit(fiel: FielProps) {
@@ -78,7 +83,7 @@ export function FieisDash() {
     console.log('caiu aqui', fiel)
     setOpen(true);
   }
-  
+
 
   function handleChangeName(name: string) {
     setDizimoForEdit(prevState => {
@@ -121,7 +126,10 @@ export function FieisDash() {
         open={open}
         onOk={async () => {
           setOpen(false);
-          await editDizimo(dizimoForEdit);
+          await updateComunidade(
+            selectedFiel!,
+            selectedCommunity?.documentId,
+          );
         }}
         onCancel={() => {
           setOpen(false);
@@ -145,7 +153,7 @@ export function FieisDash() {
               key={"nome"}
               onChange={(e) => {
                 e.preventDefault();
-                handleChangeName(e.target.value)
+                setSelectedFiel(prevState => ({...prevState!, nome: e.target.value}))
               }}
             />
           </Flex>
@@ -158,7 +166,14 @@ export function FieisDash() {
               type={'number'}
               onChange={(e) => {
                 e.preventDefault()
-                handleChangeValue(e.target.value)
+                // handleChangeValue(e.target.value)
+                if(e.target.value.length >= 11){
+                  messageApi.info('CPF nao pode ser maior que 11 caracteres')
+                  return
+                }
+                setSelectedFiel(prevState => ({...prevState!, cpf: e.target.value}))
+                
+                
               }}
             />
           </Flex>
@@ -187,6 +202,7 @@ export function FieisDash() {
                 style={{ width: 200 }}
                 onChange={(val) => {
                   const findCommunity = comunities.find(com => com.documentId === val)
+                  
                   setSelectedCommunity(findCommunity)
                 }}
                 loading={isLoading}
