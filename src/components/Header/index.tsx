@@ -1,57 +1,63 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Content } from "./style";
-import { Tabs } from "antd";
-import type { TabsProps } from "antd";
+import { Menu } from "antd";
+import type { MenuProps } from "antd";
 import { Link, useLocation } from "react-router";
 
 // eslint-disable-next-line import/no-unresolved
 
-const screens: TabsProps["items"] = [
+type MenuItem = Required<MenuProps>['items'][number];
+const items: MenuItem[] = [
   {
-    key: "1",
-    label: <Link to={"/"}>Dizimo</Link>,
+    label: (<Link to={"/"}>Dizimo</Link>),
+    key: 'dizimo',
   },
   {
-    key: "2",
-    label: <Link to={"/oferta"}>Oferta</Link>,
-    
+    label: (<Link to={"/oferta"}>Oferta</Link>),
+    key: 'oferta',
   },
   {
-    key: "3",
-    label: <Link to={"/coleta"}>Coleta</Link>,
-
-
+    label: (<Link to={"/coleta"}>Coleta</Link>),
+    key: 'coleta',
   },
   {
-    key: "4",
-    label: <Link to={"/fieis"}>Fieis</Link>,
-
-
+    label: (<Link to={"/fieis"}>Fieis</Link>),
+    key: 'fieis',
   },
-  // {
-  //   key: "5",
-  //   label: <Link to={"/config"}>Config App</Link>,
-  // },
-];
+  {
+    key: 'config',
+    label: (<Link to={"/config"}>Config App</Link>),
+    disabled: true,
+    danger: true
+  }
+]
 
 export function Header() {
 
   const location = useLocation()
+  const [tab, setTab] = useState('dizimo')
 
-  useEffect(() =>{
+  useEffect(() => {
     console.log(location.pathname);
-    
+
   }, [location])
+
+
+
+  function handleTab(e: any) {
+    console.log(e);
+
+    setTab(e.key)
+
+  }
   return (
     <Container>
       <Content>
-        <Tabs
-          defaultActiveKey="1"
-          items={screens}
-          type="line"
-          size="large"
-          centered={true}
-          color="#000"
+        <Menu
+          onClick={handleTab}
+          selectedKeys={[tab]}
+          mode="horizontal"
+          items={items}
         />
       </Content>
     </Container>

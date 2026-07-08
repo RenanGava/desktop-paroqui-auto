@@ -1,6 +1,12 @@
 export { };
 
 declare global {
+
+  interface SelectDate {
+    initDate: string;
+    lastdate: string;
+  }
+  
   interface IListDizimo {
     id: number;
     valor: string;

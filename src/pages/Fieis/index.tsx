@@ -25,22 +25,12 @@ import { api } from "../../utils/axios";
 import { stringify } from "qs";
 dayjs.extend(UTC);
 
-const { Column, ColumnGroup } = Table;
 
 export function FieisDash() {
   const [open, setOpen] = useState(false);
   const [comunities, setComunities] = useState<IListComunidades[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  const {
-    selectDate,
-    dizimoForEdit,
-    getDizimos,
-    setSelectDate,
-    submitDizimo,
-    editDizimo,
-    setDizimoForEdit,
-  } = useDizimo();
 
   const {
     fieis,
@@ -57,9 +47,7 @@ export function FieisDash() {
     selectedCommunity,
     messageApi
   } = useFieis()
-  const format = "DD/MM/YYYY";
 
-  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -85,28 +73,6 @@ export function FieisDash() {
   }
 
 
-  function handleChangeName(name: string) {
-    setDizimoForEdit(prevState => {
-
-
-      return prevState ? {
-        ...prevState,
-        fiel: {
-          ...prevState.fiel,
-          nome: name,
-        }
-      } : null
-    })
-  }
-
-  function handleChangeValue(value: string) {
-    setDizimoForEdit(prevState => {
-      return prevState ? {
-        ...prevState,
-        valor: value
-      } : null
-    })
-  }
 
   return (
     <Container>
@@ -133,7 +99,7 @@ export function FieisDash() {
         }}
         onCancel={() => {
           setOpen(false);
-          setDizimoForEdit(null);
+          
         }}
         width={{
           xs: "90%",

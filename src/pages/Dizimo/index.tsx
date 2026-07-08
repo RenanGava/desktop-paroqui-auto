@@ -1,28 +1,28 @@
-import React, { useState, Key } from "react";
+import React, { useEffect, useState } from "react";
 import { Container } from "./styles";
 import { DizimoTable } from "../../components/Dashboard/Dizimo";
-import { useNavigate } from "react-router";
 import {
   Button,
   Flex,
-  Table,
   DatePicker,
   Modal,
   Input,
   Typography,
-  InputNumber,
+  Space,
+  Select
 } from "antd";
 import { useDizimo } from "../../hooks/useDizimo";
 import dayjs from "dayjs";
 import UTC from "dayjs/plugin/utc";
-import { User } from "lucide-react";
 import { formatedValueForDecimal } from "../../utils/formatedValue";
+import { stringify } from "qs";
+import { api } from "../../utils/axios";
+import { SearchComponent } from "../../components/SearchComponent";
 dayjs.extend(UTC);
-
-const { Column, ColumnGroup } = Table;
 
 export function DizimoDash() {
   const [open, setOpen] = useState(false);
+
 
   const {
     listDizimo,
@@ -38,7 +38,6 @@ export function DizimoDash() {
   } = useDizimo();
   const format = "DD/MM/YYYY";
 
-  const navigate = useNavigate();
 
   function handleOpenAndSetDizimoEdit(dizimo: IListDizimo) {
     setDizimoForEdit(dizimo);
@@ -58,6 +57,7 @@ export function DizimoDash() {
       } : null
     })
   }
+
   function handleChangeValue(value: string) {
     setDizimoForEdit(prevState => {
       return prevState ? {
@@ -67,40 +67,15 @@ export function DizimoDash() {
     })
   }
 
+
   return (
     <Container>
       <header>
-        <Flex gap="small" align="center">
-          <DatePicker
-            defaultValue={dayjs().startOf("month")}
-            format={format}
-            onChange={(date) => {
-              console.log();
-              setSelectDate({
-                ...selectDate,
-                initDate: dayjs(date).format("YYYY-MM-DD"),
-              });
-            }}
-          />
-          <span>-</span>
-          <DatePicker
-            defaultValue={dayjs().endOf("month")}
-            format={"DD/MM/YYYY"}
-            onChange={(date) => {
-              console.log();
-              setSelectDate({
-                ...selectDate,
-                lastdate: dayjs(date).format("YYYY-MM-DD"),
-              });
-            }}
-          />
-          <Button
-            type="primary"
-            onClick={() => getDizimos(selectDate.initDate, selectDate.lastdate)}
-          >
-            Buscar
-          </Button>
-        </Flex>
+        <SearchComponent 
+          getData={getDizimos}
+          selectDate={selectDate}
+          setSelectDate={setSelectDate}
+        />
       </header>
       <DizimoTable
         dizimos={[...listDizimo]}
