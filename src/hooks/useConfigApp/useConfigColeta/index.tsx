@@ -42,7 +42,7 @@ export function useConfigColetaApp() {
       setIsLoading(false)
     }
     handleCompareColetasDB();
-  }, []);
+  }, [])
 
   async function handleSyncAllColetasDB() {
     setIsLoading(true)
