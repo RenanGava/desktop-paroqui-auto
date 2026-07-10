@@ -4,10 +4,6 @@ import { stringify } from "qs";
 import dayjs from "dayjs";
 import { message } from "antd";
 
-interface SelectDate {
-  initDate: string;
-  lastdate: string;
-}
 
 export function useDizimo() {
   const [listDizimo, setListDizimo] = useState<IListDizimo[]>([]);
@@ -15,6 +11,7 @@ export function useDizimo() {
   const [selectDate, setSelectDate] = useState<SelectDate>({} as SelectDate);
   const [messageApi, contextHolder] = message.useMessage();
   
+
   useEffect(() => {
     const lastDay = dayjs().daysInMonth().toString();
     const day = lastDay.length < 2 ? "0".concat(lastDay) : lastDay;
@@ -55,7 +52,9 @@ export function useDizimo() {
     getFieis();
   }, []);
 
-  async function getDizimos(initiDate: string, lastDate: string) {
+  async function getDizimos(initiDate: string, lastDate: string, selectedCommunity: IListComunidades) {
+    console.log('caiu aqui', selectedCommunity);
+    
     const configRequest = stringify(
       {
         fields: ["documentId", "data_lancamento", "valor"],
@@ -66,6 +65,11 @@ export function useDizimo() {
               dayjs(lastDate).format("YYYY-MM-DD"),
             ],
           },
+          comunidade: {
+            documentId: {
+              $eq: selectedCommunity?.documentId
+            }
+          }
         },
         populate: {
           comunidade: {
@@ -80,7 +84,7 @@ export function useDizimo() {
         encodeValuesOnly: true,
       },
     );
-    console.log(initiDate, lastDate);
+    console.log(configRequest);
 
     const dizimos = await api.get("/dizimos?" + configRequest);
     const dizimoList = dizimos.data.data as IListDizimo[];
@@ -144,8 +148,8 @@ export function useDizimo() {
     });
     await api.delete("/dizimos/" + id);
 
-    setListDizimo( prev => {
-      return prev.filter( diz => {
+    setListDizimo(prev => {
+      return prev.filter(diz => {
         return diz.documentId !== id
       })
     })

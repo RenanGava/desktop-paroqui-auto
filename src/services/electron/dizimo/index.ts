@@ -65,8 +65,6 @@ ipcMain.handle(
       },
     });
 
-    console.log(resDizimo.data);
-
     return;
   },
 );

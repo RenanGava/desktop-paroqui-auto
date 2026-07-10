@@ -1,6 +1,12 @@
 export { };
 
 declare global {
+
+  interface SelectDate {
+    initDate: string;
+    lastdate: string;
+  }
+  
   interface IListDizimo {
     id: number;
     valor: string;
@@ -70,6 +76,10 @@ declare global {
     theosColetaId: Number;
     theosTipoDocId: Number;
     theosHistoricoId: Number;
+  }
+  interface IColetasTheos {
+    id: string;
+    descricao: string;
   }
 
   interface IListFiel {

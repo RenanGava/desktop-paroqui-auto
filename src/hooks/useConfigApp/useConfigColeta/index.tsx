@@ -4,8 +4,8 @@ import { api } from "../../../utils/axios";
 import { message } from "antd";
 
 export function useConfigColetaApp() {
-  const [amount, setAmount] = useState(0);
   const [coletasUnSync, setColetasUnSync] = useState<ITiposColetas[]>();
+  const [coletasTheos, setColetasTheos] = useState<IColetasTheos[]>([])
   const [qtdColetasParoquiAuto, setQtdColetasParoquiAuto] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -16,10 +16,12 @@ export function useConfigColetaApp() {
         fields: ["tipo", "theosContaId", "theosHistoricoId", "theosColetaId"],
       });
 
-      const coletas = await window.api.syncColetas();
+      const coletas = await window.api.syncColetas() as IColetasTheos[]
       const { data } = await api.get("/tipo-coletas?" + configReq);
       const strapiColetas = data.data as ITiposColetas[];
       setQtdColetasParoquiAuto(strapiColetas.length)
+      console.log(coletas);
+      
 
       // percorremos a lista de coletas para achar os itens que nao existem
       // no nosso banco de dados "paroquiAuto"
@@ -27,7 +29,7 @@ export function useConfigColetaApp() {
       const isDiferentColetas = coletas
         .map((item) => {
           const isNoExistInParoquiAuto = strapiColetas.find(
-            (coleta) => coleta.tipo.trim() === item.tipo.trim(),
+            (coleta) => coleta.tipo.trim() === item.descricao.trim(),
           );
           if (!isNoExistInParoquiAuto) {
             return item;
@@ -35,34 +37,35 @@ export function useConfigColetaApp() {
         })
         .filter((coleta) => coleta !== undefined);
 
+        
+
       // console.log('dentro do useEffect',isDiferentColetas);
 
-      setAmount(isDiferentColetas.length);
-      setColetasUnSync(isDiferentColetas);
+      setColetasTheos(isDiferentColetas);
       setIsLoading(false)
     }
     handleCompareColetasDB();
   }, [])
 
-  async function handleSyncAllColetasDB() {
+  async function handleSubmitColeta() {
     setIsLoading(true)
     console.log("Cadastrando tudo de uma vez");
 
     const coletas = await window.api.syncColetas();
 
-    await Promise.all([
-      ...coletas.map(async (coleta) =>
-        api.post("/tipo-coletas", {
-          data: {
-            tipo: coleta.tipo,
-            theosContaId: coleta.theosContaId,
-            theosColetaId: coleta.theosColetaId,
-            theosTipoDocId: coleta.theosTipoDocId,
-            theosHistoricoId: coleta.theosHistoricoId,
-          },
-        }),
-      ),
-    ]);
+    // await Promise.all([
+    //   ...coletas.map(async (coleta) =>
+    //     api.post("/tipo-coletas", {
+    //       data: {
+    //         tipo: coleta.tipo,
+    //         theosContaId: coleta.theosContaId,
+    //         theosColetaId: coleta.theosColetaId,
+    //         theosTipoDocId: coleta.theosTipoDocId,
+    //         theosHistoricoId: coleta.theosHistoricoId,
+    //       },
+    //     }),
+    //   ),
+    // ]);
     setIsLoading(false)
   }
 
@@ -77,30 +80,15 @@ export function useConfigColetaApp() {
       return
     }
 
-    await Promise.all([
-      ...coletasUnSync.map(async (coleta) =>
-        api.post("/tipo-coletas", {
-          data: {
-            tipo: coleta.tipo,
-            theosContaId: coleta.theosContaId,
-            theosColetaId: coleta.theosColetaId,
-            theosTipoDocId: coleta.theosTipoDocId,
-            theosHistoricoId: coleta.theosHistoricoId, 
-          },
-        }),
-      ),
-    ]);
-
     setIsLoading(false)
   }
 
   return {
-    amount,
     coletasUnSync,
     qtdColetasParoquiAuto,
-    setAmount,
+    coletasTheos,
     setColetasUnSync,
     handleSyncColetasDB,
-    handleSyncAllColetasDB
+    handleSubmitColeta
   };
 }
