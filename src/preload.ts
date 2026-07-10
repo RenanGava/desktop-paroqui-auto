@@ -21,7 +21,7 @@ contextBridge.exposeInMainWorld("api", {
     return ipcRenderer.invoke("sendOne-coleta", data);
   },
   syncColetas: async () => {
-    return (await ipcRenderer.invoke("syncColetas")) as ITiposColetas[];
+    return (await ipcRenderer.invoke("syncColetas")) as IColetasTheos[]
   },
   syncComunidades: async () => {
     return await ipcRenderer.invoke("syncComunidades");

@@ -20,11 +20,13 @@ const theosApi = axios.create({
 
 theosApi.interceptors.response.use(
   (config) => {
-    console.log(config.config.url);
+    // console.log(config.config.url);
     
     return config;
   },
   async (error: AxiosError) => {
+    
+    console.log(error);
     
     if (error.response?.status === 401 || error.response?.status === 500) {
       const originalConfig = error.config;

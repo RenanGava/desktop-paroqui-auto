@@ -77,6 +77,10 @@ declare global {
     theosTipoDocId: Number;
     theosHistoricoId: Number;
   }
+  interface IColetasTheos {
+    id: string;
+    descricao: string;
+  }
 
   interface IListFiel {
     dizimistaId: string;

@@ -6,6 +6,7 @@ import { api } from "../../../utils/axios";
 import dayjs from "dayjs";
 import "../../../utils/storage";
 import { theosApi } from "../../../utils/theosData/api";
+import { log } from "node:console";
 config({
   path:
     process.env.NODE_ENV === "development" ? ".env.local" : ".env.production",
@@ -59,50 +60,59 @@ ipcMain.handle("syncColetas", async (event) => {
         {
           propriedade: "descricao",
           tipo: "1",
-          termo: "coleta",
+          termo: "",
           termoFinal: null,
         },
       ],
     },
   );
 
-  const listColeta = res.data.data as Array<{ id: Number }>;
-
-  const coletaIdList = listColeta.map((coleta) => {
+  const listColeta = res.data.data.map( (item:{id:number, descricao: string}) => {
     return {
-      id: coleta.id,
-    };
-  });
-
-  const coletaConfigPromises = coletaIdList.map(async (coleta) => {
-    // console.log(coleta);
-    
-    return await theosApi.post(
-      "/EclesialContabilCoreCadastros/api/v1/lancamentopadrao/getformovimento",
-      {
-        id: coleta.id,
-        organismoId: "2919",
-        telaSistema: 1,
-      },
-    );
-  });
-
-  const listColetaConfig:ITiposColetas[] = []
-  console.log(listColetaConfig);
+      id: item.id,
+      descricao: item.descricao
+    }
+  }) as Array<{id:number, descricao: string}>
   
 
-  for await(let confColeta of coletaConfigPromises){
-    listColetaConfig.push({
-      tipo: confColeta.data.descricao,
-      theosColetaId: confColeta.data.id,
-      theosContaId: confColeta.data.conta.id,
-      theosHistoricoId: confColeta.data.historico.id,
-      theosTipoDocId: confColeta.data.tipoDocumento.id
-    })
-  }
+  return listColeta
+  
+
+  // const coletaIdList = listColeta.map((coleta) => {
+  //   return {
+  //     id: coleta.id,
+  //   };
+  // });
+
+  // const coletaConfigPromises = coletaIdList.map(async (coleta) => {
+  //   // console.log(coleta.id);
+    
+  //   return await theosApi.post(
+  //     "/EclesialContabilCoreCadastros/api/v1/lancamentopadrao/getformovimento",
+  //     {
+  //       id: coleta.id,
+  //       organismoId: "2919",
+  //       telaSistema: 1,
+  //     },
+  //   );
+  // });
+
+  // const listColetaConfig:ITiposColetas[] = []
+  
+  
+  // for await(let confColeta of coletaConfigPromises){
+  //   listColetaConfig.push({
+  //     tipo: confColeta.data.descricao,
+  //     theosColetaId: confColeta.data.id,
+  //     theosContaId: confColeta.data.conta.id,
+  //     theosHistoricoId: confColeta.data.historico.id,
+  //     theosTipoDocId: confColeta.data.tipoDocumento.id
+  //   })
+  // }
+  // console.log(listColetaConfig);
 
 
-  return listColetaConfig
+  // return listColetaConfig
 
 
 });

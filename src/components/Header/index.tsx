@@ -27,8 +27,8 @@ const items: MenuItem[] = [
   {
     key: 'config',
     label: (<Link to={"/config"}>Config App</Link>),
-    disabled: true,
-    danger: true
+    disabled: false,
+    danger: false
   }
 ]
 

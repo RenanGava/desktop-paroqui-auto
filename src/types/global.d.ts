@@ -7,7 +7,7 @@ declare global {
       sendOneDizimo: (data:IListDizimo) => Promise<string>;
       sendOneOferta: (data: IListOferta) => Promise<void>;
       sendOneColeta: (data: IListColeta) => Promise<void>;
-      syncColetas:() => Promise<ITiposColetas[]>
+      syncColetas:() => Promise<any>
       syncComunidades:() => Promise<IListComunidades[]>
       syncFieis: () => Promise<IListFiel[]>
       createFieis: (data: FielProps) => Promise<FielProps>
