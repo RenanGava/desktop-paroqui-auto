@@ -67,52 +67,37 @@ ipcMain.handle("syncColetas", async (event) => {
     },
   );
 
-  const listColeta = res.data.data.map( (item:{id:number, descricao: string}) => {
+  const listColeta = res.data.data.map((item: { id: number, descricao: string }) => {
     return {
       id: item.id,
       descricao: item.descricao
     }
-  }) as Array<{id:number, descricao: string}>
-  
+  }) as IColetas[]
+
 
   return listColeta
-  
-
-  // const coletaIdList = listColeta.map((coleta) => {
-  //   return {
-  //     id: coleta.id,
-  //   };
-  // });
-
-  // const coletaConfigPromises = coletaIdList.map(async (coleta) => {
-  //   // console.log(coleta.id);
-    
-  //   return await theosApi.post(
-  //     "/EclesialContabilCoreCadastros/api/v1/lancamentopadrao/getformovimento",
-  //     {
-  //       id: coleta.id,
-  //       organismoId: "2919",
-  //       telaSistema: 1,
-  //     },
-  //   );
-  // });
-
-  // const listColetaConfig:ITiposColetas[] = []
-  
-  
-  // for await(let confColeta of coletaConfigPromises){
-  //   listColetaConfig.push({
-  //     tipo: confColeta.data.descricao,
-  //     theosColetaId: confColeta.data.id,
-  //     theosContaId: confColeta.data.conta.id,
-  //     theosHistoricoId: confColeta.data.historico.id,
-  //     theosTipoDocId: confColeta.data.tipoDocumento.id
-  //   })
-  // }
-  // console.log(listColetaConfig);
-
-
-  // return listColetaConfig
 
 
 });
+
+
+ipcMain.handle('configColeta', async (event, coleta: IColetas) => {
+
+  const coletaTheos = await theosApi.post(
+    "/EclesialContabilCoreCadastros/api/v1/lancamentopadrao/getformovimento",
+    {
+      id: coleta.id,
+      organismoId: "2919",
+      telaSistema: 1,
+    },
+  );
+
+  return {
+    tipo: coletaTheos.data.descricao,
+    theosColetaId: coletaTheos.data.id,
+    theosContaId: coletaTheos.data.conta.id,
+    theosHistoricoId: coletaTheos.data.historico.id,
+    theosTipoDocId: coletaTheos.data.tipoDocumento.id
+  }
+
+})
