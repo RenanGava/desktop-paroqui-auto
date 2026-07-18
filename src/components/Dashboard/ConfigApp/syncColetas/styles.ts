@@ -36,3 +36,6 @@ export const Title = styled.h5`
     padding: 5px;
     
 `
+
+export const Icon = styled.div`
+`

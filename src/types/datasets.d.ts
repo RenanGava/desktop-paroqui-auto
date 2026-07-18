@@ -76,6 +76,7 @@ declare global {
     theosColetaId: Number;
     theosTipoDocId: Number;
     theosHistoricoId: Number;
+    ativo?: boolean
   }
   interface IColetas {
     id: string;

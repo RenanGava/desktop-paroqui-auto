@@ -6,7 +6,6 @@ import { api } from "../../../utils/axios";
 import dayjs from "dayjs";
 import "../../../utils/storage";
 import { theosApi } from "../../../utils/theosData/api";
-import { log } from "node:console";
 config({
   path:
     process.env.NODE_ENV === "development" ? ".env.local" : ".env.production",

@@ -1,12 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { Card, Button, Table, Space } from "antd";
+import React, { CSSProperties, useEffect, useState } from "react";
+import { Card, Button, Table, Switch, Flex, Tooltip, Popconfirm } from "antd";
 import { useConfigColetaApp } from "../../../../hooks/useConfigApp/useConfigColeta";
-import { Container, Content, Title } from "./styles";
+import { Container, Content, Icon, Title } from "./styles";
 import Column from "antd/es/table/Column";
+import { PencilLine, SendHorizonal, Trash } from "lucide-react"
+import { Oval } from "react-loader-spinner";
+
+
+const override: CSSProperties = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+};
 
 
 export function SyncColetas() {
-  const {coletasTheos, coletasStrapi, columns } = useConfigColetaApp();
+  const { coletasTheos, coletasStrapi, handleSubmitColeta, isLoading } = useConfigColetaApp();
+
 
   return (
     <Container>
@@ -16,37 +26,116 @@ export function SyncColetas() {
         <Table<IColetas>
           dataSource={coletasTheos}
           rowKey={'id'}
+          style={{ width: 560 }}
         >
           <Column
-          title="ID"
-          dataIndex={'id'}
-          key="comunidade"
-          
-        />
-        <Column
-          title="Tipo Coleta Theos"
-          dataIndex={'descricao'}
-          key="descricao"
-          
-        />
+            title="ID"
+            dataIndex={'id'}
+            key="comunidade"
+
+          />
+          <Column
+            title="Tipo Coleta Theos"
+            dataIndex={'descricao'}
+            key="descricao"
+          />
+
+          <Column
+            title="Sincronizar"
+            key="action"
+            width={120}
+            render={(_: any, coleta: IColetas) => (
+              <Flex gap={"small"} justify="center">
+                <Tooltip title="Sincronizar?" key={"sync"}>
+                  <Popconfirm
+                    title="Deseja Sincronizar?"
+                    okText="Sim"
+                    okType="danger"
+                    onConfirm={async () => {
+                      handleSubmitColeta(coleta)
+
+                    }}
+                    cancelText="Não"
+                  >
+                    <Button
+                      color="blue"
+                      variant="solid"
+                      size="small"
+                    >
+                      {!isLoading && <SendHorizonal color="#000" size={16} />}
+                      <Oval
+                        visible={isLoading}
+                        height="20"
+                        width="20"
+                        color="#000"
+                        ariaLabel="oval-loading"
+                        wrapperStyle={{}}
+                        wrapperClass=""
+                      />
+                    </Button>
+                   
+                  </Popconfirm>
+                </Tooltip>
+              </Flex>
+            )}
+          />
         </Table>
-        <Table<IColetas>
+        <Table<ITiposColetas>
           dataSource={coletasStrapi}
           rowKey={'id'}
-          style={{height: 400}}
+          style={{ width: 560 }}
         >
           <Column
-          title="ID"
-          dataIndex={'id'}
-          key="comunidade"
-          
-        />
-        <Column
-          title="Tipo Coleta ParoquiAuto"
-          dataIndex={'descricao'}
-          key="descricao"
-          
-        /></Table>
+            title="ID"
+            dataIndex={'id'}
+            key="comunidade"
+
+          />
+          <Column
+            title="Tipo Coleta ParoquiAuto"
+            dataIndex={'tipo'}
+            key="tipo"
+
+          />
+          <Column
+            title="Ativado"
+            key="action"
+            width={120}
+            render={(_: any, coleta: ITiposColetas) => (
+              <Flex gap={"small"} justify="center">
+                <Tooltip title="Editar" key={"edit"}>
+                  <Button
+                    color="green"
+                    variant="solid"
+                    size="small"
+                    onClick={() => {
+                      console.log(coleta);
+
+                    }}
+                  >
+                    <PencilLine color="#000" size={16} />
+                  </Button>
+                </Tooltip>
+
+                <Switch checked={coleta.ativo} />
+
+                <Tooltip title="Enviar" key={"enviar"}>
+                  <Button
+                    color="blue"
+                    variant="solid"
+                    size="small"
+                    onClick={async () => {
+                      console.log('Caiu 2');
+
+                    }}
+                  >
+                    <SendHorizonal color="#000" size={16} />
+                  </Button>
+                </Tooltip>
+              </Flex>
+            )}
+          />
+        </Table>
       </Content>
     </Container>
   );

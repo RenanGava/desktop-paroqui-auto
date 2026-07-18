@@ -1,7 +1,6 @@
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 import { contextBridge, ipcRenderer } from "electron";
-import { api } from "./utils/axios";
 
 contextBridge.exposeInMainWorld("env", {
   ...ipcRenderer.sendSync("envs"),
@@ -21,7 +20,7 @@ contextBridge.exposeInMainWorld("api", {
     return ipcRenderer.invoke("sendOne-coleta", data);
   },
   syncColetas: async () => {
-    return (await ipcRenderer.invoke("syncColetas")) as IColetasTheos[]
+    return (await ipcRenderer.invoke("syncColetas")) as IColetas[]
   },
   syncComunidades: async () => {
     return await ipcRenderer.invoke("syncComunidades");
