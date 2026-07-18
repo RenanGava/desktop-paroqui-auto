@@ -6,7 +6,6 @@ import { message } from "antd";
 export function useConfigColetaApp() {
   const [coletasStrapi, setColetasStrapi] = useState<ITiposColetas[]>([]);
   const [coletasTheos, setColetasTheos] = useState<IColetas[]>([])
-  const [coletaSelected, setColetaSelected] = useState<ITiposColetas>()
   const [isLoading, setIsLoading] = useState(false)
 
 
@@ -34,7 +33,6 @@ export function useConfigColetaApp() {
       const { data } = await api.get("/tipo-coletas?" + configReq);
       const strapiColetas = data.data as ITiposColetas[];
 
-      console.log('Strapi', strapiColetas);
 
 
 
@@ -61,32 +59,78 @@ export function useConfigColetaApp() {
     handleCompareColetasDB();
   }, [])
 
-  console.log(coletasTheos);
   async function handleSubmitColeta(coleta: IColetas) {
     setIsLoading(true)
-    console.log("Cadastrando tudo de uma vez", coleta);
 
     try {
-      const coletaTheosConfig = await window.api.configColeta();
+      const coletaTheosConfig = await window.api.configColeta(coleta);
 
-      // const coletaStrapi = await api.post("/tipo-coletas", {
-      //   data: {
-      //     tipo: coletaTheosConfig.tipo,
-      //     theosContaId: coletaTheosConfig.theosContaId,
-      //     theosColetaId: coletaTheosConfig.theosColetaId,
-      //     theosTipoDocId: coletaTheosConfig.theosTipoDocId,
-      //     theosHistoricoId: coletaTheosConfig.theosHistoricoId,
-      //     ativo: false
-      //   },
-      // })
-      console.log(coletaTheosConfig);
+      const coletaStrapi = await api.post("/tipo-coletas", {
+        data: {
+          tipo: coletaTheosConfig.tipo,
+          theosContaId: coletaTheosConfig.theosContaId,
+          theosColetaId: coletaTheosConfig.theosColetaId,
+          theosTipoDocId: coletaTheosConfig.theosTipoDocId,
+          theosHistoricoId: coletaTheosConfig.theosHistoricoId,
+          ativo: false
+        },
+      })
+
+      setColetasTheos(prevState => {
+
+        return prevState.filter(col => {
+          return col.id !== coleta.id
+        })
+      })
+
+      setColetasStrapi(prevState => {
+        return [...prevState, coletaStrapi.data.data]
+      })
+      message.success("Coleta Sincronizada com Sucesso")
     } catch (error) {
-      console.log(error)
+      message.error("Algo Deu Errado " + error)
     }
 
-
-
     setIsLoading(false)
+  }
+
+  async function handleToggleStatus(id: string, status: boolean) {
+    try {
+      const coletaStrapi = await api.put("/tipo-coletas/" + id, {
+        data: {
+          ativo: status
+        }
+      })
+
+      setColetasStrapi(prevState => prevState.map(coleta => {
+        if (coleta.documentId === id) {
+          coleta.ativo = status
+          return coleta
+        }
+
+        return coleta
+
+      }))
+      message.success('Status Atualizado com Sucesso!')
+    } catch (error) {
+      message.error('Erro ao Atualizar Status')
+    }
+
+  }
+
+  async function handleDelete(id: string) {
+
+    try {
+      const coletaStrapi = await api.put("/tipo-coletas/" + id)
+
+      setColetasStrapi(prevState => prevState.filter(coleta => {
+        return coleta.documentId !== id
+      }))
+
+      message.success('Apagado com Sucesso!')
+    } catch (error) {
+      message.error('Erro ao Apagar')
+    }
   }
 
   return {
@@ -94,6 +138,7 @@ export function useConfigColetaApp() {
     coletasTheos,
     columns,
     isLoading,
+    handleToggleStatus,
     setColetasStrapi,
     handleSubmitColeta
   };

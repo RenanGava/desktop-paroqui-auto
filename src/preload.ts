@@ -22,6 +22,9 @@ contextBridge.exposeInMainWorld("api", {
   syncColetas: async () => {
     return (await ipcRenderer.invoke("syncColetas")) as IColetas[]
   },
+  configColeta: async (coleta: IColetas) => {
+    return await ipcRenderer.invoke('configColeta', coleta)
+  },
   syncComunidades: async () => {
     return await ipcRenderer.invoke("syncComunidades");
   },

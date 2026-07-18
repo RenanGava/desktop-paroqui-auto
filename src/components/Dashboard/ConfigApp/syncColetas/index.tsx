@@ -1,21 +1,21 @@
-import React, { CSSProperties, useEffect, useState } from "react";
-import { Card, Button, Table, Switch, Flex, Tooltip, Popconfirm } from "antd";
+import React, {  } from "react";
+import { Button, Table, Switch, Flex, Tooltip, Popconfirm } from "antd";
 import { useConfigColetaApp } from "../../../../hooks/useConfigApp/useConfigColeta";
-import { Container, Content, Icon, Title } from "./styles";
+import { Container, Content } from "./styles";
 import Column from "antd/es/table/Column";
 import { PencilLine, SendHorizonal, Trash } from "lucide-react"
 import { Oval } from "react-loader-spinner";
 
 
-const override: CSSProperties = {
-  display: "block",
-  margin: "0 auto",
-  borderColor: "red",
-};
-
 
 export function SyncColetas() {
-  const { coletasTheos, coletasStrapi, handleSubmitColeta, isLoading } = useConfigColetaApp();
+  const {
+    coletasTheos,
+    coletasStrapi,
+    handleSubmitColeta,
+    isLoading,
+    handleToggleStatus
+  } = useConfigColetaApp();
 
 
   return (
@@ -69,11 +69,10 @@ export function SyncColetas() {
                         width="20"
                         color="#000"
                         ariaLabel="oval-loading"
-                        wrapperStyle={{}}
-                        wrapperClass=""
+
                       />
                     </Button>
-                   
+
                   </Popconfirm>
                 </Tooltip>
               </Flex>
@@ -103,9 +102,9 @@ export function SyncColetas() {
             width={120}
             render={(_: any, coleta: ITiposColetas) => (
               <Flex gap={"small"} justify="center">
-                <Tooltip title="Editar" key={"edit"}>
+                <Tooltip title="Deletar" key={"del"}>
                   <Button
-                    color="green"
+                    color="red"
                     variant="solid"
                     size="small"
                     onClick={() => {
@@ -113,25 +112,15 @@ export function SyncColetas() {
 
                     }}
                   >
-                    <PencilLine color="#000" size={16} />
+                    <Trash color="#000" size={16} />
                   </Button>
                 </Tooltip>
 
-                <Switch checked={coleta.ativo} />
+                <Switch checked={coleta.ativo}  onChange={(e) => { 
+                  handleToggleStatus(coleta.documentId!, e)
+                
+                }}/>
 
-                <Tooltip title="Enviar" key={"enviar"}>
-                  <Button
-                    color="blue"
-                    variant="solid"
-                    size="small"
-                    onClick={async () => {
-                      console.log('Caiu 2');
-
-                    }}
-                  >
-                    <SendHorizonal color="#000" size={16} />
-                  </Button>
-                </Tooltip>
               </Flex>
             )}
           />

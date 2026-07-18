@@ -71,6 +71,7 @@ declare global {
   }
 
   interface ITiposColetas {
+    documentId?: string
     tipo: string;
     theosContaId: Number;
     theosColetaId: Number;
@@ -79,7 +80,7 @@ declare global {
     ativo?: boolean
   }
   interface IColetas {
-    id: string;
+    id: string | number;
     descricao: string;
   }
 

@@ -27,7 +27,14 @@ export const Content = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-evenly;
-    /* align-items: center; */
+    gap: 30px;
+
+
+
+    @media (max-width: 1000px){
+        flex-direction: column;
+        align-items: center;
+    }
 
 `
 

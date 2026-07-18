@@ -9,7 +9,7 @@ declare global {
       sendOneColeta: (data: IListColeta) => Promise<void>;
       syncColetas:() => Promise<any>
       syncComunidades:() => Promise<IListComunidades[]>
-      configColeta: () => Promise<ITiposColetas>
+      configColeta: (data: IColetas) => Promise<ITiposColetas>
       syncFieis: () => Promise<IListFiel[]>
       createFieis: (data: FielProps) => Promise<FielProps>
     };

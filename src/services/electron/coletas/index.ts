@@ -82,21 +82,37 @@ ipcMain.handle("syncColetas", async (event) => {
 
 ipcMain.handle('configColeta', async (event, coleta: IColetas) => {
 
-  const coletaTheos = await theosApi.post(
-    "/EclesialContabilCoreCadastros/api/v1/lancamentopadrao/getformovimento",
-    {
-      id: coleta.id,
-      organismoId: "2919",
-      telaSistema: 1,
-    },
-  );
 
-  return {
-    tipo: coletaTheos.data.descricao,
-    theosColetaId: coletaTheos.data.id,
-    theosContaId: coletaTheos.data.conta.id,
-    theosHistoricoId: coletaTheos.data.historico.id,
-    theosTipoDocId: coletaTheos.data.tipoDocumento.id
+
+  try {
+    const coletaTheos = await theosApi.post(
+      "/EclesialContabilCoreCadastros/api/v1/lancamentopadrao/getformovimento",
+      {
+        id: coleta.id,
+        organismoId: "2919",
+        telaSistema: 1,
+      },
+
+
+    )
+    const theosTipoColetaDocId = !!coletaTheos.data.tipoDocumento ? coletaTheos.data.tipoDocumento.id : 0
+    
+    return {
+      tipo: coletaTheos.data.descricao,
+      theosColetaId: coletaTheos.data.id,
+      theosContaId: coletaTheos.data.conta.id,
+      theosHistoricoId: coletaTheos.data.historico.id,
+      theosTipoDocId: theosTipoColetaDocId
+    }
+  } catch (error) {
+    throw error
+
   }
 
+
+
+
+
+
 })
+
