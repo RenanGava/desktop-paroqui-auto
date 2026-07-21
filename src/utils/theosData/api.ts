@@ -26,8 +26,6 @@ theosApi.interceptors.response.use(
   },
   async (error: AxiosError) => {
     
-    console.log(error);
-    
     if (error.response?.status === 401 || error.response?.status === 500) {
       const originalConfig = error.config;
       const theosData = new FormData();

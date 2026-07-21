@@ -23,6 +23,8 @@ import { useFieis } from "../../hooks/useFieis";
 import { FieisTable } from "../../components/Dashboard/Fieis";
 import { api } from "../../utils/axios";
 import { stringify } from "qs";
+import { SearchComponent } from "../../components/SearchComponent";
+import { SearchFieisComponent } from "../../components/SearchFiesComponent";
 dayjs.extend(UTC);
 
 
@@ -45,7 +47,10 @@ export function FieisDash() {
     updateComunidade,
     setSelectedCommunity,
     selectedCommunity,
-    messageApi
+    messageApi,
+    selectDate,
+    setSelectDate,
+    getFieis
   } = useFieis()
 
 
@@ -76,7 +81,12 @@ export function FieisDash() {
 
   return (
     <Container>
-
+      
+      <header>
+        <SearchFieisComponent
+          getData={getFieis}
+        />
+      </header>
       <FieisTable
         fieis={[...fieis]}
         submitFiel={submitFiel}
@@ -84,7 +94,10 @@ export function FieisDash() {
         deleteFiel={deleteFiel}
         selectedPage={selectedPage}
         setSelectedPage={setSelectedPage}
+        getData={getFieis}
+        selectedComunyti={selectedCommunity!}
         pages={pages}
+        
       />
 
       <Modal

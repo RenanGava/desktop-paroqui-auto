@@ -62,7 +62,7 @@ export function useColeta() {
     getColetas();
   }, []);
 
-  async function getColetas(initiDate: string, lastDate: string) {
+  async function getColetas(initiDate: string, lastDate: string, selectedCommunity: IListComunidades) {
     const configRequest = stringify(
       {
         fields: ["documentId", "data_lancamento", "valor"],
@@ -73,6 +73,12 @@ export function useColeta() {
               dayjs(lastDate).format("YYYY-MM-DD"),
             ],
           },
+
+          comunidade:{
+            documentId: {
+              $eq: selectedCommunity.documentId
+            }
+          }
         },
         populate: {
           comunidade: {

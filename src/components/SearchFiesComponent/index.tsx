@@ -6,14 +6,10 @@ import { api } from "../../utils/axios";
 
 
 interface ISearchProps {
-    selectDate: SelectDate,
-    setSelectDate: (date: SelectDate) => void
     getData: (...data: any) => Promise<void>
 }
 
-export function SearchComponent({
-    selectDate,
-    setSelectDate,
+export function SearchFieisComponent({
     getData
 }: ISearchProps) {
 
@@ -48,29 +44,6 @@ export function SearchComponent({
 
     return (
         <Space vertical={false} size={20}>
-            <DatePicker
-                defaultValue={dayjs().startOf("month")}
-                format={format}
-                onChange={(date) => {
-                    console.log();
-                    setSelectDate({
-                        ...selectDate,
-                        initDate: dayjs(date).format("YYYY-MM-DD"),
-                    });
-                }}
-            />
-            <span>-</span>
-            <DatePicker
-                defaultValue={dayjs().endOf("month")}
-                format={"DD/MM/YYYY"}
-                onChange={(date) => {
-                    console.log();
-                    setSelectDate({
-                        ...selectDate,
-                        lastdate: dayjs(date).format("YYYY-MM-DD"),
-                    });
-                }}
-            />
             <Select
                 style={{ width: 200 }}
                 defaultValue={selectedCommunity?.nome}
@@ -87,7 +60,7 @@ export function SearchComponent({
             />
             <Button
                 type="primary"
-                onClick={() => getData(selectDate.initDate, selectDate.lastdate, selectedCommunity)}
+                onClick={() => getData(1, selectedCommunity)}
             >
                 Buscar
             </Button>

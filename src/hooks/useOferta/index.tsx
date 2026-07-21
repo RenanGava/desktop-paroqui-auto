@@ -52,7 +52,7 @@ export function useOferta() {
     getOfertas();
   }, []);
 
-  async function getOfertas(initiDate: string, lastDate: string) {
+  async function getOfertas(initiDate: string, lastDate: string, selectedCommunity:IListComunidades) {
     const configRequest = stringify(
       {
         fields: ["documentId", "data_lancamento", "valor"],
@@ -63,6 +63,11 @@ export function useOferta() {
               dayjs(lastDate).format("YYYY-MM-DD"),
             ],
           },
+          comunidade: {
+            documentId: {
+              $eq: selectedCommunity.documentId
+            }
+          }
         },
         populate: {
           comunidade: {

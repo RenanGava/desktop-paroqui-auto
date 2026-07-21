@@ -11,6 +11,8 @@ interface FieisTableProps {
   selectedPage: number, 
   setSelectedPage: (page: number) => void
   pages: number
+  getData: (...data: any) => Promise<void>
+  selectedComunyti: IListComunidades
   
 }
 
@@ -21,7 +23,9 @@ export function FieisTable({
   submitFiel,
   setIsOpen,
   setSelectedPage,
-  deleteFiel
+  deleteFiel,
+  getData,
+  selectedComunyti
 }: FieisTableProps) {
   const { Column } = Table;
 
@@ -30,6 +34,7 @@ export function FieisTable({
       <Table<FielProps> dataSource={fieis} rowKey="id" pagination={{
         async onChange(page, pageSise){
           setSelectedPage(page)
+          await getData(page, selectedComunyti)
         },
         total: pages,
         current: selectedPage

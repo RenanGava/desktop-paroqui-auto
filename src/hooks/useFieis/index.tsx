@@ -3,6 +3,7 @@ import { api } from "../../utils/axios"
 import { stringify } from "qs"
 import { message } from "antd"
 import axios from "axios"
+import dayjs from "dayjs"
 
 
 
@@ -20,7 +21,20 @@ export function useFieis() {
     // Toast Api
     const [messageApi, contextHolder] = message.useMessage();
 
+    const [selectDate, setSelectDate] = useState<SelectDate>({} as SelectDate)
+
     useEffect(() => {
+        const lastDay = dayjs().daysInMonth().toString();
+        const day = lastDay.length < 2 ? "0".concat(lastDay) : lastDay;
+        const month = dayjs().month() + 1;
+        const year = dayjs().year();
+
+        console.log(dayjs().utc().toISOString());
+
+        setSelectDate({
+            initDate: `${year}-${month}-01`,
+            lastdate: `${year}-${month}-${day}`,
+        });
 
         async function getFieis() {
 
@@ -68,13 +82,18 @@ export function useFieis() {
 
 
 
-    async function getFieis(selectedPage: number) {
+    async function getFieis(selectedPage: number, selectedCommunity: IListComunidades) {
 
         const configRequest = stringify({
             fields: ['id', 'documentId', 'cpf', 'sexo', 'nome', 'dizimistaId'],
             filters: {
                 dizimistaId: {
                     $null: true
+                },
+                comunidade: {
+                    documentId: {
+                        $eq: selectedCommunity.documentId
+                    }
                 }
             },
             pagination: {
@@ -83,6 +102,9 @@ export function useFieis() {
             }
         })
         const fieis = await api.get('/fieis?' + configRequest)
+
+        console.log(fieis);
+        
 
 
         setFieis(fieis.data.data)
@@ -115,7 +137,7 @@ export function useFieis() {
         try {
             const updateComunityDocumentId = !!newComunidadeId ? newComunidadeId : fielUpdated.comunidade.documentId
             console.log(updateComunityDocumentId);
-            
+
             const fielData = await api.put(`/fieis/${fielUpdated.documentId}?${configReq}`, {
                 data: {
                     nome: fielUpdated.nome,
@@ -131,8 +153,8 @@ export function useFieis() {
                 }
             })
 
-            setFieis( prevState => {
-                return [...prevState.filter( fiel => fiel.documentId !== fielUpdated.documentId), fielUpdated]
+            setFieis(prevState => {
+                return [...prevState.filter(fiel => fiel.documentId !== fielUpdated.documentId), fielUpdated]
             })
 
             messageApi.info('Fiel Atualizado!')
@@ -180,6 +202,8 @@ export function useFieis() {
         updateComunidade,
         selectedCommunity,
         setSelectedCommunity,
-        messageApi
+        messageApi,
+        selectDate,
+        setSelectDate
     }
 }
