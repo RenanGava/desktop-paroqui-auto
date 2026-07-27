@@ -26,26 +26,29 @@ const items: MenuItem[] = [
   },
   {
     key: 'config',
-    label: (<Link to={"/config"}>Config App</Link>),
+    label: 'Config App',
     disabled: false,
+    children: [
+      {
+        label: (<Link to={"/syncColetas"}>Lançamentos e Coletas</Link>),
+        key: 'syncColetas',
+      }
+    ],
     danger: false
   }
 ]
 
 export function Header() {
 
-  const location = useLocation()
+  // const location = useLocation()
   const [tab, setTab] = useState('dizimo')
 
-  useEffect(() => {
-    console.log(location.pathname);
+  // useEffect(() => {
+  //   console.log(location.pathname);
 
-  }, [location])
-
-
+  // }, [location])
 
   function handleTab(e: any) {
-    console.log(e);
 
     setTab(e.key)
 

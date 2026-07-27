@@ -8,12 +8,11 @@ import { useConfigComunidadesApp } from "../../hooks/useConfigApp/useConfigComun
 export function TiposConfig() {
   const { qtdComunidadesParoquiAuto } = useConfigComunidadesApp()
 
-  console.log(qtdComunidadesParoquiAuto);
   
 
   return (
     <Flex justify="center" gap={10} wrap>
-      <SyncColetas />
+      {/* <SyncColetas /> */}
       {/* <SyncComunidades/>
       {qtdComunidadesParoquiAuto > 1 && <SyncFieis/>} */}
     </Flex>

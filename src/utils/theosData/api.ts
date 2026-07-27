@@ -43,6 +43,9 @@ theosApi.interceptors.response.use(
           .then((res) => {
             setKey("@jwtTheos", res.data.access_token);
             theosApi.defaults.headers.autorization = `Bearer ${res.data.access_token}`;
+            failedQueue.forEach( request => {
+              request.resolve(res.data.access_token)
+            })
           })
           .catch((err) => {
             failedQueue.forEach((request) => {

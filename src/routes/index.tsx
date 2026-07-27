@@ -10,6 +10,7 @@ import { ColetaDash } from '../pages/Coletas'
 import { Header } from "../components/Header";
 import { TiposConfig } from "../pages/Config";
 import { FieisDash } from "../pages/Fieis";
+import { SyncColetas } from "../components/Dashboard/ConfigApp/syncColetas";
 
 // eslint-disable-next-line import/no-unresolved
 
@@ -29,6 +30,7 @@ export function MainRouter() {
         <Route element={<OfertaDash />} path="/oferta" />
         <Route element={<TiposConfig />} path="/config" />
         <Route element={<FieisDash />} path="/fieis" />
+        <Route element={<SyncColetas />} path="/syncColetas" />
       </Routes>
     </HashRouter>
   );

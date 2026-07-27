@@ -5,9 +5,12 @@ import styled from 'styled-components'
 
 export const Container = styled.div`
     width: 100%;
-    max-width: 1200px;
     border-radius: 5px;
     background-color: aliceblue;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
 
 
 
@@ -25,9 +28,11 @@ export const Container = styled.div`
 
 export const Content = styled.div`
     width: 100%;
+    max-width: 1200px;
     display: flex;
     justify-content: space-evenly;
-    gap: 30px;
+    
+    gap: 60px;
 
 
 
