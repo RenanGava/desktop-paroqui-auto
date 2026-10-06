@@ -4,6 +4,7 @@ import { stringify } from "qs"
 import { message } from "antd"
 import axios from "axios"
 import dayjs from "dayjs"
+import { usePagination } from "../usePagination"
 
 
 
@@ -15,8 +16,12 @@ export function useFieis() {
     const [selectedCommunity, setSelectedCommunity] = useState<IListComunidades>()
 
     // Paginação dos dados
-    const [selectedPage, setSelectedPage] = useState(1)
-    const [pages, setPages] = useState(0)
+    const { 
+        pages, 
+        selectedPage, 
+        setPages, 
+        setSelectedPage 
+    } = usePagination()
 
     // Toast Api
     const [messageApi, contextHolder] = message.useMessage();
@@ -104,7 +109,7 @@ export function useFieis() {
         const fieis = await api.get('/fieis?' + configRequest)
 
         console.log(fieis);
-        
+
 
 
         setFieis(fieis.data.data)

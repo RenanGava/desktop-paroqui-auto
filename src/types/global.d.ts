@@ -5,6 +5,7 @@ declare global {
     api: {
       loginTheos: () => Promise<void>;
       sendOneDizimo: (data:IListDizimo) => Promise<string>;
+      bulkDizimo: (data:IListDizimo[]) => Promise<string>;
       sendOneOferta: (data: IListOferta) => Promise<void>;
       sendOneColeta: (data: IListColeta) => Promise<void>;
       syncColetas:() => Promise<any>

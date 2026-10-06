@@ -87,7 +87,7 @@ export function SearchComponent({
             />
             <Button
                 type="primary"
-                onClick={() => getData(selectDate.initDate, selectDate.lastdate, selectedCommunity)}
+                onClick={() => getData(selectDate.initDate, selectDate.lastdate, selectedCommunity, 1)}
             >
                 Buscar
             </Button>

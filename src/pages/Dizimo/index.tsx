@@ -66,16 +66,25 @@ export function DizimoDash() {
       } : null
     })
   }
+  async function handleDeleteAllDizimos(dizimoArray: IListDizimo[]) {
+    
+  }
 
 
   return (
     <Container>
       <header>
-        <SearchComponent 
+        <SearchComponent
           getData={getDizimos}
           selectDate={selectDate}
           setSelectDate={setSelectDate}
         />
+        <Button
+          type="primary"
+          onClick={() => {}}
+        >
+          Buscar
+        </Button>
       </header>
       <DizimoTable
         dizimos={[...listDizimo]}

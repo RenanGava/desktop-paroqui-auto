@@ -52,8 +52,8 @@ export function useDizimo() {
     getFieis();
   }, []);
 
-  async function getDizimos(initiDate: string, lastDate: string, selectedCommunity: IListComunidades) {
-    console.log('caiu aqui', selectedCommunity);
+  async function getDizimos(initiDate: string, lastDate: string, selectedCommunity: IListComunidades, page: number) {
+    
     
     const configRequest = stringify(
       {

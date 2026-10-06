@@ -13,8 +13,8 @@ export function TiposConfig() {
   return (
     <Flex justify="center" gap={10} wrap>
       {/* <SyncColetas /> */}
-      {/* <SyncComunidades/>
-      {qtdComunidadesParoquiAuto > 1 && <SyncFieis/>} */}
+      {/* <SyncComunidades/> */}
+      {/* {qtdComunidadesParoquiAuto > 1 && <SyncFieis/>} */}
     </Flex>
   );
 }

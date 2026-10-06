@@ -48,8 +48,6 @@ export function FieisDash() {
     setSelectedCommunity,
     selectedCommunity,
     messageApi,
-    selectDate,
-    setSelectDate,
     getFieis
   } = useFieis()
 

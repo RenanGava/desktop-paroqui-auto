@@ -15,6 +15,7 @@ export function DizimoTable({
   submitDizimo,
   setIsOpen,
   deleteDizimo,
+  
 }: DizimoTableProps) {
   const { Column } = Table;
 
