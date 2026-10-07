@@ -73,8 +73,8 @@ ipcMain.handle(
   "dizimo:bulk-insert",
   async (event: IpcMainInvokeEvent, dizimoList: IListDizimo[]) => {
 
-    try {
-      for (let data of dizimoList) {
+    for (let data of dizimoList) {
+      try {
         const dateSplit = data.data_lancamento.split("-");
         const dateReverse = `${dateSplit[2]}/${dateSplit[1]}/${dateSplit[0]}`;
         const fielData = await theosApi.post(
@@ -125,9 +125,9 @@ ipcMain.handle(
         });
 
         return;
+      } catch (error) {
+        return error
       }
-    } catch (error) {
-      return error
     }
 
   },

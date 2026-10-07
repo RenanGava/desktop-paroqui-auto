@@ -2,6 +2,7 @@ import React, { Key, useState } from "react";
 import { Button, Flex, Modal, Table, Tooltip, Popconfirm } from "antd";
 import { List, PencilLine, SendHorizonal, Trash } from "lucide-react";
 import dayjs from "dayjs";
+import { TableRowSelection } from "antd/es/table/interface";
 
 interface DizimoTableProps {
   dizimos: IListDizimo[];
@@ -21,7 +22,12 @@ export function DizimoTable({
 
   return (
     <>
-      <Table<IListDizimo> dataSource={dizimos} rowKey="id">
+      <Table<IListDizimo> dataSource={dizimos} rowKey="id" rowSelection={{
+        onChange(selectedRowsKey, selectedRow){
+          console.log(selectedRow);
+          
+        }
+      }}>
         <Column title="ID" dataIndex="id" key="id" width={80} />
         <Column
           title="Nome"
