@@ -10,6 +10,7 @@ export function useDizimo() {
   const [dizimoForEdit, setDizimoForEdit] = useState<IListDizimo | null>(null);
   const [selectDate, setSelectDate] = useState<SelectDate>({} as SelectDate);
   const [messageApi, contextHolder] = message.useMessage();
+  const [bulkDizimo, setBulkDizimo] = useState<IListDizimo[]>([])
   
 
   useEffect(() => {
@@ -155,6 +156,11 @@ export function useDizimo() {
     })
   }
 
+  async function sendBulkDizimo(bulk:string[]){
+    const {data} = await api.post("/dizimo-bulk", bulk)
+    messageApi.success('Dízimos Enviados: '+ data.count)
+  }
+
   return {
     getDizimos,
     setSelectDate,
@@ -162,9 +168,12 @@ export function useDizimo() {
     editDizimo,
     setDizimoForEdit,
     deleteDizimo,
+    setBulkDizimo,
+    sendBulkDizimo,
     listDizimo,
     selectDate,
     dizimoForEdit,
     contextHolder,
+    bulkDizimo
   };
 }

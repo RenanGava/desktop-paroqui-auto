@@ -73,6 +73,8 @@ ipcMain.handle(
   "dizimo:bulk-insert",
   async (event: IpcMainInvokeEvent, dizimoList: IListDizimo[]) => {
 
+    
+
     for (let data of dizimoList) {
       try {
         const dateSplit = data.data_lancamento.split("-");
@@ -113,7 +115,6 @@ ipcMain.handle(
             nomeComunidade: data.comunidade.nome,
             comunidadeId: data.comunidade.theosId,
             comunidadeIdCentrosCustos: data.comunidade.centroCustoId,
-            // cnpjCpf: data.fiel.cpf,
           },
           comunidade: {
             id: data.comunidade.theosId,
@@ -124,12 +125,10 @@ ipcMain.handle(
           },
         });
 
-        return;
       } catch (error) {
         return error
       }
     }
-
   },
 );
 
