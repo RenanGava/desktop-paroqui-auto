@@ -4,11 +4,11 @@ import axios, {
   InternalAxiosRequestConfig,
 } from "axios";
 
-const URL = import.meta.env.DEV ? 'http://localhost:80/api': import.meta.env.VITE_API_URL
+const URL = import.meta.env.DEV ? 'http://localhost:1337/api': import.meta.env.VITE_API_URL
 
 
 const api = axios.create({
-  baseURL: 'https://api.paroquiauto.com/api',
+  baseURL: URL,
 });
 
 api.interceptors.request.use((config) => {

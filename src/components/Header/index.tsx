@@ -32,9 +32,12 @@ const items: MenuItem[] = [
       {
         label: (<Link to={"/syncColetas"}>Lançamentos e Coletas</Link>),
         key: 'syncColetas',
+      },
+      {
+        label: (<Link to={"/tipos"}>tipo</Link>),
+        key: 'tipos',
       }
-    ],
-    danger: false
+    ]
   }
 ]
 
@@ -61,6 +64,7 @@ export function Header() {
           selectedKeys={[tab]}
           mode="horizontal"
           items={items}
+          
         />
       </Content>
     </Container>

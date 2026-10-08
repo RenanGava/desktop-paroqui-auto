@@ -31,6 +31,7 @@ export function MainRouter() {
         <Route element={<TiposConfig />} path="/config" />
         <Route element={<FieisDash />} path="/fieis" />
         <Route element={<SyncColetas />} path="/syncColetas" />
+       <Route element={<TiposConfig />} path="/tipos" /> 
       </Routes>
     </HashRouter>
   );

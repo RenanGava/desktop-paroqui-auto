@@ -28,10 +28,10 @@ export function SyncComunidades() {
       ) : (
         <>
           <Card.Meta
-            description={`Coletas não sincronizadas do Theos ${amount}`}
+            description={`Comunidades não sincronizadas do Theos ${amount}`}
           />
           <Card.Meta
-            description={`Itens Cadastrados no App ${qtdComunidadesParoquiAuto}`}
+            description={`Comunidades no sistema ${qtdComunidadesParoquiAuto}`}
           />
         </>
       )}
