@@ -9,6 +9,7 @@ interface DizimoTableProps {
   submitDizimo: (dizimo: IListDizimo) => Promise<void>;
   setIsOpen(dizimo: IListDizimo): void;
   deleteDizimo(id: string): Promise<void>;
+  setListDizimo(data:IListDizimo[]): void
 }
 
 export function DizimoTable({
@@ -16,6 +17,7 @@ export function DizimoTable({
   submitDizimo,
   setIsOpen,
   deleteDizimo,
+  setListDizimo
   
 }: DizimoTableProps) {
   const { Column } = Table;
@@ -23,9 +25,8 @@ export function DizimoTable({
   return (
     <>
       <Table<IListDizimo> dataSource={dizimos} rowKey="id" rowSelection={{
-        onChange(selectedRowsKey, selectedRow){
-          console.log(selectedRow);
-          
+        onChange(selectedRowsKey, selectedRows){
+          setListDizimo(selectedRows)
         }
       }}>
         <Column title="ID" dataIndex="id" key="id" width={80} />

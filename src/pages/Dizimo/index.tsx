@@ -35,6 +35,9 @@ export function DizimoDash() {
     editDizimo,
     setDizimoForEdit,
     deleteDizimo,
+    bulkDizimo,
+    setBulkDizimo,
+    sendBulkDizimo
   } = useDizimo();
   const format = "DD/MM/YYYY";
 
@@ -66,10 +69,23 @@ export function DizimoDash() {
       } : null
     })
   }
-  async function handleDeleteAllDizimos(dizimoArray: IListDizimo[]) {
-    
-  }
 
+  async function handleSendBulk(data: IListDizimo[]) {
+    const bulkList = data.map( row => row.documentId)
+
+    try {
+      const teste = await window.api.bulkDizimo(data)
+    } catch (error) {
+      console.log(error);
+      
+    }
+    finally{
+      await sendBulkDizimo(bulkList)
+      await getDizimos(selectDate.initDate, selectDate.lastdate, {} as IListComunidades, 1)
+    }
+
+  }
+  
 
   return (
     <Container>
@@ -79,18 +95,19 @@ export function DizimoDash() {
           selectDate={selectDate}
           setSelectDate={setSelectDate}
         />
-        <Button
+        {bulkDizimo.length > 0 && (<Button
           type="primary"
-          onClick={() => {}}
+          onClick={() => { handleSendBulk(bulkDizimo)}}
         >
-          Buscar
-        </Button>
+          Enviar Selecionados
+        </Button>)}
       </header>
       <DizimoTable
         dizimos={[...listDizimo]}
         submitDizimo={submitDizimo}
         setIsOpen={handleOpenAndSetDizimoEdit}
         deleteDizimo={deleteDizimo}
+        setListDizimo={setBulkDizimo}
       />
 
       <Modal
