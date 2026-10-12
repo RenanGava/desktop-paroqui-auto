@@ -44,7 +44,7 @@ export function useOferta() {
       const ofertas = await api.get("/ofertas?" + configRequest);
       const ofertasList = ofertas.data.data as IListOferta[];
 
-      console.log(ofertas);
+      
 
       setListOferta(ofertasList);
     }
@@ -83,7 +83,7 @@ export function useOferta() {
     const ofertas = await api.get("/ofertas?" + configRequest);
     const ofertasList = ofertas.data.data as IListOferta[];
 
-    console.log(ofertas);
+    
 
     setListOferta(ofertasList);
   }
@@ -134,14 +134,14 @@ export function useOferta() {
   }
 
   async function deleteOferta(id: string) {
-    console.log(id);
+    
     await api.delete("/ofertas/" + id).then((res) => {
       messageApi.open({
         type: "warning",
         content: "Oferta Apagada com sucesso!",
       });
 
-      console.log(res);
+     
 
       setListOferta((prev) => {
         return prev.filter((item) => {

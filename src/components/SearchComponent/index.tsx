@@ -52,7 +52,7 @@ export function SearchComponent({
                 defaultValue={dayjs().startOf("month")}
                 format={format}
                 onChange={(date) => {
-                    console.log();
+                    
                     setSelectDate({
                         ...selectDate,
                         initDate: dayjs(date).format("YYYY-MM-DD"),
@@ -64,7 +64,7 @@ export function SearchComponent({
                 defaultValue={dayjs().endOf("month")}
                 format={"DD/MM/YYYY"}
                 onChange={(date) => {
-                    console.log();
+                    
                     setSelectDate({
                         ...selectDate,
                         lastdate: dayjs(date).format("YYYY-MM-DD"),

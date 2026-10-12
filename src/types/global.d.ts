@@ -19,5 +19,7 @@ declare global {
       EMAIL: string;
       SENHA: string;
     };
+
+     
   }
 }

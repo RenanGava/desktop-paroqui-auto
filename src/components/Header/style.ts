@@ -1,3 +1,4 @@
+import { Menu } from "antd";
 import styled from "styled-components";
 
 export const Container = styled.div`
@@ -7,5 +8,15 @@ export const Container = styled.div`
 
 export const Content = styled.div`
   margin: 0 auto;
-  width: 400px;
+  display: flex;
+  justify-content: center;
 `;
+export const HeaderMenu = styled(Menu).attrs({
+  mode: 'horizontal',
+  styles:{
+    root: {
+      border: 0
+    }
+  }
+})`max-width: 400px;
+width:100%`

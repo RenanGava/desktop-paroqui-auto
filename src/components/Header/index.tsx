@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Content } from "./style";
+import { Container, Content, HeaderMenu } from "./style";
 import { Menu } from "antd";
 import type { MenuProps } from "antd";
 import { Link, useLocation } from "react-router";
@@ -9,7 +9,7 @@ import { Link, useLocation } from "react-router";
 type MenuItem = Required<MenuProps>['items'][number];
 const items: MenuItem[] = [
   {
-    label: (<Link to={"/"}>Dizimo</Link>),
+    label: (<Link to={"/dizimo"}>Dizimo</Link>),
     key: 'dizimo',
   },
   {
@@ -43,28 +43,18 @@ const items: MenuItem[] = [
 
 export function Header() {
 
-  // const location = useLocation()
   const [tab, setTab] = useState('dizimo')
 
-  // useEffect(() => {
-  //   console.log(location.pathname);
-
-  // }, [location])
-
   function handleTab(e: any) {
-
     setTab(e.key)
-
   }
   return (
     <Container>
       <Content>
-        <Menu
+        <HeaderMenu
           onClick={handleTab}
           selectedKeys={[tab]}
-          mode="horizontal"
           items={items}
-          
         />
       </Content>
     </Container>

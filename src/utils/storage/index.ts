@@ -6,9 +6,6 @@ type Key = '@jwtTheos'
 const store = new Store({});
 
 
-
-console.log();
-
 function getKey(key:Key){
     //@ts-ignore
     return store.get('key')

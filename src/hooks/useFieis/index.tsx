@@ -34,7 +34,7 @@ export function useFieis() {
         const month = dayjs().month() + 1;
         const year = dayjs().year();
 
-        console.log(dayjs().utc().toISOString());
+        
 
         setSelectDate({
             initDate: `${year}-${month}-01`,
@@ -108,7 +108,7 @@ export function useFieis() {
         })
         const fieis = await api.get('/fieis?' + configRequest)
 
-        console.log(fieis);
+        
 
 
 
@@ -141,7 +141,7 @@ export function useFieis() {
 
         try {
             const updateComunityDocumentId = !!newComunidadeId ? newComunidadeId : fielUpdated.comunidade.documentId
-            console.log(updateComunityDocumentId);
+            
 
             const fielData = await api.put(`/fieis/${fielUpdated.documentId}?${configReq}`, {
                 data: {
@@ -166,7 +166,7 @@ export function useFieis() {
         } catch (error) {
 
             if (axios.isAxiosError(error)) {
-                console.log(error.toJSON());
+                
 
                 messageApi.error(`HTTP ${error.message} Code ${error.status}`)
             }
@@ -182,7 +182,7 @@ export function useFieis() {
 
         const fiel = await api.delete(`/fieis/${documentId}`)
 
-        console.log(documentId);
+        
         setFieis(prevState => {
             return prevState.filter(fiel => fiel.documentId !== documentId)
         })

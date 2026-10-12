@@ -22,7 +22,7 @@ async function createFieis(data: FielProps) {
     const dizId = await getDizimistaId()
     const dataCadastro = dayjs(new Date()).format('YYYY-M-DD')
     
-    console.log(data);
+    
     
 
 

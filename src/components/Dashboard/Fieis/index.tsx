@@ -111,7 +111,7 @@ export function FieisTable({
                   size="small"
                   onClick={() => {
                     submitFiel(fiel)
-                    console.log(fiel);
+                    
                     
                   }}
                 >

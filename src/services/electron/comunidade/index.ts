@@ -24,6 +24,6 @@ ipcMain.handle("syncComunidades", async (event: IpcMainInvokeEvent) => {
     centroCustoId: comunidade.centroCustoId.toString()
   }))
 
-  console.log(mappedComunidades);
+  
   return mappedComunidades
 });

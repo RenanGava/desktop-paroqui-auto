@@ -19,7 +19,7 @@ export function useDizimo() {
     const month = dayjs().month() + 1;
     const year = dayjs().year();
 
-    console.log(dayjs().utc().toISOString());
+    
 
     setSelectDate({
       initDate: `${year}-${month}-01`,
@@ -85,12 +85,12 @@ export function useDizimo() {
         encodeValuesOnly: true,
       },
     );
-    console.log(configRequest);
+    
 
     const dizimos = await api.get("/dizimos?" + configRequest);
     const dizimoList = dizimos.data.data as IListDizimo[];
 
-    console.log(dizimoList);
+    
     setListDizimo(dizimoList);
   }
 

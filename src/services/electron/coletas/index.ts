@@ -14,7 +14,7 @@ config({
 ipcMain.handle(
   "sendOne-coleta",
   async (event: IpcMainInvokeEvent, data: IListColeta) => {
-    console.log(data);
+    
 
     try {
       const res = await theosApi.post(

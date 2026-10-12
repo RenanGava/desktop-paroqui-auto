@@ -20,7 +20,6 @@ const theosApi = axios.create({
 
 theosApi.interceptors.response.use(
   (config) => {
-    // console.log(config.config.url);
     
     return config;
   },

@@ -30,7 +30,7 @@ ipcMain.handle('createFiel', async (_, data: FielProps) => {
   // const pupInstance = await PupAutomation.getInstance();
   // const { browser } = await pupInstance.getPup();
   // const [page] = await browser.pages();
-  // console.log(process.env.EMAIL);
+
   // pvaguadalupe@gmail.com
   // 1109
   // await page.goto(url.loginPage);
@@ -43,7 +43,6 @@ ipcMain.handle('createFiel', async (_, data: FielProps) => {
   //     const response = res.request()
   //     const cep = (await res.json()).organismoCep
   //     if(cep !== undefined){
-  //         console.log({cep: cep});
   //     }
   //   })
 // });
@@ -72,7 +71,7 @@ ipcMain.handle('createFiel', async (_, data: FielProps) => {
     //   const dateSplit = data.data_lancamento.split("-");
     //   const dateReverse = `${dateSplit[2]}/${dateSplit[1]}/${dateSplit[0]}`
 
-    //   console.log(dateReverse);
+
     //   const dizimistaId = document.querySelector<HTMLInputElement>("#tipoLeitura0");
     //   const mes = document.querySelector<HTMLInputElement>("#mesReferente");
     //   const ano = document.querySelector<HTMLInputElement>("#anoReferente");
@@ -169,7 +168,6 @@ ipcMain.handle('createFiel', async (_, data: FielProps) => {
 //       },
 //     });
 
-//     console.log(resDizimo.data);
 
 //     return;
 //   },

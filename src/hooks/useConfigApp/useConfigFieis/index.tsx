@@ -63,7 +63,7 @@ export function useConfigFieisApp() {
           .filter((fiel) => fiel !== undefined);
       });
 
-      console.log(mapUserData);
+     
 
       const listFielData = mapUserData.map((item) => item[0]);
 

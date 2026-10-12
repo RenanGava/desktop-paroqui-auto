@@ -71,7 +71,7 @@ export function FieisDash() {
 
   function handleOpenAndSetFielEdit(fiel: FielProps) {
     setSelectedFiel(fiel);
-    console.log('caiu aqui', fiel)
+    
     setOpen(true);
   }
 

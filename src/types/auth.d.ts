@@ -11,4 +11,10 @@ declare global {
             email: string
         }
     }
+
+    interface ICreateUser{
+        username: string
+        email: string
+        password: string
+    }
 }

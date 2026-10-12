@@ -1,6 +1,6 @@
 export function formatedValueForDecimal(value: string | null | undefined) {
 
-    console.log(value);
+    
     
     if(!value){
       return

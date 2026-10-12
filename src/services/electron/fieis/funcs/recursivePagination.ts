@@ -78,7 +78,6 @@ export async function requestFieis() {
 
             if(fiel.dizimistaId !== null){
                 // const date = fiel.dataNascimento.split('/')
-                // console.log(fiel.cnpjCpf);
     
                 // const formatedDate = `${date[2]}-${date[1]}-${date[0]}`
 
