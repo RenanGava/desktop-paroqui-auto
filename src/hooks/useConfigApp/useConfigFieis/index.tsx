@@ -23,7 +23,6 @@ export function useConfigFieisApp() {
       setQtdFieisParoquiAuto(allFieis.data.meta.pagination.total);
       await getFieisTheos()
       setIsLoading(false);
-
     }
 
     async function getFieisTheos() {

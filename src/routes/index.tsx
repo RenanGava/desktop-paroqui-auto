@@ -21,14 +21,14 @@ import { HomePage } from "../pages/Home";
 
 
 interface IPrivateProps {
-  authentiicated: boolean
+  authenticated: boolean
 }
 
 
-function PrivateRoutes({ authentiicated }: IPrivateProps) {
+function PrivateRoutes({ authenticated }: IPrivateProps) {
 
 
-  if (!authentiicated) {
+  if (!authenticated) {
     return <Navigate to='/' replace />
   }
 
@@ -68,7 +68,7 @@ export function MainRouter() {
               } />
           </Route>
           <Route element={
-            <PrivateRoutes authentiicated={authenticated} />
+            <PrivateRoutes authenticated={authenticated} />
           }>
             <Route element={<DizimoDash />} path="/dizimo" />
             <Route element={<ColetaDash />} path="/coleta" />

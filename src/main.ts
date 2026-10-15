@@ -12,7 +12,9 @@ import "./services/electron/coletas";
 import "./services/electron/dizimo";
 import "./services/electron/comunidade";
 import "./services/electron/ofertas";
-import "./services/global/env";
+import "./services/global/storage";
+import "./services/electron/login"
+import { clearKeys } from "./utils/storage";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -65,6 +67,7 @@ app.on("ready", async () => {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on("window-all-closed", () => {
+
   if (process.platform !== "darwin") {
     app.quit();
   }

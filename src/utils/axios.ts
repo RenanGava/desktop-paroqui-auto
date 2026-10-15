@@ -12,7 +12,8 @@ const api = axios.create({
 });
 
 const publicURLs = [
-  '/auth/local'
+  '/auth/local',
+  '/auth/local/register'
 ]
 
 api.interceptors.request.use((config) => {
@@ -28,10 +29,10 @@ api.interceptors.request.use((config) => {
   return config;
 })
 
-api.interceptors.response.use( request => {
-  
+api.interceptors.response.use( response => {
+  response
 
-  return request
+  return response
 }, (err: AxiosError) => {
 
   if(err.status === 401){
@@ -39,6 +40,7 @@ api.interceptors.response.use( request => {
     
   }
   
+  return Promise.reject(err)
 
 })
 

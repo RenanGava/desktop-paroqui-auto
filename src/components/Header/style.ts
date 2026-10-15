@@ -13,10 +13,14 @@ export const Content = styled.div`
 `;
 export const HeaderMenu = styled(Menu).attrs({
   mode: 'horizontal',
-  styles:{
+
+  styles: {
     root: {
       border: 0
     }
   }
-})`max-width: 400px;
-width:100%`
+})`
+
+  max-width: fit-content;
+  width:100%
+`

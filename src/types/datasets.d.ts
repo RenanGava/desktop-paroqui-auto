@@ -6,7 +6,12 @@ declare global {
     initDate: string;
     lastdate: string;
   }
-  
+
+  interface IDataLoginTheos {
+    Email: string,
+    Senha: string
+  }
+
   interface IListDizimo {
     id: number;
     valor: string;

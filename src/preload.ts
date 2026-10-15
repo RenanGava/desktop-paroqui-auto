@@ -2,13 +2,13 @@
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 import { contextBridge, ipcRenderer } from "electron";
 
-contextBridge.exposeInMainWorld("env", {
-  ...ipcRenderer.sendSync("envs"),
+contextBridge.exposeInMainWorld("local", {
+  saveData: async (data: IDataLoginTheos)=> await ipcRenderer.invoke("storage", data)
 });
 
 contextBridge.exposeInMainWorld("api", {
-  loginTheos: async () => {
-    ipcRenderer.invoke("loginTheos");
+  loginTheos: async (data: IDataLoginTheos) => {
+    return await ipcRenderer.invoke("login-theos", data);
   },
   sendOneDizimo: async (data: IListDizimo) => {
     return ipcRenderer.invoke("send-dizimo", data);

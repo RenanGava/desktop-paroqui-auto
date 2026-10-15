@@ -32,8 +32,8 @@ theosApi.interceptors.response.use(
       if (!isRefreshing) {
         isRefreshing = true;
 
-        theosData.append("Email", "pvaguadalupe@gmail.com");
-        theosData.append("Senha", "9882");
+        theosData.append("Email", getKey('email'));
+        theosData.append("Senha", getKey('pass'));
         axios
           .post(
             "http://eclesial.theos.com.br/EclesialIdentityHub/api/v1/Authentication",

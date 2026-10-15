@@ -31,7 +31,7 @@ export function HomePage() {
     return (
         <Container>
             <Content>
-                <Tabs defaultActiveKey="register" items={screens}/>
+                <Tabs defaultActiveKey="login" items={screens}/>
             </Content>
         </Container>
     )
