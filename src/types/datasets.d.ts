@@ -1,6 +1,17 @@
-export {};
+export { };
 
 declare global {
+
+  interface SelectDate {
+    initDate: string;
+    lastdate: string;
+  }
+
+  interface IDataLoginTheos {
+    Email: string,
+    Senha: string
+  }
+
   interface IListDizimo {
     id: number;
     valor: string;
@@ -65,18 +76,39 @@ declare global {
   }
 
   interface ITiposColetas {
+    documentId?: string
     tipo: string;
     theosContaId: Number;
     theosColetaId: Number;
     theosTipoDocId: Number;
     theosHistoricoId: Number;
+    ativo?: boolean
+  }
+  interface IColetas {
+    id: string | number;
+    descricao: string;
   }
 
   interface IListFiel {
     dizimistaId: string;
     cpf: string;
     nome: string;
-    // data_nascimento: string;
     comunidadeTheosId: string;
+  }
+
+
+  interface FielProps {
+    id: number
+    documentId: string
+    cpf: string
+    sexo: string
+    nome: string
+    dizimistaId: string
+    comunidade: {
+      nome: string;
+      documentId: string;
+      theosId: string;
+      centroCustoId: string;
+    }
   }
 }

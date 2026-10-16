@@ -1,10 +1,11 @@
 import { Card } from "antd";
 import React from "react";
-import { useConfigComunidadesApp } from "../../../../hooks/useConfigApp/useConfigComunidades";
+
 import { LoadingOutlined } from "@ant-design/icons";
 import { Flex, Spin } from "antd";
+import { useConfigComunidadesApp } from "../../hooks/useConfigApp/useConfigComunidades";
 
-export function SyncComunidades() {
+export function Comunidades() {
   const {
     amount,
     handleSyncComunidadesDB,
@@ -28,10 +29,10 @@ export function SyncComunidades() {
       ) : (
         <>
           <Card.Meta
-            description={`Coletas não sincronizadas do Theos ${amount}`}
+            description={`Comunidades não sincronizadas do Theos ${amount}`}
           />
           <Card.Meta
-            description={`Itens Cadastrados no App ${qtdComunidadesParoquiAuto}`}
+            description={`Comunidades no sistema ${qtdComunidadesParoquiAuto}`}
           />
         </>
       )}

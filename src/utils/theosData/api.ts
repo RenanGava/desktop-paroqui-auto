@@ -20,7 +20,6 @@ const theosApi = axios.create({
 
 theosApi.interceptors.response.use(
   (config) => {
-    console.log(config.config.url);
     
     return config;
   },
@@ -33,8 +32,8 @@ theosApi.interceptors.response.use(
       if (!isRefreshing) {
         isRefreshing = true;
 
-        theosData.append("Email", "pvaguadalupe@gmail.com");
-        theosData.append("Senha", "9882");
+        theosData.append("Email", getKey('email'));
+        theosData.append("Senha", getKey('pass'));
         axios
           .post(
             "http://eclesial.theos.com.br/EclesialIdentityHub/api/v1/Authentication",
@@ -43,6 +42,9 @@ theosApi.interceptors.response.use(
           .then((res) => {
             setKey("@jwtTheos", res.data.access_token);
             theosApi.defaults.headers.autorization = `Bearer ${res.data.access_token}`;
+            failedQueue.forEach( request => {
+              request.resolve(res.data.access_token)
+            })
           })
           .catch((err) => {
             failedQueue.forEach((request) => {

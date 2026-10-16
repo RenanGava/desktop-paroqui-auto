@@ -1,29 +1,25 @@
 import Store, { Options } from "electron-store";
 
 
-type Key = '@jwtTheos'
+type Key = '@jwtTheos' | "email" | "pass"
 
 const store = new Store({});
 
 
-
-console.log();
-
-function getKey(key:Key){
+function getKey(key:Key): string{
     //@ts-ignore
-    return store.get('key')
+    return store.get(key)
 }
 
 function setKey(key:Key, value:any){
-    //@ts-ignore
-    return store.set('key', value)
+
+    store.delete(key)
+    store.set(key, value)
 }
 
 function clearKeys(){
-
     //@ts-ignore
     store.clear()
-    
 }
 
 

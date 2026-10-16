@@ -54,7 +54,7 @@ export function useColeta() {
       const ofertas = await api.get("/coletas?" + configRequest);
       const ofertasList = ofertas.data.data as IListColeta[];
 
-      console.log(ofertas);
+      
 
       setListColeta(ofertasList);
     }
@@ -62,7 +62,7 @@ export function useColeta() {
     getColetas();
   }, []);
 
-  async function getColetas(initiDate: string, lastDate: string) {
+  async function getColetas(initiDate: string, lastDate: string, selectedCommunity: IListComunidades) {
     const configRequest = stringify(
       {
         fields: ["documentId", "data_lancamento", "valor"],
@@ -73,6 +73,12 @@ export function useColeta() {
               dayjs(lastDate).format("YYYY-MM-DD"),
             ],
           },
+
+          comunidade:{
+            documentId: {
+              $eq: selectedCommunity.documentId
+            }
+          }
         },
         populate: {
           comunidade: {
@@ -98,13 +104,13 @@ export function useColeta() {
     const ofertas = await api.get("/coletas?" + configRequest);
     const ofertasList = ofertas.data.data as IListColeta[];
 
-    console.log(ofertas);
+    
 
     setListColeta(ofertasList);
   }
 
   async function submitColeta(coleta: IListColeta) {
-    console.log(coleta);
+    
 
     try {
       await window.api.sendOneColeta(coleta);
@@ -135,14 +141,14 @@ export function useColeta() {
   }
 
   async function deleteColeta(id: string) {
-    console.log(id);
+    
     await api.delete("/coletas/" + id).then((res) => {
       messageApi.open({
         type: "warning",
         content: "Coleta Apagada com sucesso!",
       });
 
-      console.log(res);
+     
 
       setListColeta((prev) => {
         return prev.filter((item) => {

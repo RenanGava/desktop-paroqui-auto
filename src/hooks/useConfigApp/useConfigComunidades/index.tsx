@@ -26,7 +26,6 @@ export function useConfigComunidadesApp() {
       const { data } = await api.get("/comunidades?" + configReq);
       const strapiComunidades = data.data as IListComunidades[];
       setQtdComunidadesParoquiAuto(strapiComunidades.length);
-      console.log(comunidades);
 
       // percorremos a lista de coletas para achar os itens que nao existem
       // no nosso banco de dados "paroquiAuto"
@@ -42,7 +41,7 @@ export function useConfigComunidadesApp() {
         })
         .filter((coleta) => coleta !== undefined);
 
-      // console.log('useEffect diferentes',isDiferentComunidades);
+      
 
       setAmount(isDiferentComunidades.length);
       setComunidadesUnSync(isDiferentComunidades);
@@ -53,7 +52,7 @@ export function useConfigComunidadesApp() {
 
   async function handleSyncAllComunidadesDB() {
     setIsLoading(true)
-    console.log("caiu aqui");
+    
 
     const comunidades = await window.api.syncComunidades();
 
@@ -77,13 +76,10 @@ export function useConfigComunidadesApp() {
   // o sistema Theos e o ParoquiAuto
   async function handleSyncComunidadesDB() {
     setIsLoading(true)
-    console.log("Cadasrando novos itens ou que faltavam", comunidadesUnSync);
+    
 
     if (comunidadesUnSync?.length === 0 || comunidadesUnSync === undefined) {
-      console.log(
-        "Cadasrando novos itens ou que faltavam IF",
-        comunidadesUnSync,
-      );
+      
       return;
     }
 

@@ -1,12 +1,13 @@
 import { ipcMain, IpcMainInvokeEvent } from "electron";
-import { PupAutomation } from "../../puppeteer";
-import url from "../../puppeteer/url";
+import { PupAutomation } from "../../../puppeteer";
+import url from "../../../puppeteer/url";
 import { config } from "dotenv";
-import { api } from "../../utils/axios";
+import { api } from "../../../utils/axios";
 import dayjs from "dayjs";
-import "../../utils/storage";
-import { theosApi } from "../../utils/theosData/api";
+import "../../../utils/storage";
+import { theosApi } from "../../../utils/theosData/api";
 import { requestFieis } from "./funcs/recursivePagination";
+import { createFieis } from "./funcs/createFieis";
 config({
   path:
     process.env.NODE_ENV === "development" ? ".env.local" : ".env.production",
@@ -19,11 +20,17 @@ ipcMain.handle('getFieis', async () => {
   return fieis
 })
 
+ipcMain.handle('createFiel', async (_, data: FielProps) => {
+  const fiel = await createFieis(data)
+
+  return fiel
+})
+
 // ipcMain.handle("loginTheos", async () => {
   // const pupInstance = await PupAutomation.getInstance();
   // const { browser } = await pupInstance.getPup();
   // const [page] = await browser.pages();
-  // console.log(process.env.EMAIL);
+
   // pvaguadalupe@gmail.com
   // 1109
   // await page.goto(url.loginPage);
@@ -36,7 +43,6 @@ ipcMain.handle('getFieis', async () => {
   //     const response = res.request()
   //     const cep = (await res.json()).organismoCep
   //     if(cep !== undefined){
-  //         console.log({cep: cep});
   //     }
   //   })
 // });
@@ -65,7 +71,7 @@ ipcMain.handle('getFieis', async () => {
     //   const dateSplit = data.data_lancamento.split("-");
     //   const dateReverse = `${dateSplit[2]}/${dateSplit[1]}/${dateSplit[0]}`
 
-    //   console.log(dateReverse);
+
     //   const dizimistaId = document.querySelector<HTMLInputElement>("#tipoLeitura0");
     //   const mes = document.querySelector<HTMLInputElement>("#mesReferente");
     //   const ano = document.querySelector<HTMLInputElement>("#anoReferente");
@@ -162,7 +168,6 @@ ipcMain.handle('getFieis', async () => {
 //       },
 //     });
 
-//     console.log(resDizimo.data);
 
 //     return;
 //   },

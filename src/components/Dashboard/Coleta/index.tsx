@@ -30,7 +30,7 @@ export function ColetaTable({
           width={200}
         />
         <Column
-          title="Comunidade"
+          title="Tipo Coleta"
           dataIndex={["tipo_coleta", "tipo"]}
           key="comunidade"
           width={200}

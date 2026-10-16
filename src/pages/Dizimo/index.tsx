@@ -1,28 +1,28 @@
-import React, { useState, Key } from "react";
+import React, { useEffect, useState } from "react";
 import { Container } from "./styles";
 import { DizimoTable } from "../../components/Dashboard/Dizimo";
-import { useNavigate } from "react-router";
 import {
   Button,
   Flex,
-  Table,
   DatePicker,
   Modal,
   Input,
   Typography,
-  InputNumber,
+  Space,
+  Select
 } from "antd";
 import { useDizimo } from "../../hooks/useDizimo";
 import dayjs from "dayjs";
 import UTC from "dayjs/plugin/utc";
-import { User } from "lucide-react";
 import { formatedValueForDecimal } from "../../utils/formatedValue";
+import { stringify } from "qs";
+import { api } from "../../utils/axios";
+import { SearchComponent } from "../../components/SearchComponent";
 dayjs.extend(UTC);
-
-const { Column, ColumnGroup } = Table;
 
 export function DizimoDash() {
   const [open, setOpen] = useState(false);
+
 
   const {
     listDizimo,
@@ -35,15 +35,57 @@ export function DizimoDash() {
     editDizimo,
     setDizimoForEdit,
     deleteDizimo,
+    bulkDizimo,
+    setBulkDizimo,
+    sendBulkDizimo
   } = useDizimo();
   const format = "DD/MM/YYYY";
 
-  const navigate = useNavigate();
 
   function handleOpenAndSetDizimoEdit(dizimo: IListDizimo) {
     setDizimoForEdit(dizimo);
     setOpen(true);
   }
+
+  function handleChangeName(name: string) {
+    setDizimoForEdit(prevState => {
+
+
+      return prevState ? {
+        ...prevState,
+        fiel: {
+          ...prevState.fiel,
+          nome: name,
+        }
+      } : null
+    })
+  }
+
+  function handleChangeValue(value: string) {
+    setDizimoForEdit(prevState => {
+      return prevState ? {
+        ...prevState,
+        valor: value
+      } : null
+    })
+  }
+
+  async function handleSendBulk(data: IListDizimo[]) {
+    const bulkList = data.map( row => row.documentId)
+
+    try {
+      const teste = await window.api.bulkDizimo(data)
+    } catch (error) {
+      console.log(error);
+      
+    }
+    finally{
+      await sendBulkDizimo(bulkList)
+      await getDizimos(selectDate.initDate, selectDate.lastdate, {} as IListComunidades, 1)
+    }
+
+  }
+  
 
   return (
     <Container>
@@ -78,8 +120,6 @@ export function DizimoDash() {
           >
             Buscar
           </Button>
-          <Typography.Text>{window.env.API_URL}</Typography.Text>
-          <Typography.Text>{window.env.API_URL}</Typography.Text>
         </Flex>
       </header>
       <DizimoTable
@@ -87,6 +127,7 @@ export function DizimoDash() {
         submitDizimo={submitDizimo}
         setIsOpen={handleOpenAndSetDizimoEdit}
         deleteDizimo={deleteDizimo}
+        setListDizimo={setBulkDizimo}
       />
 
       <Modal
@@ -118,37 +159,18 @@ export function DizimoDash() {
               key={"nome"}
               onChange={(e) => {
                 e.preventDefault();
-                setDizimoForEdit((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        fiel: {
-                          ...prev.fiel,
-                          nome: e.target.value,
-                        },
-                      }
-                    : null,
-                );
+                handleChangeName(e.target.value)
               }}
             />
           </Flex>
           <Flex orientation="vertical" gap={0}>
             <Typography.Title level={5}>Valor</Typography.Title>
             <Input
-              placeholder="Nome"
+              placeholder="valor"
               value={formatedValueForDecimal(dizimoForEdit?.valor)}
               onChange={(e) => {
-                setDizimoForEdit((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        fiel: {
-                          ...prev.fiel,
-                          nome: e.target.value,
-                        },
-                      }
-                    : null,
-                );
+                e.preventDefault()
+                handleChangeValue(e.target.value.replace(/\D/g, ""))
               }}
             />
           </Flex>

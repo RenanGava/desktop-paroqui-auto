@@ -4,22 +4,37 @@ import { api } from "../../../utils/axios";
 import { message } from "antd";
 
 export function useConfigColetaApp() {
-  const [amount, setAmount] = useState(0);
-  const [coletasUnSync, setColetasUnSync] = useState<ITiposColetas[]>();
-  const [qtdColetasParoquiAuto, setQtdColetasParoquiAuto] = useState(0)
+  const [coletasStrapi, setColetasStrapi] = useState<ITiposColetas[]>([]);
+  const [coletasTheos, setColetasTheos] = useState<IColetas[]>([])
   const [isLoading, setIsLoading] = useState(false)
+
+
+  const columns = [
+    {
+      title: 'ID',
+      dataindex: 'id',
+      key: 'id'
+    },
+    {
+      title: 'Tipo',
+      dataindex: 'descricao',
+      key: 'descricao'
+    }
+  ]
 
   useEffect(() => {
     async function handleCompareColetasDB() {
       setIsLoading(true)
       const configReq = stringify({
-        fields: ["tipo", "theosContaId", "theosHistoricoId", "theosColetaId"],
+        fields: ["tipo", "theosContaId", "theosHistoricoId", "theosColetaId", "ativo"],
       });
 
-      const coletas = await window.api.syncColetas();
+      const coletas = await window.api.syncColetas() as IColetas[]
       const { data } = await api.get("/tipo-coletas?" + configReq);
       const strapiColetas = data.data as ITiposColetas[];
-      setQtdColetasParoquiAuto(strapiColetas.length)
+
+
+
 
       // percorremos a lista de coletas para achar os itens que nao existem
       // no nosso banco de dados "paroquiAuto"
@@ -27,88 +42,104 @@ export function useConfigColetaApp() {
       const isDiferentColetas = coletas
         .map((item) => {
           const isNoExistInParoquiAuto = strapiColetas.find(
-            (coleta) => coleta.tipo.trim() === item.tipo.trim(),
+            (coleta) => coleta.tipo.trim() === item.descricao.trim(),
           );
           if (!isNoExistInParoquiAuto) {
             return item;
           }
+          else {
+          }
         })
         .filter((coleta) => coleta !== undefined);
 
-      console.log('dentro do useEffect', isDiferentColetas);
-
-      setAmount(isDiferentColetas.length);
-      setColetasUnSync(isDiferentColetas);
+      setColetasStrapi(strapiColetas)
+      setColetasTheos(isDiferentColetas);
       setIsLoading(false)
     }
     handleCompareColetasDB();
-  }, []);
+  }, [])
 
-  async function handleSyncAllColetasDB() {
+  async function handleSubmitColeta(coleta: IColetas) {
     setIsLoading(true)
-    console.log("Cadastrando tudo de uma vez");
 
-    const coletas = await window.api.syncColetas();
+    try {
+      const coletaTheosConfig = await window.api.configColeta(coleta);
 
-    await Promise.all([
-      ...coletas.map(async (coleta) =>
-        api.post("/tipo-coletas", {
-          data: {
-            tipo: coleta.tipo,
-            theosContaId: coleta.theosContaId,
-            theosColetaId: coleta.theosColetaId,
-            theosTipoDocId: coleta.theosTipoDocId,
-            theosHistoricoId: coleta.theosHistoricoId,
-          },
-        }),
-      ),
-    ]);
+      const coletaStrapi = await api.post("/tipo-coletas", {
+        data: {
+          tipo: coletaTheosConfig.tipo,
+          theosContaId: coletaTheosConfig.theosContaId,
+          theosColetaId: coletaTheosConfig.theosColetaId,
+          theosTipoDocId: coletaTheosConfig.theosTipoDocId,
+          theosHistoricoId: coletaTheosConfig.theosHistoricoId,
+          ativo: false
+        },
+      })
+
+      setColetasTheos(prevState => {
+
+        return prevState.filter(col => {
+          return col.id !== coleta.id
+        })
+      })
+
+      setColetasStrapi(prevState => {
+        return [...prevState, coletaStrapi.data.data]
+      })
+      message.success("Coleta Sincronizada com Sucesso")
+    } catch (error) {
+      message.error("Algo Deu Errado " + error)
+    }
+
     setIsLoading(false)
   }
 
-  // aqui sincroniza somente as coletas que estao diferentes entre
-  // o sistema Theos e o ParoquiAuto
-  async function handleSyncColetasDB() {
-    setIsLoading(true)
-    console.log("Cadasrando novos itens ou que faltavam", coletasUnSync)
+  async function handleToggleStatus(id: string, status: boolean) {
+    try {
+      const coletaStrapi = await api.put("/tipo-coletas/" + id, {
+        data: {
+          ativo: status
+        }
+      })
 
-    if (coletasUnSync?.length === 0 || coletasUnSync === undefined) {
-      console.log("Cadasrando novos itens ou que faltavam IF", coletasUnSync)
-      return
+      setColetasStrapi(prevState => prevState.map(coleta => {
+        if (coleta.documentId === id) {
+          coleta.ativo = status
+          return coleta
+        }
+
+        return coleta
+
+      }))
+      message.success('Status Atualizado com Sucesso!')
+    } catch (error) {
+      message.error('Erro ao Atualizar Status')
     }
+
+  }
+
+  async function handleDelete(id: string) {
 
     try {
-      await Promise.all([
-        ...coletasUnSync.map(async (coleta) =>
-          api.post("/tipo-coletas", {
-            data: {
-              tipo: coleta.tipo,
-              theosContaId: coleta.theosContaId,
-              theosColetaId: coleta.theosColetaId,
-              theosTipoDocId: coleta.theosTipoDocId,
-              theosHistoricoId: coleta.theosHistoricoId,
-            },
-          }),
-        ),
-      ]);
-      setAmount(0)
-      setQtdColetasParoquiAuto(coletasUnSync.length)
-      setIsLoading(false)
+      const coletaStrapi = await api.put("/tipo-coletas/" + id)
+
+      setColetasStrapi(prevState => prevState.filter(coleta => {
+        return coleta.documentId !== id
+      }))
+
+      message.success('Apagado com Sucesso!')
     } catch (error) {
-
+      message.error('Erro ao Apagar')
     }
-
-    setIsLoading(false)
   }
 
   return {
-    amount,
-    coletasUnSync,
-    qtdColetasParoquiAuto,
+    coletasStrapi,
+    coletasTheos,
+    columns,
     isLoading,
-    setAmount,
-    setColetasUnSync,
-    handleSyncColetasDB,
-    handleSyncAllColetasDB
+    handleToggleStatus,
+    setColetasStrapi,
+    handleSubmitColeta
   };
 }

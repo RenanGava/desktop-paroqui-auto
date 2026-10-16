@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import { useOferta } from "../../hooks/useOferta";
 import { useNavigate } from "react-router";
 import { formatedValueForDecimal } from "../../utils/formatedValue";
+import { SearchComponent } from "../../components/SearchComponent";
 
 export function OfertaDash() {
   const [open, setOpen] = useState(false);
@@ -35,39 +36,12 @@ export function OfertaDash() {
     <Container>
       <Content>
         <header>
-          <Flex gap="small" align="center">
-            <DatePicker
-              defaultValue={dayjs().startOf("month")}
-              format={format}
-              onChange={(date) => {
-                console.log();
-                setSelectDate({
-                  ...selectDate,
-                  initDate: dayjs(date).format("YYYY-MM-DD"),
-                });
-              }}
-            />
-            <span>-</span>
-            <DatePicker
-              defaultValue={dayjs().endOf("month")}
-              format={"DD/MM/YYYY"}
-              onChange={(date) => {
-                console.log();
-                setSelectDate({
-                  ...selectDate,
-                  lastdate: dayjs(date).format("YYYY-MM-DD"),
-                });
-              }}
-            />
-            <Button
-              type="primary"
-              onClick={async () => {
-                await getOfertas(selectDate.initDate, selectDate.lastdate);
-              }}
-            >
-              Buscar
-            </Button>
-          </Flex>
+
+          <SearchComponent
+            getData={getOfertas}
+            selectDate={selectDate}
+            setSelectDate={setSelectDate}
+          />
         </header>
         <OfertaTable
           ofertas={listOferta}

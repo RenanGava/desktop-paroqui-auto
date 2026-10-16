@@ -1,11 +1,11 @@
 import { ipcMain, IpcMainInvokeEvent } from "electron";
-import { PupAutomation } from "../../puppeteer";
-import url from "../../puppeteer/url";
+import { PupAutomation } from "../../../puppeteer";
+import url from "../../../puppeteer/url";
 import { config } from "dotenv";
-import { api } from "../../utils/axios";
+import { api } from "../../../utils/axios";
 import dayjs from "dayjs";
-import "../../utils/storage";
-import { theosApi } from "../../utils/theosData/api";
+import "../../../utils/storage";
+import { theosApi } from "../../../utils/theosData/api";
 config({
   path:
     process.env.NODE_ENV === "development" ? ".env.local" : ".env.production",

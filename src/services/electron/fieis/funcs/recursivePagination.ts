@@ -1,4 +1,4 @@
-import { theosApi } from "../../../utils/theosData/api";
+import { theosApi } from "../../../../utils/theosData/api";
 
 async function calcNumberPages(itensPerPage: number) {
   const { data } = await theosApi.post(
@@ -76,11 +76,11 @@ export async function requestFieis() {
 
         fieisTheos.map( (fiel, index) => {
 
-            
-            if(fiel.dizimistaId !== null /*&& fiel.dataNascimento !== null*/){
+            if(fiel.dizimistaId !== null){
                 // const date = fiel.dataNascimento.split('/')
     
                 // const formatedDate = `${date[2]}-${date[1]}-${date[0]}`
+
                 listAllFieis.push({
                 dizimistaId: fiel.dizimistaId,
                 cpf: fiel.cnpjCpf,
@@ -88,7 +88,6 @@ export async function requestFieis() {
                 comunidadeTheosId: fiel.comunidadeId.toString()
             })}
         })
-        
     }
     
 

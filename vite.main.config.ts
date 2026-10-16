@@ -12,5 +12,6 @@ export default defineConfig({
         "utf-8-validate",
       ],
     },
-  },
+    
+  }
 });

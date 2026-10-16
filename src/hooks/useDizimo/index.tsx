@@ -4,16 +4,14 @@ import { stringify } from "qs";
 import dayjs from "dayjs";
 import { message } from "antd";
 
-interface SelectDate {
-  initDate: string;
-  lastdate: string;
-}
 
 export function useDizimo() {
   const [listDizimo, setListDizimo] = useState<IListDizimo[]>([]);
   const [dizimoForEdit, setDizimoForEdit] = useState<IListDizimo | null>(null);
   const [selectDate, setSelectDate] = useState<SelectDate>({} as SelectDate);
   const [messageApi, contextHolder] = message.useMessage();
+  const [bulkDizimo, setBulkDizimo] = useState<IListDizimo[]>([])
+  
 
   useEffect(() => {
     const lastDay = dayjs().daysInMonth().toString();
@@ -21,14 +19,14 @@ export function useDizimo() {
     const month = dayjs().month() + 1;
     const year = dayjs().year();
 
-    console.log(dayjs().utc().toISOString());
+    
 
     setSelectDate({
       initDate: `${year}-${month}-01`,
       lastdate: `${year}-${month}-${day}`,
     });
 
-    async function getDizimos() {
+    async function getFieis() {
       const configRequest = stringify(
         {
           fields: ["documentId", "data_lancamento", "valor"],
@@ -49,15 +47,15 @@ export function useDizimo() {
       const dizimos = await api.get("/dizimos?" + configRequest);
       const dizimoList = dizimos.data.data as IListDizimo[];
 
-      console.log(dizimoList);
-
       setListDizimo(dizimoList);
     }
 
-    getDizimos();
+    getFieis();
   }, []);
 
-  async function getDizimos(initiDate: string, lastDate: string) {
+  async function getDizimos(initiDate: string, lastDate: string, selectedCommunity: IListComunidades, page: number) {
+    
+    
     const configRequest = stringify(
       {
         fields: ["documentId", "data_lancamento", "valor"],
@@ -68,6 +66,11 @@ export function useDizimo() {
               dayjs(lastDate).format("YYYY-MM-DD"),
             ],
           },
+          comunidade: {
+            documentId: {
+              $eq: selectedCommunity?.documentId
+            }
+          }
         },
         populate: {
           comunidade: {
@@ -82,12 +85,12 @@ export function useDizimo() {
         encodeValuesOnly: true,
       },
     );
-    console.log(initiDate, lastDate);
+    
 
     const dizimos = await api.get("/dizimos?" + configRequest);
     const dizimoList = dizimos.data.data as IListDizimo[];
 
-    console.log(dizimoList);
+    
     setListDizimo(dizimoList);
   }
 
@@ -146,11 +149,16 @@ export function useDizimo() {
     });
     await api.delete("/dizimos/" + id);
 
-    setListDizimo( prev => {
-      return prev.filter( diz => {
+    setListDizimo(prev => {
+      return prev.filter(diz => {
         return diz.documentId !== id
       })
     })
+  }
+
+  async function sendBulkDizimo(bulk:string[]){
+    const {data} = await api.post("/dizimo-bulk", bulk)
+    messageApi.success('Dízimos Enviados: '+ data.count)
   }
 
   return {
@@ -160,9 +168,12 @@ export function useDizimo() {
     editDizimo,
     setDizimoForEdit,
     deleteDizimo,
+    setBulkDizimo,
+    sendBulkDizimo,
     listDizimo,
     selectDate,
     dizimoForEdit,
     contextHolder,
+    bulkDizimo
   };
 }

@@ -1,11 +1,11 @@
 import { ipcMain, IpcMainInvokeEvent } from "electron";
-import { PupAutomation } from "../../puppeteer";
-import url from "../../puppeteer/url";
+import { PupAutomation } from "../../../puppeteer";
+import url from "../../../puppeteer/url";
 import { config } from "dotenv";
-import { api } from "../../utils/axios";
+import { api } from "../../../utils/axios";
 import dayjs from "dayjs";
-import "../../utils/storage";
-import { theosApi } from "../../utils/theosData/api";
+import "../../../utils/storage";
+import { theosApi } from "../../../utils/theosData/api";
 config({
   path:
     process.env.NODE_ENV === "development" ? ".env.local" : ".env.production",
@@ -14,7 +14,7 @@ config({
 ipcMain.handle(
   "sendOne-coleta",
   async (event: IpcMainInvokeEvent, data: IListColeta) => {
-    console.log(data);
+    
 
     try {
       const res = await theosApi.post(
@@ -59,50 +59,60 @@ ipcMain.handle("syncColetas", async (event) => {
         {
           propriedade: "descricao",
           tipo: "1",
-          termo: "coleta",
+          termo: "",
           termoFinal: null,
         },
       ],
     },
   );
 
-  const listColeta = res.data.data as Array<{ id: Number }>;
-
-  const coletaIdList = listColeta.map((coleta) => {
+  const listColeta = res.data.data.map((item: { id: number, descricao: string }) => {
     return {
-      id: coleta.id,
-    };
-  });
+      id: item.id,
+      descricao: item.descricao
+    }
+  }) as IColetas[]
 
-  const coletaConfigPromises = coletaIdList.map(async (coleta) => {
-    // console.log(coleta);
-    
-    return await theosApi.post(
+
+  return listColeta
+
+
+});
+
+
+ipcMain.handle('configColeta', async (event, coleta: IColetas) => {
+
+
+
+  try {
+    const coletaTheos = await theosApi.post(
       "/EclesialContabilCoreCadastros/api/v1/lancamentopadrao/getformovimento",
       {
         id: coleta.id,
         organismoId: "2919",
         telaSistema: 1,
       },
-    );
-  });
 
-  const listColetaConfig:ITiposColetas[] = []
-  console.log(listColetaConfig);
-  
 
-  for await(let confColeta of coletaConfigPromises){
-    listColetaConfig.push({
-      tipo: confColeta.data.descricao,
-      theosColetaId: confColeta.data.id,
-      theosContaId: confColeta.data.conta.id,
-      theosHistoricoId: confColeta.data.historico.id,
-      theosTipoDocId: confColeta.data.tipoDocumento.id
-    })
+    )
+    const theosTipoColetaDocId = !!coletaTheos.data.tipoDocumento ? coletaTheos.data.tipoDocumento.id : 0
+    
+    return {
+      tipo: coletaTheos.data.descricao,
+      theosColetaId: coletaTheos.data.id,
+      theosContaId: coletaTheos.data.conta.id,
+      theosHistoricoId: coletaTheos.data.historico.id,
+      theosTipoDocId: theosTipoColetaDocId
+    }
+  } catch (error) {
+    throw error
+
   }
 
 
-  return listColetaConfig
 
 
-});
+
+
+})
+

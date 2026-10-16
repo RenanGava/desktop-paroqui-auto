@@ -2,12 +2,14 @@ import React, { Key, useState } from "react";
 import { Button, Flex, Modal, Table, Tooltip, Popconfirm } from "antd";
 import { List, PencilLine, SendHorizonal, Trash } from "lucide-react";
 import dayjs from "dayjs";
+import { TableRowSelection } from "antd/es/table/interface";
 
 interface DizimoTableProps {
   dizimos: IListDizimo[];
   submitDizimo: (dizimo: IListDizimo) => Promise<void>;
   setIsOpen(dizimo: IListDizimo): void;
   deleteDizimo(id: string): Promise<void>;
+  setListDizimo(data:IListDizimo[]): void
 }
 
 export function DizimoTable({
@@ -15,12 +17,18 @@ export function DizimoTable({
   submitDizimo,
   setIsOpen,
   deleteDizimo,
+  setListDizimo
+  
 }: DizimoTableProps) {
   const { Column } = Table;
 
   return (
     <>
-      <Table<IListDizimo> dataSource={dizimos} rowKey="id">
+      <Table<IListDizimo> dataSource={dizimos} rowKey="id" rowSelection={{
+        onChange(selectedRowsKey, selectedRows){
+          setListDizimo(selectedRows)
+        }
+      }}>
         <Column title="ID" dataIndex="id" key="id" width={80} />
         <Column
           title="Nome"
