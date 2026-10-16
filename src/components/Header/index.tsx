@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Container, Content, HeaderMenu } from "./style";
-import { Menu } from "antd";
 import type { MenuProps } from "antd";
-import { Link, useLocation } from "react-router";
+import { Link } from "react-router";
 
 // eslint-disable-next-line import/no-unresolved
 
@@ -31,15 +30,15 @@ const items: MenuItem[] = [
     children: [
       {
         label: (<Link to={"/config/coletas"}>Lançamentos e Coletas</Link>),
-        key: 'syncColetas',
+        key: 'config-coletas',
       },
       {
-        label: (<Link to={"/config/fieis"}>Configurar Paroquia</Link>),
-        key: '',
+        label: (<Link to={"/config/fieis"}>Configurar Fieis</Link>),
+        key: 'config-fieis',
       },
       {
-        label: (<Link to={"/config/comunidades"}>Configurar Paroquia</Link>),
-        key: '',
+        label: (<Link to={"/config/comunidades"}>Configurar Comunidades</Link>),
+        key: 'config-comunidades',
       }
     ]
   }

@@ -2,6 +2,7 @@ import { stringify } from "qs";
 import React, { useEffect, useState } from "react";
 import { api } from "../../../utils/axios";
 import { message } from "antd";
+import { useAuth } from "../../../context/Auth";
 
 export function useConfigComunidadesApp() {
   const [amount, setAmount] = useState(0);
@@ -9,6 +10,7 @@ export function useConfigComunidadesApp() {
     useState<IListComunidades[]>();
   const [qtdComunidadesParoquiAuto, setQtdComunidadesParoquiAuto] = useState(0);
   const [isLoading, setIsLoading] = useState(false)
+
 
   useEffect(() => {
     async function handleCompareColetasDB() {
@@ -48,6 +50,7 @@ export function useConfigComunidadesApp() {
       setIsLoading(false)
     }
     handleCompareColetasDB();
+    
   }, []);
 
   async function handleSyncAllComunidadesDB() {
@@ -98,6 +101,10 @@ export function useConfigComunidadesApp() {
     setAmount(0)
     setQtdComunidadesParoquiAuto(0)
     setIsLoading(false)
+  }
+
+  async function createIfNotExists() {
+
   }
 
   return {

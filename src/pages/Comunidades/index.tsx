@@ -1,8 +1,7 @@
-import { Card } from "antd";
-import React from "react";
+import { Card, Steps, Flex, Spin, Divider, Space } from "antd";
+import React, { useState } from "react";
 
 import { LoadingOutlined } from "@ant-design/icons";
-import { Flex, Spin } from "antd";
 import { useConfigComunidadesApp } from "../../hooks/useConfigApp/useConfigComunidades";
 
 export function Comunidades() {
@@ -14,28 +13,62 @@ export function Comunidades() {
     isLoading,
   } = useConfigComunidadesApp();
 
+  const [current, setCurrent] = useState(0)
+
   return (
-    <Card
-      title="Sincronizar Comunidades"
-      style={{ width: 300 }}
-      hoverable
-      onClick={async (e) => {
-        qtdComunidadesParoquiAuto < 1 && (await handleSyncAllComunidadesDB());
-        qtdComunidadesParoquiAuto >= 1 && (await handleSyncComunidadesDB());
+    <Space orientation="vertical"
+      align="center"
+      style={{
+        width: "100%",
+
       }}
     >
-      {isLoading ? (
-        <Spin indicator={<LoadingOutlined spin />} size="small" />
-      ) : (
-        <>
+      <Card
+        style={{
+          width: 600,
+          margin: "0 auto"
+        }}
+        hoverable
+
+      >
+        <Flex
+          align="center"
+          justify="space-around"
+
+        >
           <Card.Meta
-            description={`Comunidades não sincronizadas do Theos ${amount}`}
+            description={`Comunidades Theos ${amount}`}
+          />
+          <Divider orientation="vertical" />
+          <Card.Meta
+            description={`Comunidades no ParoquiAuto ${qtdComunidadesParoquiAuto}`}
+          />
+        </Flex>
+      </Card>
+      <Card
+        style={{
+          width: 600,
+          margin: "0 auto",
+        }}
+        hoverable
+
+      >
+        <Flex
+          align="center"
+          justify="space-around"
+        >
+          <Card.Meta
+            description={`Comunidades Theos ${amount}`}
           />
           <Card.Meta
-            description={`Comunidades no sistema ${qtdComunidadesParoquiAuto}`}
+            description={`Comunidades no ParoquiAuto ${qtdComunidadesParoquiAuto}`}
           />
-        </>
-      )}
-    </Card>
+        </Flex>
+      </Card>
+    </Space>
   );
 }
+
+
+
+//<Spin indicator={<LoadingOutlined spin />} size="small" />

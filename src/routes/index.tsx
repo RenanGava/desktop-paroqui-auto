@@ -16,6 +16,7 @@ import { HomePage } from "../pages/Home";
 import { Comunidades } from "../pages/Comunidades";
 import { ConfigFieis } from "../pages/ConfigFieis";
 import { ConfigColetas } from "../pages/ConfigColetas";
+import { ConfigContextProvider} from "../context/Config";
 
 // eslint-disable-next-line import/no-unresolved
 
@@ -73,7 +74,12 @@ export function MainRouter() {
             <Route element={<ColetaDash />} path="/coleta" />
             <Route element={<OfertaDash />} path="/oferta" />
             <Route element={<FieisDash />} path="/fieis" />
-            <Route element={<Outlet />} path="/config">
+            <Route path="/config" element={(
+              <ConfigContextProvider>
+                <Outlet/>
+              </ConfigContextProvider>
+            )}
+            >
               <Route element={<ConfigFieis />} path="fieis" />
               <Route element={<Comunidades />} path="comunidades" />
               <Route element={<ConfigColetas />} path="coletas" />
