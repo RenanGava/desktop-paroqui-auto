@@ -1,10 +1,10 @@
 import { Card } from "antd";
 import React from "react";
-import { useConfigFieisApp } from "../../../../hooks/useConfigApp/useConfigFieis";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Flex, Spin } from "antd";
+import { useConfigFieisApp } from "../../hooks/useConfigApp/useConfigFieis";
 
-export function SyncFieis() {
+export function ConfigFieis() {
   const { amount, qtdFieisParoquiAuto, handleSyncFieisDB, isLoading } =
     useConfigFieisApp();
 

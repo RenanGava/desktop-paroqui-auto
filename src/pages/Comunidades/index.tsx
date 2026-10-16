@@ -1,10 +1,11 @@
 import { Card } from "antd";
 import React from "react";
-import { useConfigComunidadesApp } from "../../../../hooks/useConfigApp/useConfigComunidades";
+
 import { LoadingOutlined } from "@ant-design/icons";
 import { Flex, Spin } from "antd";
+import { useConfigComunidadesApp } from "../../hooks/useConfigApp/useConfigComunidades";
 
-export function SyncComunidades() {
+export function Comunidades() {
   const {
     amount,
     handleSyncComunidadesDB,

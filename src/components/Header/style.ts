@@ -16,11 +16,11 @@ export const HeaderMenu = styled(Menu).attrs({
 
   styles: {
     root: {
-      border: 0
+      border: 0,
+      display: 'flex',
+      justifyContent: 'center'
     }
   }
 })`
-
-  max-width: fit-content;
   width:100%
 `

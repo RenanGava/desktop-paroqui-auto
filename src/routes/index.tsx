@@ -10,12 +10,12 @@ import { DizimoDash } from "../pages/Dizimo";
 import { OfertaDash } from "../pages/Ofertas";
 import { ColetaDash } from '../pages/Coletas'
 import { Header } from "../components/Header";
-import { TiposConfig } from "../pages/Config";
 import { FieisDash } from "../pages/Fieis";
-import { SyncColetas } from "../components/Dashboard/ConfigApp/syncColetas";
 import { useAuth } from "../context/Auth";
-import { LoginPage } from "../pages/Home/Login";
 import { HomePage } from "../pages/Home";
+import { Comunidades } from "../pages/Comunidades";
+import { ConfigFieis } from "../pages/ConfigFieis";
+import { ConfigColetas } from "../pages/ConfigColetas";
 
 // eslint-disable-next-line import/no-unresolved
 
@@ -31,7 +31,6 @@ function PrivateRoutes({ authenticated }: IPrivateProps) {
   if (!authenticated) {
     return <Navigate to='/' replace />
   }
-
 
   return (
     <>
@@ -73,15 +72,17 @@ export function MainRouter() {
             <Route element={<DizimoDash />} path="/dizimo" />
             <Route element={<ColetaDash />} path="/coleta" />
             <Route element={<OfertaDash />} path="/oferta" />
-            <Route element={<TiposConfig />} path="/config" />
             <Route element={<FieisDash />} path="/fieis" />
-            <Route element={<SyncColetas />} path="/syncColetas" />
-            <Route element={<TiposConfig />} path="/tipos" />
+            <Route element={<Outlet />} path="/config">
+              <Route element={<ConfigFieis />} path="fieis" />
+              <Route element={<Comunidades />} path="comunidades" />
+              <Route element={<ConfigColetas />} path="coletas" />
+            </Route>
           </Route>
 
           <Route
             path="*"
-            element={<Navigate to={authenticated? '/dizimo': '/'} />}
+            element={<Navigate to={authenticated ? '/dizimo' : '/'} />}
           />
         </Routes>
       </>

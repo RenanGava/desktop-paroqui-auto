@@ -24,6 +24,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const [isLoading, setIsLoading] = useState(false)
     const authenticated = !!user
 
+    
+
     useEffect(() => {
 
         const configReq = stringify({
@@ -38,6 +40,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                     Email: res.data.paroquia.theosEmail,
                     Senha: res.data.paroquia.theosPass
                 })
+                
             })
             .catch(err => {
                 console.log(err);

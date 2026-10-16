@@ -15,7 +15,7 @@ export function RegisterPage() {
       email: formValues.email,
       password: formValues.password,
       username: formValues.username
-    }).then( async (user) => {
+    }).then(async (user) => {
       const theosData = await window.api.loginTheos({
         Email: formValues.theosEmail,
         Senha: formValues.theosPassword
@@ -26,7 +26,7 @@ export function RegisterPage() {
         Senha: formValues.theosPassword
       })
 
-      const resParoquia = await api.post('/paroquias', {
+      await api.post('/paroquias', {
         data: {
           ...theosData,
           user: {
@@ -39,7 +39,7 @@ export function RegisterPage() {
         timeout: 5000
       })
 
-      console.log(resParoquia);
+
     })
 
 

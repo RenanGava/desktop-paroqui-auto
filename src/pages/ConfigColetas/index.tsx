@@ -1,14 +1,15 @@
 import React, {  } from "react";
 import { Button, Table, Switch, Flex, Tooltip, Popconfirm } from "antd";
-import { useConfigColetaApp } from "../../../../hooks/useConfigApp/useConfigColeta";
+
 import { Container, Content } from "./styles";
 import Column from "antd/es/table/Column";
 import { PencilLine, SendHorizonal, Trash } from "lucide-react"
 import { Oval } from "react-loader-spinner";
+import { useConfigColetaApp } from "../../hooks/useConfigApp/useConfigColeta";
 
 
 
-export function SyncColetas() {
+export function ConfigColetas() {
   const {
     coletasTheos,
     coletasStrapi,
