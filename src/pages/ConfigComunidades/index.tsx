@@ -2,27 +2,26 @@ import { Card } from "antd";
 import React from "react";
 
 import { LoadingOutlined } from "@ant-design/icons";
-import { Flex, Spin } from "antd";
+import { Spin } from "antd";
 import { useConfigComunidadesApp } from "../../hooks/useConfigApp/useConfigComunidades";
+import { useNavigate } from 'react-router'
 
 export function Comunidades() {
   const {
     amount,
-    handleSyncComunidadesDB,
-    handleSyncAllComunidadesDB,
+    syncCommunities,
     qtdComunidadesParoquiAuto,
     isLoading,
   } = useConfigComunidadesApp();
+
+  const navigate = useNavigate()
 
   return (
     <Card
       title="Sincronizar Comunidades"
       style={{ width: 300 }}
       hoverable
-      onClick={async (e) => {
-        qtdComunidadesParoquiAuto < 1 && (await handleSyncAllComunidadesDB());
-        qtdComunidadesParoquiAuto >= 1 && (await handleSyncComunidadesDB());
-      }}
+      onClick={async (e) =>{await syncCommunities() }}
     >
       {isLoading ? (
         <Spin indicator={<LoadingOutlined spin />} size="small" />

@@ -13,7 +13,7 @@ import { Header } from "../components/Header";
 import { FieisDash } from "../pages/Fieis";
 import { useAuth } from "../context/Auth";
 import { HomePage } from "../pages/Home";
-import { Comunidades } from "../pages/Comunidades";
+import { Comunidades } from "../pages/ConfigComunidades";
 import { ConfigFieis } from "../pages/ConfigFieis";
 import { ConfigColetas } from "../pages/ConfigColetas";
 
@@ -77,6 +77,9 @@ export function MainRouter() {
               <Route element={<ConfigFieis />} path="fieis" />
               <Route element={<Comunidades />} path="comunidades" />
               <Route element={<ConfigColetas />} path="coletas" />
+            </Route>
+            <Route element={<Outlet/>} path="/register">
+
             </Route>
           </Route>
 

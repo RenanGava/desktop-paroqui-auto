@@ -8,8 +8,6 @@ const URL =
     : process.env.API_URL;
 
 ipcMain.handle("storage", async (event, data: IDataLoginTheos) => {
-  
-
   setKey('email', data.Email)
   setKey('pass', data.Senha)
 });

@@ -2,6 +2,7 @@ import { stringify } from "qs";
 import React, { useEffect, useState } from "react";
 import { api } from "../../../utils/axios";
 import { message } from "antd";
+import { useAuth } from "../../../context/Auth";
 
 export function useConfigComunidadesApp() {
   const [amount, setAmount] = useState(0);
@@ -9,13 +10,24 @@ export function useConfigComunidadesApp() {
     useState<IListComunidades[]>();
   const [qtdComunidadesParoquiAuto, setQtdComunidadesParoquiAuto] = useState(0);
   const [isLoading, setIsLoading] = useState(false)
+  const { user } = useAuth()
 
   useEffect(() => {
-    async function handleCompareColetasDB() {
+    async function verifyAmountComunities() {
+
+      console.log(user)
+      
 
       setIsLoading(true)
       const configReq = stringify({
         fields: ["nome", "theosId", "centroCustoId", "id"],
+        filters:{
+          paroquia:{
+            documentId:{
+              // $eq: user.
+            }
+          }
+        },
         pagination: {
           page: 1,
           pageSize: 100,
@@ -27,7 +39,7 @@ export function useConfigComunidadesApp() {
       const strapiComunidades = data.data as IListComunidades[];
       setQtdComunidadesParoquiAuto(strapiComunidades.length);
 
-      // percorremos a lista de coletas para achar os itens que nao existem
+      // percorremos a lista de comunidades para achar os itens que nao existem
       // no nosso banco de dados "paroquiAuto"
 
       const isDiferentComunidades = comunidades
@@ -47,53 +59,19 @@ export function useConfigComunidadesApp() {
       setComunidadesUnSync(isDiferentComunidades);
       setIsLoading(false)
     }
-    handleCompareColetasDB();
+    verifyAmountComunities();
   }, []);
 
-  async function handleSyncAllComunidadesDB() {
+  async function syncCommunities() {
     setIsLoading(true)
     
 
     const comunidades = await window.api.syncComunidades();
 
-    await Promise.all([
-      ...comunidades.map(async (comunidade) =>
-        api.post("/comunidades", {
-          data: {
-            nome: comunidade.nome,
-            centroCustoId: comunidade.centroCustoId,
-            theosId: comunidade.theosId,
-          },
-        }),
-      ),
-    ]);
-    setAmount(0)
-    setQtdComunidadesParoquiAuto(0)
-    setIsLoading(false)
-  }
-
-  // aqui sincroniza somente as coletas que estao diferentes entre
-  // o sistema Theos e o ParoquiAuto
-  async function handleSyncComunidadesDB() {
-    setIsLoading(true)
-    
-
-    if (comunidadesUnSync?.length === 0 || comunidadesUnSync === undefined) {
-      
-      return;
-    }
-
-    await Promise.all([
-      ...comunidadesUnSync.map(async (comunidade) =>
-        api.post("/comunidades", {
-          data: {
-            nome: comunidade.nome,
-            centroCustoId: comunidade.centroCustoId,
-            theosId: comunidade.theosId,
-          },
-        }),
-      ),
-    ]);
+    const res = await api.post('/comunidade/already-exists',{
+      paroquiaID: user?.paroquia.id,
+      comunidades
+    })
 
     setAmount(0)
     setQtdComunidadesParoquiAuto(0)
@@ -107,7 +85,6 @@ export function useConfigComunidadesApp() {
     isLoading,
     setAmount,
     setComunidadesUnSync,
-    handleSyncComunidadesDB,
-    handleSyncAllComunidadesDB,
+    syncCommunities,
   };
 }

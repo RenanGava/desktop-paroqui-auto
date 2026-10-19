@@ -24,6 +24,9 @@ theosApi.interceptors.response.use(
     return config;
   },
   async (error: AxiosError) => {
+
+    console.log(error);
+    
     
     if (error.response?.status === 401 || error.response?.status === 500) {
       const originalConfig = error.config;

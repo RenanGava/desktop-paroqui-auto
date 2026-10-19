@@ -30,16 +30,16 @@ const items: MenuItem[] = [
     disabled: false,
     children: [
       {
-        label: (<Link to={"/config/coletas"}>Lançamentos e Coletas</Link>),
+        label: (<Link to={"/config/coletas"}>Configurar Lançamentos e Coletas</Link>),
         key: 'syncColetas',
       },
       {
-        label: (<Link to={"/config/fieis"}>Configurar Paroquia</Link>),
-        key: '',
+        label: (<Link to={"/config/fieis"}>Configurar Fieis</Link>),
+        key: 'config-fieis',
       },
       {
-        label: (<Link to={"/config/comunidades"}>Configurar Paroquia</Link>),
-        key: '',
+        label: (<Link to={"/config/comunidades"}>Configurar Comunidades</Link>),
+        key: 'config-comunidades',
       }
     ]
   }

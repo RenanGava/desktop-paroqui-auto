@@ -3,18 +3,21 @@ export { }
 declare global {
 
     interface IUserData {
-        jwt: string;
-        user: {
-            id: number
-            documentId: string
-            username: string
-            email: string
-        }
+        id: number
+        documentId: string
+        username: string
+        email: string
+        paroquia: IParoquia
     }
 
-    interface ICreateUser{
+    interface ICreateUser {
         username: string
         email: string
         password: string
+    }
+
+    interface IParoquia {
+        id: number | string
+        documentId: string
     }
 }
