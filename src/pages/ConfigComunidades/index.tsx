@@ -14,7 +14,6 @@ export function Comunidades() {
     isLoading,
   } = useConfigComunidadesApp();
 
-  const navigate = useNavigate()
 
   return (
     <Card

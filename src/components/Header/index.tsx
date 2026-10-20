@@ -4,8 +4,6 @@ import { Menu } from "antd";
 import type { MenuProps } from "antd";
 import { Link, useLocation } from "react-router";
 
-// eslint-disable-next-line import/no-unresolved
-
 type MenuItem = Required<MenuProps>['items'][number];
 const items: MenuItem[] = [
   {
@@ -31,7 +29,7 @@ const items: MenuItem[] = [
     children: [
       {
         label: (<Link to={"/config/coletas"}>Configurar Lançamentos e Coletas</Link>),
-        key: 'syncColetas',
+        key: 'config-coletas',
       },
       {
         label: (<Link to={"/config/fieis"}>Configurar Fieis</Link>),

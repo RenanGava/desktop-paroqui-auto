@@ -17,8 +17,6 @@ import { Comunidades } from "../pages/ConfigComunidades";
 import { ConfigFieis } from "../pages/ConfigFieis";
 import { ConfigColetas } from "../pages/ConfigColetas";
 
-// eslint-disable-next-line import/no-unresolved
-
 
 interface IPrivateProps {
   authenticated: boolean
@@ -26,7 +24,6 @@ interface IPrivateProps {
 
 
 function PrivateRoutes({ authenticated }: IPrivateProps) {
-
 
   if (!authenticated) {
     return <Navigate to='/' replace />
@@ -73,13 +70,10 @@ export function MainRouter() {
             <Route element={<ColetaDash />} path="/coleta" />
             <Route element={<OfertaDash />} path="/oferta" />
             <Route element={<FieisDash />} path="/fieis" />
-            <Route element={<Outlet />} path="/config">
+            <Route element={<Outlet />} path="/register-config">
               <Route element={<ConfigFieis />} path="fieis" />
               <Route element={<Comunidades />} path="comunidades" />
               <Route element={<ConfigColetas />} path="coletas" />
-            </Route>
-            <Route element={<Outlet/>} path="/register">
-
             </Route>
           </Route>
 
