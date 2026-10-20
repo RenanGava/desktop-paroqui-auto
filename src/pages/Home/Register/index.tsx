@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useAuth } from "../../../context/Auth"
 import { Button, Divider, Form, Input, } from 'antd'
 import { api } from '../../../utils/axios';
+import { useConfig } from '../../../context/Config';
 
 
 export function RegisterPage() {
@@ -46,7 +47,7 @@ export function RegisterPage() {
 
   }
 
-
+  const {} = useConfig()
   return (
     <Form
       layout="vertical"

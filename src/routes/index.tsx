@@ -16,6 +16,7 @@ import { HomePage } from "../pages/Home";
 import { Comunidades } from "../pages/ConfigComunidades";
 import { ConfigFieis } from "../pages/ConfigFieis";
 import { ConfigColetas } from "../pages/ConfigColetas";
+import { RegisterRoutes } from "./ConfigLayout";
 
 
 interface IPrivateProps {
@@ -70,12 +71,12 @@ export function MainRouter() {
             <Route element={<ColetaDash />} path="/coleta" />
             <Route element={<OfertaDash />} path="/oferta" />
             <Route element={<FieisDash />} path="/fieis" />
-            <Route element={<Outlet />} path="/register-config">
+          </Route>
+            <Route element={<RegisterRoutes />} path="/register-config">
               <Route element={<ConfigFieis />} path="fieis" />
               <Route element={<Comunidades />} path="comunidades" />
               <Route element={<ConfigColetas />} path="coletas" />
             </Route>
-          </Route>
 
           <Route
             path="*"
