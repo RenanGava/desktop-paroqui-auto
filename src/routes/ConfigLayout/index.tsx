@@ -8,8 +8,6 @@ import { ConfigContextProvider } from '../../context/Config'
 export function RegisterRoutes() {
 
 
-
-
     return (
         <ConfigContextProvider>
             <Steps/>

@@ -72,11 +72,11 @@ export function MainRouter() {
             <Route element={<OfertaDash />} path="/oferta" />
             <Route element={<FieisDash />} path="/fieis" />
           </Route>
-            <Route element={<RegisterRoutes />} path="/register-config">
-              <Route element={<ConfigFieis />} path="fieis" />
-              <Route element={<Comunidades />} path="comunidades" />
-              <Route element={<ConfigColetas />} path="coletas" />
-            </Route>
+          <Route element={<RegisterRoutes />} path="/register-config">
+            <Route element={<ConfigFieis />} path="fieis" />
+            <Route element={<Comunidades />} path="comunidades" />
+            <Route element={<ConfigColetas />} path="coletas" />
+          </Route>
 
           <Route
             path="*"

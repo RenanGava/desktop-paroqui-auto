@@ -28,7 +28,7 @@ const items: MenuItem[] = [
     disabled: false,
     children: [
       {
-        label: (<Link to={"/config/coletas"}>Configurar Lançamentos e Coletas</Link>),
+        label: (<Link to={"config/coletas"}>Configurar Lançamentos e Coletas</Link>),
         key: 'config-coletas',
       },
       {
