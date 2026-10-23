@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router'
 import { api } from '../../utils/axios'
 import { stringify } from 'qs'
 import { message } from 'antd'
+import { MessageInstance } from 'antd/es/message/interface'
 
 
 
@@ -15,6 +16,9 @@ interface IConfigContextProps {
   currentStep: number
   SetCurrentStep: (step: number) => void
   contextHolder: ReactNode
+  messageApi: MessageInstance
+  comunitiesNotRegister: IListComunidades[]
+  setIsLoading: (data: boolean) => void
 
 }
 
@@ -31,7 +35,7 @@ export function ConfigContextProvider({ children }: ConfigProviderProps) {
 
   const { user } = useAuth()
   // Passo Atual
-  const [currentStep, SetCurrentStep] = useState(1)
+  const [currentStep, SetCurrentStep] = useState(0)
   // Hook de Navegacao
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
@@ -39,6 +43,7 @@ export function ConfigContextProvider({ children }: ConfigProviderProps) {
   // Estados das Comunidades
   const [theosCommunities, setTheosCommunities] = useState(0)
   const [paroquiCommunities, setParoquiCommunities] = useState(0)
+  const [comunitiesNotRegister, setComunitiesNotRegister] = useState<IListComunidades[]>([])
 
   // Toast Message
   const [ messageApi, contextHolder ] = message.useMessage()
@@ -82,7 +87,7 @@ export function ConfigContextProvider({ children }: ConfigProviderProps) {
           }
         })
         .filter((coleta) => coleta !== undefined);
-
+        setComunitiesNotRegister(isDiferentComunidades)
 
 
       //   setAmount(isDiferentComunidades.length);
@@ -100,16 +105,21 @@ export function ConfigContextProvider({ children }: ConfigProviderProps) {
     try {
       setIsLoading(true)
       const comunidades = await window.api.syncComunidades();
+      console.log(comunidades);
+      
       const res = await api.post('/comunidade/already-exists', {
         paroquiaID: user?.paroquia.id,
         comunidades
       })
     } catch (error) {
-
+      setIsLoading(false)
+      throw error
+    }
+    finally{
+      setIsLoading(false)
     }
 
 
-    setIsLoading(false)
   }
 
 
@@ -127,7 +137,10 @@ export function ConfigContextProvider({ children }: ConfigProviderProps) {
       paroquiCommunities,
       theosCommunities,
       isLoading,
-      contextHolder
+      contextHolder,
+      messageApi,
+      comunitiesNotRegister,
+      setIsLoading
     }}
     >
       {children}

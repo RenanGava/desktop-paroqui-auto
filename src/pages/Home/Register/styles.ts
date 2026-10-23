@@ -7,9 +7,9 @@ export const Container = styled.div`
 
     width: 100%;
     height: 100vh;
-    background-color: #9d9d9d;
     display: flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
 
 
@@ -25,5 +25,15 @@ export const Container = styled.div`
         }
     }
 
+
+`
+
+export const Content = styled.div`
+    max-width: 450px;
+    width: 100%;
+    border-radius: 8px;
+    align-self: center;
+    box-shadow: 0px 1px 10px 1px;
+    padding: 1rem;
 
 `

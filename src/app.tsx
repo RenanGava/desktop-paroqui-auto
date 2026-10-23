@@ -3,14 +3,17 @@ import { createRoot } from "react-dom/client";
 import { MainRouter } from "./routes";
 import { GlobalStyle } from "./global/global";
 import { AuthProvider } from "./context/Auth";
+import { App } from 'antd'
 
 
-function App() {
+function AppMain() {
   return (
     <AuthProvider>
 
       <GlobalStyle />
-      <MainRouter />
+      <App>
+        <MainRouter />
+      </App>
 
     </AuthProvider>
   );
@@ -18,4 +21,4 @@ function App() {
 
 const rootElement = createRoot(document.getElementById("root")!);
 
-rootElement.render(<App />);
+rootElement.render(<AppMain />);

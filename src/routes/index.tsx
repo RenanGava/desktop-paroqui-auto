@@ -17,6 +17,9 @@ import { Comunidades } from "../pages/ConfigComunidades";
 import { ConfigFieis } from "../pages/ConfigFieis";
 import { ConfigColetas } from "../pages/ConfigColetas";
 import { RegisterRoutes } from "./ConfigLayout";
+import { LoginPage } from "../pages/Home/Login";
+import { RegisterPage } from "../pages/Home/Register";
+import { ConfigContextProvider } from "../context/Config";
 
 
 interface IPrivateProps {
@@ -61,7 +64,7 @@ export function MainRouter() {
               element={
                 authenticated
                   ? <Navigate to='/dizimo' />
-                  : <HomePage />
+                  : <LoginPage />
               } />
           </Route>
           <Route element={
@@ -71,11 +74,16 @@ export function MainRouter() {
             <Route element={<ColetaDash />} path="/coleta" />
             <Route element={<OfertaDash />} path="/oferta" />
             <Route element={<FieisDash />} path="/fieis" />
-          </Route>
-          <Route element={<RegisterRoutes />} path="/register-config">
-            <Route element={<ConfigFieis />} path="fieis" />
-            <Route element={<Comunidades />} path="comunidades" />
             <Route element={<ConfigColetas />} path="coletas" />
+          </Route>
+          <Route element={
+            <ConfigContextProvider>
+              <RegisterRoutes />
+            </ConfigContextProvider>
+          } path="/register-config">
+            <Route element={<RegisterPage />} index />
+            <Route element={<Comunidades />} path="comunidades"/>
+            <Route element={<ConfigFieis />} path="fieis" />
           </Route>
 
           <Route

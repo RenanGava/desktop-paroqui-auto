@@ -1,90 +1,99 @@
 import React, { useState } from 'react'
 import { useAuth } from "../../../context/Auth"
-import { Button, Divider, Form, Input, } from 'antd'
+import { Button, Divider, Form, Input, message, } from 'antd'
 import { api } from '../../../utils/axios';
 import { useConfig } from '../../../context/Config';
+import { Link, useNavigate } from 'react-router';
+import { Container, Content } from './styles';
 
 
 export function RegisterPage() {
 
-  const { register } = useAuth()
   const [form] = Form.useForm();
+  const [messageApi, contextHolder] = message.useMessage()
+  const { SetCurrentStep, currentStep } = useConfig()
+  const { register } = useAuth()
+  const navigate = useNavigate()
 
 
   async function handleRegister(formValues: any) {
-    register({
-      email: formValues.email,
-      password: formValues.password,
-      username: formValues.username
-    }).then(async (user) => {
-      try {
-        const theosData = await window.api.loginTheos({
-          Email: formValues.theosEmail,
-          Senha: formValues.theosPassword
-        })
 
-        window.local.saveData({
-          Email: formValues.theosEmail,
-          Senha: formValues.theosPassword
-        })
+    try {
 
-        await api.post('/paroquias', {
-          data: {
-            ...theosData,
-            user: {
-              connect: [
-                { documentId: user.documentId }
-              ]
-            }
+      const user = await register({
+        email: formValues.email,
+        password: formValues.password,
+        username: formValues.username
+      })
+
+      const theosData = await window.api.loginTheos({
+        Email: formValues.theosEmail,
+        Senha: formValues.theosPassword
+      })
+
+      window.local.saveData({
+        Email: formValues.theosEmail,
+        Senha: formValues.theosPassword
+      })
+
+      await api.post('/paroquias', {
+        data: {
+          ...theosData,
+          user: {
+            connect: [
+              { documentId: user.documentId }
+            ]
           }
-        }, {
-          timeout: 5000
-        })
-      } catch (error) {
-
-      }
+        }
+      }, {
+        timeout: 5000
+      })
 
 
-    })
-
-
+      SetCurrentStep(currentStep+1)
+      navigate('/register-config/comunidades')
+    } catch (error) {
+      messageApi.error('ocorreu u erro')
+    }
 
   }
 
-  const { contextHolder } = useConfig()
   return (
 
-    <>
+    <Container>
       {contextHolder}
-      <Form
-        layout="vertical"
-        form={form}
-        size='medium'
-        onFinish={handleRegister}
-      >
-        <Form.Item label="Nome" name={'username'} required>
-          <Input placeholder="Digite o Nome" />
-        </Form.Item>
-        <Form.Item label="Email" name={'email'} required>
-          <Input placeholder="Digite o Email" />
-        </Form.Item>
-        <Form.Item label="Senha" name={'password'} required>
-          <Input type={'password'} placeholder="Digite a Senha" height={50} />
-        </Form.Item>
-        <Divider>
-          Dados Theos Eclesial
-        </Divider>
-        <Form.Item label="Email Theos" name={"theosEmail"} required>
-          <Input placeholder="Digite o Email" />
-        </Form.Item>
-        <Form.Item label="Senha Theos" name={'theosPassword'} required>
-          <Input placeholder="Digite a Senha" height={50} />
-        </Form.Item>
-        <Form.Item style={{ marginTop: 10 }}>
-          <Button type="primary" htmlType='submit'>Criar Usuário</Button>
-        </Form.Item>
-      </Form>
-    </>
+      <Content>
+        <Form
+          layout="vertical"
+          form={form}
+          size='medium'
+          onFinish={handleRegister}
+        >
+          <Form.Item label="Nome" name={'username'} required>
+            <Input placeholder="Digite o Nome" />
+          </Form.Item>
+          <Form.Item label="Email" name={'email'} required>
+            <Input placeholder="Digite o Email" />
+          </Form.Item>
+          <Form.Item label="Senha" name={'password'} required>
+            <Input type={'password'} placeholder="Digite a Senha" height={50} />
+          </Form.Item>
+          <Divider>
+            Dados Theos Eclesial
+          </Divider>
+          <Form.Item label="Email Theos" name={"theosEmail"} required>
+            <Input placeholder="Digite o Email" />
+          </Form.Item>
+          <Form.Item label="Senha Theos" name={'theosPassword'} required>
+            <Input placeholder="Digite a Senha" height={50} />
+          </Form.Item>
+          <Form.Item style={{ marginTop: 10 }}>
+            <Button type="primary" htmlType='submit'>Criar Usuário</Button>
+          </Form.Item>
+        </Form>
+
+      </Content>
+    </Container>
 
   )
 }

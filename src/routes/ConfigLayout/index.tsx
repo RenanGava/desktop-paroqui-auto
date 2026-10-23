@@ -1,17 +1,58 @@
 import React from 'react'
-import { Outlet } from 'react-router'
-import {Steps} from 'antd'
-import { ConfigContextProvider } from '../../context/Config'
+import { Outlet, useNavigate } from 'react-router'
+import { Steps, Card, Flex } from 'antd'
+import { ConfigContextProvider, useConfig } from '../../context/Config'
+import { Content } from './styles'
 
 
 
 export function RegisterRoutes() {
 
+    const { currentStep, SetCurrentStep } = useConfig()
+    const navigate = useNavigate()
+    const routes = [
+        '/register-config',
+        '/register-config/comunidades',
+        '/register-config/fieis'
+    ]
+
 
     return (
-        <ConfigContextProvider>
-            <Steps/>
+        <Flex
+            orientation='vertical'
+            style={{
+                padding: 16
+            }}
+        >
+            <Content>
+                <Steps
+                    current={currentStep}
+                    onChange={current => {
+
+                        if (current <= currentStep) {
+                            navigate(routes[current])
+                            SetCurrentStep(current)
+
+                        }
+                    }}
+                    items={[
+                        {
+                            title: "Formulario de Cadastro",
+                            content: "Usuario e login Theos"
+                        },
+                        {
+                            title: "Configurar Comunidades",
+                            content: "Dados Usuario e Theos"
+                        },
+                        {
+                            title: "Configurar Fieis",
+                            content: "Dados Usuario e Theos"
+                        }
+                    ]}
+                />
+            </Content>
             <Outlet />
-        </ConfigContextProvider>
+        </Flex>
+
     )
 }
