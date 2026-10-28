@@ -15,13 +15,15 @@ import { useDizimo } from "../../hooks/useDizimo";
 import dayjs from "dayjs";
 import UTC from "dayjs/plugin/utc";
 import { formatedValueForDecimal } from "../../utils/formatedValue";
-import { stringify } from "qs";
-import { api } from "../../utils/axios";
 import { SearchComponent } from "../../components/SearchComponent";
+import { useNavigate } from 'react-router'
 dayjs.extend(UTC);
 
 export function DizimoDash() {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate()
+
+  navigate('/register-config/comunidades')
 
 
   const {

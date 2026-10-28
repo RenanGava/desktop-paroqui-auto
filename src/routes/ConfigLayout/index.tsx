@@ -1,5 +1,5 @@
-import React from 'react'
-import { Outlet, useNavigate } from 'react-router'
+import React, { useEffect } from 'react'
+import { Outlet, useLocation, useNavigate } from 'react-router'
 import { Steps, Card, Flex } from 'antd'
 import { ConfigContextProvider, useConfig } from '../../context/Config'
 import { Content } from './styles'
@@ -10,12 +10,18 @@ export function RegisterRoutes() {
 
     const { currentStep, SetCurrentStep } = useConfig()
     const navigate = useNavigate()
+    const { pathname } = useLocation()
     const routes = [
         '/register-config',
         '/register-config/comunidades',
         '/register-config/fieis'
     ]
 
+
+    useEffect(() => {
+        SetCurrentStep(routes.indexOf(pathname))
+    }, [])
+    
 
     return (
         <Flex

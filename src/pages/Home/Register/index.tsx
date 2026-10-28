@@ -53,7 +53,7 @@ export function RegisterPage() {
       SetCurrentStep(currentStep+1)
       navigate('/register-config/comunidades')
     } catch (error) {
-      messageApi.error('ocorreu u erro')
+      messageApi.error('ocorreu um erro')
     }
 
   }

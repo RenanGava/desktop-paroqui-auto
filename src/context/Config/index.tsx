@@ -9,8 +9,6 @@ import { MessageInstance } from 'antd/es/message/interface'
 
 
 interface IConfigContextProps {
-  theosCommunities: number
-  paroquiCommunities: number
   isLoading: boolean
   syncCommunities: () => Promise<any>
   currentStep: number
@@ -19,6 +17,7 @@ interface IConfigContextProps {
   messageApi: MessageInstance
   comunitiesNotRegister: IListComunidades[]
   setIsLoading: (data: boolean) => void
+  qtdFieisNotregister: number
 
 }
 
@@ -41,17 +40,18 @@ export function ConfigContextProvider({ children }: ConfigProviderProps) {
   const [isLoading, setIsLoading] = useState(false)
 
   // Estados das Comunidades
-  const [theosCommunities, setTheosCommunities] = useState(0)
-  const [paroquiCommunities, setParoquiCommunities] = useState(0)
   const [comunitiesNotRegister, setComunitiesNotRegister] = useState<IListComunidades[]>([])
 
+  // Estados Fieis
+  const [qtdFieisNotregister, setQtdFieisNotregister] = useState(0)
+  
+
   // Toast Message
-  const [ messageApi, contextHolder ] = message.useMessage()
+  const [messageApi, contextHolder] = message.useMessage()
 
 
   useEffect(() => {
     async function verifyAmountComunities() {
-      console.log(user)
 
       setIsLoading(true)
       const configReq = stringify({
@@ -72,7 +72,7 @@ export function ConfigContextProvider({ children }: ConfigProviderProps) {
       const comunidades = await window.api.syncComunidades();
       const { data } = await api.get("/comunidades?" + configReq);
       const strapiComunidades = data.data as IListComunidades[];
-      setParoquiCommunities(strapiComunidades.length);
+
 
       // percorremos a lista de comunidades para achar os itens que nao existem
       // no nosso banco de dados "paroquiAuto"
@@ -87,39 +87,115 @@ export function ConfigContextProvider({ children }: ConfigProviderProps) {
           }
         })
         .filter((coleta) => coleta !== undefined);
-        setComunitiesNotRegister(isDiferentComunidades)
+      setComunitiesNotRegister(isDiferentComunidades)
 
-
-      //   setAmount(isDiferentComunidades.length);
-      //   setComunidadesUnSync(isDiferentComunidades);
       setIsLoading(false)
     }
+
+    async function verifyFieis() {
+
+
+      const theosFieis = await window.api.syncFieis()
+
+      const configReq = stringify({
+        filters: {
+          comunidade: {
+            paroquia: {
+              documentId: {
+                $eq: "cznl0z20a3ftwwsly00eyssg"
+              }
+            }
+          }
+        },
+        pagination: {
+          pageSize: 2000
+        }
+      }, { encodeValuesOnly: true })
+      console.log(configReq);
+
+
+
+      const res = await api.get('/fieis?' + configReq)
+      const totalFieisParoquiAuto = res.data.meta.pagination.total
+      setQtdFieisNotregister((totalFieisParoquiAuto - theosFieis.length) * (-1))
+      
+      
+      
+      
+      
+    }
     verifyAmountComunities();
-  }, []);
-
-
-
+    verifyFieis()
+  }, [user]);
+  
 
   async function syncCommunities() {
-    
+
     try {
       setIsLoading(true)
       const comunidades = await window.api.syncComunidades();
-      console.log(comunidades);
-      
+
       const res = await api.post('/comunidade/already-exists', {
         paroquiaID: user?.paroquia.id,
         comunidades
       })
+
+      setComunitiesNotRegister([])
     } catch (error) {
       setIsLoading(false)
       throw error
     }
-    finally{
+    finally {
       setIsLoading(false)
     }
+  }
+
+  async function syncFieis() {
+
+    const configReq = stringify({
+      filters: {
+
+        paroquia: {
+          documentId: {
+            $eq: "cznl0z20a3ftwwsly00eyssg"
+          }
+        }
+
+      },
+      pagination: {
+        pageSize: 2000
+      }
+    }, { encodeValuesOnly: true })
+    console.log(configReq);
+    const resComunities = await api.get('/comunidades?' + configReq)
+    const comunidades = resComunities.data.data as IListComunidades[]
+    console.log(comunidades);
 
 
+
+    // const fieisCreateModel = theosFieis.map(fiel => {
+
+    //   return comunidades.find( comunidade => {
+    //     if (fiel.comunidadeTheosId === comunidade.theosId) {
+    //       return {
+    //         cpf: fiel.cpf,
+    //         nome: fiel.nome,
+    //         dizimistaId: fiel.dizimistaId,
+    //         comunidade: {
+    //           connect: [
+    //             {
+    //               documentId: comunidade.documentId,
+    //             },
+    //           ],
+    //         },
+    //       }
+    //     }
+    //   })
+
+    // })
+
+
+    // const resFieis = await api.post('/fieis/fielSync', fieisCreateModel)
   }
 
 
@@ -134,12 +210,11 @@ export function ConfigContextProvider({ children }: ConfigProviderProps) {
       syncCommunities,
       SetCurrentStep,
       currentStep,
-      paroquiCommunities,
-      theosCommunities,
       isLoading,
       contextHolder,
       messageApi,
       comunitiesNotRegister,
+      qtdFieisNotregister,
       setIsLoading
     }}
     >

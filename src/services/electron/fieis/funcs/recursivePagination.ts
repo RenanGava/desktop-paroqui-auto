@@ -65,31 +65,34 @@ async function reqTheosFieis(itensPerPage: number, page: number) {
 }
 
 export async function requestFieis() {
+  
+  const itensPerPage = 2000
 
-    const totalPages = await calcNumberPages(50)
+  const totalPages = await calcNumberPages(itensPerPage)
 
-    const listAllFieis:IListFiel[] = []
+  const listAllFieis: IListFiel[] = []
 
 
-    for(let i = 1; i <= totalPages; i++){
-        const fieisTheos = await reqTheosFieis(50, i)
+  for (let i = 1; i <= totalPages; i++) {
+    const fieisTheos = await reqTheosFieis(itensPerPage, i)
 
-        fieisTheos.map( (fiel, index) => {
+    fieisTheos.map((fiel, index) => {
 
-            if(fiel.dizimistaId !== null){
-                // const date = fiel.dataNascimento.split('/')
-    
-                // const formatedDate = `${date[2]}-${date[1]}-${date[0]}`
+      if (fiel.dizimistaId !== null) {
+        // const date = fiel.dataNascimento.split('/')
 
-                listAllFieis.push({
-                dizimistaId: fiel.dizimistaId,
-                cpf: fiel.cnpjCpf,
-                nome: fiel.nome,
-                comunidadeTheosId: fiel.comunidadeId.toString()
-            })}
+        // const formatedDate = `${date[2]}-${date[1]}-${date[0]}`
+
+        listAllFieis.push({
+          dizimistaId: fiel.dizimistaId,
+          cpf: fiel.cnpjCpf,
+          nome: fiel.nome,
+          comunidadeTheosId: fiel.comunidadeId.toString()
         })
-    }
-    
+      }
+    })
+  }
+
 
 
   return listAllFieis
