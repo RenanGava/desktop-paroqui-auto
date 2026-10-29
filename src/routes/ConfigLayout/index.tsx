@@ -27,7 +27,7 @@ export function RegisterRoutes() {
         <Flex
             orientation='vertical'
             style={{
-                padding: 16
+                padding: 16,
             }}
         >
             <Content>

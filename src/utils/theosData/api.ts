@@ -25,7 +25,7 @@ theosApi.interceptors.response.use(
   },
   async (error: AxiosError) => {
 
-    console.log(error);
+    console.log(error.response?.status);
     
     
     if (error.response?.status === 401 || error.response?.status === 500) {

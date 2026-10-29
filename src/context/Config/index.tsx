@@ -5,6 +5,7 @@ import { api } from '../../utils/axios'
 import { stringify } from 'qs'
 import { message } from 'antd'
 import { MessageInstance } from 'antd/es/message/interface'
+import { fiel } from '../../utils/theosData'
 
 
 
@@ -17,7 +18,8 @@ interface IConfigContextProps {
   messageApi: MessageInstance
   comunitiesNotRegister: IListComunidades[]
   setIsLoading: (data: boolean) => void
-  qtdFieisNotregister: number
+  FieisNotregister: IListFiel[]
+  syncFieis: () => Promise<void>
 
 }
 
@@ -43,7 +45,7 @@ export function ConfigContextProvider({ children }: ConfigProviderProps) {
   const [comunitiesNotRegister, setComunitiesNotRegister] = useState<IListComunidades[]>([])
 
   // Estados Fieis
-  const [qtdFieisNotregister, setQtdFieisNotregister] = useState(0)
+  const [FieisNotregister, setFieisNotregister] = useState<IListFiel[]>([])
   
 
   // Toast Message
@@ -94,35 +96,21 @@ export function ConfigContextProvider({ children }: ConfigProviderProps) {
 
     async function verifyFieis() {
 
-
+      setIsLoading(true)
       const theosFieis = await window.api.syncFieis()
-
-      const configReq = stringify({
-        filters: {
-          comunidade: {
-            paroquia: {
-              documentId: {
-                $eq: "cznl0z20a3ftwwsly00eyssg"
-              }
-            }
-          }
-        },
-        pagination: {
-          pageSize: 2000
-        }
-      }, { encodeValuesOnly: true })
-      console.log(configReq);
+      // remover Itens Duplicados
+      const fieisRemoveDuplicated = [...new Map(theosFieis.map( fiel => [fiel.cpf, fiel])).values()]
+      console.log('Verificar',fieisRemoveDuplicated);
 
 
 
-      const res = await api.get('/fieis?' + configReq)
-      const totalFieisParoquiAuto = res.data.meta.pagination.total
-      setQtdFieisNotregister((totalFieisParoquiAuto - theosFieis.length) * (-1))
+
+      const res = await api.post('/fieis/verifyFieis', fieisRemoveDuplicated)
+      const fieisNotRegister = res.data as IListFiel[]
+
       
-      
-      
-      
-      
+      setFieisNotregister(fieisNotRegister)
+      setIsLoading(false)
     }
     verifyAmountComunities();
     verifyFieis()
@@ -166,36 +154,37 @@ export function ConfigContextProvider({ children }: ConfigProviderProps) {
         pageSize: 2000
       }
     }, { encodeValuesOnly: true })
-    console.log(configReq);
     const resComunities = await api.get('/comunidades?' + configReq)
     const comunidades = resComunities.data.data as IListComunidades[]
-    console.log(comunidades);
 
 
 
-    // const fieisCreateModel = theosFieis.map(fiel => {
+    const fieisCreateModel = FieisNotregister.map(fiel => {
+      
+      return comunidades.map( comunidade => {
+        if (fiel.comunidadeTheosId === comunidade.theosId) {
+          return {
+            cpf: fiel.cpf,
+            nome: fiel.nome,
+            dizimistaId: fiel.dizimistaId,
+            comunidade: {
+              set: [
+                {
+                  id: comunidade.id,
+                },
+              ],
+            },
+          }
+        }
+      }).filter(findFiel => findFiel !== undefined)
 
-    //   return comunidades.find( comunidade => {
-    //     if (fiel.comunidadeTheosId === comunidade.theosId) {
-    //       return {
-    //         cpf: fiel.cpf,
-    //         nome: fiel.nome,
-    //         dizimistaId: fiel.dizimistaId,
-    //         comunidade: {
-    //           connect: [
-    //             {
-    //               documentId: comunidade.documentId,
-    //             },
-    //           ],
-    //         },
-    //       }
-    //     }
-    //   })
-
-    // })
+    }).map( fiel => fiel[0])
 
 
-    // const resFieis = await api.post('/fieis/fielSync', fieisCreateModel)
+    const resFieis = await api.post('/fieis/fielSync', fieisCreateModel)
+
+    setFieisNotregister([])
+    
   }
 
 
@@ -214,8 +203,9 @@ export function ConfigContextProvider({ children }: ConfigProviderProps) {
       contextHolder,
       messageApi,
       comunitiesNotRegister,
-      qtdFieisNotregister,
-      setIsLoading
+      FieisNotregister,
+      setIsLoading,
+      syncFieis
     }}
     >
       {children}

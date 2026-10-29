@@ -25,7 +25,7 @@ const items: MenuItem[] = [
   {
     key: 'config',
     label: 'Config App',
-    disabled: false,
+    disabled: true,
     children: [
       {
         label: (<Link to={"config/coletas"}>Configurar Lançamentos e Coletas</Link>),
@@ -45,7 +45,14 @@ const items: MenuItem[] = [
 
 export function Header() {
 
-  const [tab, setTab] = useState('dizimo')
+  const [tab, setTab] = useState('')
+  const location = useLocation()
+
+
+  useEffect(()=> {
+    
+    setTab(location.pathname.replace('/', ''))
+  },[])
 
   function handleTab(e: any) {
     setTab(e.key)

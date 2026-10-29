@@ -69,6 +69,7 @@ declare global {
   }
 
   interface IListComunidades {
+    id?: number | string
     nome: string;
     documentId: string;
     theosId: string;

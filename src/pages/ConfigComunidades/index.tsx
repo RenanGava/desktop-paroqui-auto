@@ -45,6 +45,7 @@ export function Comunidades() {
             <Button
               type="primary"
               onClick={handleSyncComunities}
+              disabled={comunitiesNotRegister.length < 1}
             >
               {
                 isLoading ? <Spin styles={{

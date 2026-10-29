@@ -23,8 +23,6 @@ export function DizimoDash() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate()
 
-  navigate('/register-config/comunidades')
-
 
   const {
     listDizimo,
