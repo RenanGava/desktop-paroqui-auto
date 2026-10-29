@@ -19,7 +19,10 @@ interface IConfigContextProps {
   comunitiesNotRegister: IListComunidades[]
   setIsLoading: (data: boolean) => void
   FieisNotregister: IListFiel[]
+  setFieisNotregister: (data: IListFiel[])=> void
   syncFieis: () => Promise<void>
+  setComunitiesNotRegister: (data:IListComunidades[]) => void
+
 
 }
 
@@ -94,26 +97,9 @@ export function ConfigContextProvider({ children }: ConfigProviderProps) {
       setIsLoading(false)
     }
 
-    async function verifyFieis() {
-
-      setIsLoading(true)
-      const theosFieis = await window.api.syncFieis()
-      // remover Itens Duplicados
-      const fieisRemoveDuplicated = [...new Map(theosFieis.map( fiel => [fiel.cpf, fiel])).values()]
-      console.log('Verificar',fieisRemoveDuplicated);
-
-
-
-
-      const res = await api.post('/fieis/verifyFieis', fieisRemoveDuplicated)
-      const fieisNotRegister = res.data as IListFiel[]
-
-      
-      setFieisNotregister(fieisNotRegister)
-      setIsLoading(false)
-    }
+    
+    
     verifyAmountComunities();
-    verifyFieis()
   }, [user]);
   
 
@@ -205,7 +191,9 @@ export function ConfigContextProvider({ children }: ConfigProviderProps) {
       comunitiesNotRegister,
       FieisNotregister,
       setIsLoading,
-      syncFieis
+      syncFieis,
+      setFieisNotregister,
+      setComunitiesNotRegister
     }}
     >
       {children}

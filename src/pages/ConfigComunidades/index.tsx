@@ -1,11 +1,14 @@
 import { Button, Card, Flex } from "antd";
-import React, { MouseEvent, } from "react";
+import React, { MouseEvent, useEffect, } from "react";
 
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin, Listy, Typography, message } from "antd";
 import { useConfigComunidadesApp } from "../../hooks/useConfigApp/useConfigComunidades";
 import { useNavigate } from 'react-router'
 import { useConfig } from "../../context/Config";
+import { api } from "../../utils/axios";
+import { stringify } from "qs";
+import { useAuth } from "../../context/Auth";
 
 
 
@@ -14,9 +17,57 @@ const { Title } = Typography
 
 export function Comunidades() {
 
-  const { syncCommunities, comunitiesNotRegister, isLoading, SetCurrentStep } = useConfig()
+  const { syncCommunities, comunitiesNotRegister, isLoading, SetCurrentStep, setComunitiesNotRegister, setIsLoading } = useConfig()
+  const {user} = useAuth()
   const [msg, contextHolder] = message.useMessage()
   const navigate = useNavigate()
+
+
+  useEffect(() => {
+    async function verifyAmountComunities() {
+
+      setIsLoading(true)
+      const configReq = stringify({
+        fields: ["nome", "theosId", "centroCustoId", "id"],
+        filters: {
+          paroquia: {
+            documentId: {
+              $eq: user?.paroquia.documentId
+            }
+          }
+        },
+        pagination: {
+          page: 1,
+          pageSize: 100,
+        },
+      });
+
+      const comunidades = await window.api.syncComunidades();
+      const { data } = await api.get("/comunidades?" + configReq);
+      const strapiComunidades = data.data as IListComunidades[];
+
+
+      // percorremos a lista de comunidades para achar os itens que nao existem
+      // no nosso banco de dados "paroquiAuto"
+
+      const isDiferentComunidades = comunidades
+        .map((item) => {
+          const isNoExistInParoquiAuto = strapiComunidades.find(
+            (comunidade) => comunidade.theosId === item.theosId,
+          );
+          if (!isNoExistInParoquiAuto) {
+            return item;
+          }
+        })
+        .filter((coleta) => coleta !== undefined);
+      setComunitiesNotRegister(isDiferentComunidades)
+
+      setIsLoading(false)
+    }
+
+    verifyAmountComunities()
+
+  }, [user])
 
   async function handleSyncComunities(e: MouseEvent) {
     e.preventDefault()
@@ -28,7 +79,7 @@ export function Comunidades() {
   }
 
 
-  function handleNavigateNextPage(e: MouseEvent){
+  function handleNavigateNextPage(e: MouseEvent) {
     e.preventDefault()
     SetCurrentStep(2)
     navigate('/register-config/fieis')
@@ -75,13 +126,13 @@ export function Comunidades() {
 
       {comunitiesNotRegister.length < 1 && (
         <Button
-        type="primary"
-        style={{margin: '10px 0'}}
-        size="large"
-        onClick={handleNavigateNextPage}
-      >
-        Seguir Para Sincronizar Fieis
-      </Button>)}
+          type="primary"
+          style={{ margin: '10px 0' }}
+          size="large"
+          onClick={handleNavigateNextPage}
+        >
+          Seguir Para Sincronizar Fieis
+        </Button>)}
     </>
   );
 }
