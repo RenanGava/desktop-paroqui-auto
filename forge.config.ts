@@ -14,9 +14,7 @@ const config: ForgeConfig = {
   },
   rebuildConfig: {},
   makers: [
-    new MakerWix({
-      icon: './favicon.png'
-    }),
+    new MakerWix({}),
     // new MakerSquirrel({}),
     // new MakerZIP({}, ['darwin']),
     // new MakerRpm({}),
