@@ -54,57 +54,12 @@ export function ConfigContextProvider({ children }: ConfigProviderProps) {
   // Toast Message
   const [messageApi, contextHolder] = message.useMessage()
 
-
-  useEffect(() => {
-    async function verifyAmountComunities() {
-
-      setIsLoading(true)
-      const configReq = stringify({
-        fields: ["nome", "theosId", "centroCustoId", "id"],
-        filters: {
-          paroquia: {
-            documentId: {
-              $eq: user?.paroquia.documentId
-            }
-          }
-        },
-        pagination: {
-          page: 1,
-          pageSize: 100,
-        },
-      });
-
-      const comunidades = await window.api.syncComunidades();
-      const { data } = await api.get("/comunidades?" + configReq);
-      const strapiComunidades = data.data as IListComunidades[];
-
-
-      // percorremos a lista de comunidades para achar os itens que nao existem
-      // no nosso banco de dados "paroquiAuto"
-
-      const isDiferentComunidades = comunidades
-        .map((item) => {
-          const isNoExistInParoquiAuto = strapiComunidades.find(
-            (comunidade) => comunidade.theosId === item.theosId,
-          );
-          if (!isNoExistInParoquiAuto) {
-            return item;
-          }
-        })
-        .filter((coleta) => coleta !== undefined);
-      setComunitiesNotRegister(isDiferentComunidades)
-
-      setIsLoading(false)
-    }
-
-    
-    
-    verifyAmountComunities();
-  }, [user]);
   
 
   async function syncCommunities() {
 
+    console.log('Sync', user);
+    
     try {
       setIsLoading(true)
       const comunidades = await window.api.syncComunidades();
@@ -131,7 +86,7 @@ export function ConfigContextProvider({ children }: ConfigProviderProps) {
 
         paroquia: {
           documentId: {
-            $eq: "cznl0z20a3ftwwsly00eyssg"
+            $eq: user?.paroquia.documentId
           }
         }
 
@@ -162,9 +117,10 @@ export function ConfigContextProvider({ children }: ConfigProviderProps) {
             },
           }
         }
-      }).filter(findFiel => findFiel !== undefined)
+      }).filter(fiel => fiel !== undefined)
 
-    }).map( fiel => fiel[0])
+    }).map(fiel => fiel[0])
+  
 
 
     const resFieis = await api.post('/fieis/fielSync', fieisCreateModel)

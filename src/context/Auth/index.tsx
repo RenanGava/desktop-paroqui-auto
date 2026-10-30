@@ -24,7 +24,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const [isLoading, setIsLoading] = useState(false)
     const authenticated = !!user
 
-    
+
 
     useEffect(() => {
 
@@ -40,7 +40,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                     Email: res.data.paroquia.theosEmail,
                     Senha: res.data.paroquia.theosPass
                 })
-                
+
             })
             .catch(err => {
                 console.log(err);
@@ -82,7 +82,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         window.localStorage.removeItem('@rf-jwt')
     }
 
-    async function register({ email, password, username }: ICreateUser) {
+    async function register({ email, password, username, theosEmail, theosPassword }: IRegisterFormData) {
         try {
             setIsLoading(true)
             const resResgister = await api.post('/auth/local/register', {
@@ -91,14 +91,45 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 username
             })
 
-            setUser(resResgister.data.user)
-            window.localStorage.setItem('@jwt', resResgister.data.jwt)
-            window.localStorage.setItem('@rf-jwt', resResgister.data.refreshToken)
+            const {user, jwt, refreshToken} = resResgister.data
 
-            return resResgister.data.user
+            window.localStorage.setItem('@jwt', jwt)
+            window.localStorage.setItem('@rf-jwt', refreshToken)
+
+            const theosData = await window.api.loginTheos({
+                Email: theosEmail,
+                Senha: theosPassword 
+            })
+
+            window.local.saveData({
+                Email: theosPassword,
+                Senha: theosPassword 
+            })
+
+            const resParoqui = await api.post('/paroquias', {
+                data: {
+                    ...theosData,
+                    user: {
+                        connect: [
+                            { documentId: user.documentId }
+                        ]
+                    }
+                }
+            }, {
+                headers:{
+                    Authorization: `Bearer ${jwt}`
+                }
+            })
+            // pvaguadalupe@gmail.com
+
+            setUser({...user, paroquia: resParoqui.data.data})
+
+
+            return {...user, paroquia: resParoqui.data.data}
         }
         catch (error) {
-            console.log(error);
+            setIsLoading(false)
+            throw error
         }
         finally {
             setIsLoading(false)

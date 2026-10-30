@@ -24,11 +24,7 @@ export function ConfigFieis() {
       const theosFieis = await window.api.syncFieis()
       // remover Itens Duplicados
       const fieisRemoveDuplicated = [...new Map(theosFieis.map(fiel => [fiel.cpf, fiel])).values()]
-      console.log('Verificar', fieisRemoveDuplicated);
-
-
-
-
+  
       const res = await api.post('/fieis/verifyFieis', fieisRemoveDuplicated)
       const fieisNotRegister = res.data as IListFiel[]
 

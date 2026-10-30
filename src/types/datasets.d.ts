@@ -2,6 +2,14 @@ export { };
 
 declare global {
 
+  interface IRegisterFormData {
+    username: string;
+    email: string;
+    password: string;
+    theosEmail: string
+    theosPassword: string
+  }
+
   interface SelectDate {
     initDate: string;
     lastdate: string;

@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router';
 import { Container, Content } from './styles';
 
 
+
 export function RegisterPage() {
 
   const [form] = Form.useForm();
@@ -16,39 +17,11 @@ export function RegisterPage() {
   const navigate = useNavigate()
 
 
-  async function handleRegister(formValues: any) {
-
+  async function handleRegister(formValues: IRegisterFormData) {
+    
     try {
 
-      const user = await register({
-        email: formValues.email,
-        password: formValues.password,
-        username: formValues.username
-      })
-
-      const theosData = await window.api.loginTheos({
-        Email: formValues.theosEmail,
-        Senha: formValues.theosPassword
-      })
-
-      window.local.saveData({
-        Email: formValues.theosEmail,
-        Senha: formValues.theosPassword
-      })
-
-      await api.post('/paroquias', {
-        data: {
-          ...theosData,
-          user: {
-            connect: [
-              { documentId: user.documentId }
-            ]
-          }
-        }
-      }, {
-        timeout: 5000
-      })
-
+      const user = await register(formValues)
 
       SetCurrentStep(currentStep+1)
       navigate('/register-config/comunidades')

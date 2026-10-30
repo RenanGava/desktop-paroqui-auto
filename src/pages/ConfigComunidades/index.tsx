@@ -18,7 +18,7 @@ const { Title } = Typography
 export function Comunidades() {
 
   const { syncCommunities, comunitiesNotRegister, isLoading, SetCurrentStep, setComunitiesNotRegister, setIsLoading } = useConfig()
-  const {user} = useAuth()
+  const { user } = useAuth()
   const [msg, contextHolder] = message.useMessage()
   const navigate = useNavigate()
 
@@ -27,13 +27,18 @@ export function Comunidades() {
     async function verifyAmountComunities() {
 
       setIsLoading(true)
+
+      const comunidades = await window.api.syncComunidades();
       const configReq = stringify({
         fields: ["nome", "theosId", "centroCustoId", "id"],
         filters: {
           paroquia: {
-            documentId: {
-              $eq: user?.paroquia.documentId
+            id: {
+              $eq: user?.paroquia.id
             }
+          },
+          theosId: {
+            $in: comunidades.map(com => com.theosId)
           }
         },
         pagination: {
@@ -41,8 +46,6 @@ export function Comunidades() {
           pageSize: 100,
         },
       });
-
-      const comunidades = await window.api.syncComunidades();
       const { data } = await api.get("/comunidades?" + configReq);
       const strapiComunidades = data.data as IListComunidades[];
 
@@ -74,6 +77,7 @@ export function Comunidades() {
     try {
       await syncCommunities()
     } catch (error) {
+      console.log(error);
       msg.error('Ocorreu Algum Erro')
     }
   }

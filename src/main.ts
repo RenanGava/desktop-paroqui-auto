@@ -1,11 +1,5 @@
 import started from "electron-squirrel-startup";
 import { app, BrowserWindow } from "electron";
-import {
-  updateElectronApp,
-  UpdateSourceType,
-  makeUserNotifier,
-} from "update-electron-app";
-import electronLogger from "electron-log";
 import path from "node:path";
 import "./services/electron/fieis";
 import "./services/electron/coletas";
@@ -14,7 +8,7 @@ import "./services/electron/comunidade";
 import "./services/electron/ofertas";
 import "./services/global/storage";
 import "./services/electron/login"
-import { clearKeys } from "./utils/storage";
+import 'dotenv/config'
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -24,15 +18,16 @@ if (started) {
 const createWindow = async () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1280,
+    height: 720,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
       nodeIntegration: false,
     },
   });
-  // mainWindow.setMenu(null);
+  
+  process.env.NODE_ENV !== "development" && mainWindow.setMenu(null)
 
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
@@ -55,12 +50,6 @@ const createWindow = async () => {
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
   createWindow();
-  updateElectronApp({
-    repo: "RenanGava/desktop-paroqui-auto",
-    updateInterval: "1h",
-    logger: electronLogger,
-    notifyUser: true
-  });
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
