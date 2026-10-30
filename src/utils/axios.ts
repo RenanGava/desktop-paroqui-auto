@@ -4,9 +4,11 @@ import axios, {
   InternalAxiosRequestConfig,
 } from "axios";
 
-const URL = import.meta.env.DEV ? 'http://localhost:1337/api': import.meta.env.VITE_API_URL
+const URL = import.meta.env.DEV ? 'http://localhost:1337/api': import.meta.env.API_URL
 
 console.log(import.meta.env.DEV);
+console.log(import.meta.env.API_URL);
+console.log(import.meta.env.VITE_API_URL);
 
 const api = axios.create({
   baseURL: URL,
