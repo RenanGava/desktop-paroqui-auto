@@ -6,6 +6,7 @@ import axios, {
 
 const URL = import.meta.env.DEV ? 'http://localhost:1337/api': import.meta.env.VITE_API_URL
 
+console.log(import.meta.env.DEV);
 
 const api = axios.create({
   baseURL: URL,
