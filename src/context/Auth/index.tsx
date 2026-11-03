@@ -102,7 +102,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             })
 
             window.local.saveData({
-                Email: theosPassword,
+                Email: theosEmail,
                 Senha: theosPassword 
             })
 
