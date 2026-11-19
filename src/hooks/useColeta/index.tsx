@@ -63,6 +63,9 @@ export function useColeta() {
   }, []);
 
   async function getColetas(initiDate: string, lastDate: string, selectedCommunity: IListComunidades) {
+
+    console.log(selectedCommunity);
+    
     const configRequest = stringify(
       {
         fields: ["documentId", "data_lancamento", "valor"],

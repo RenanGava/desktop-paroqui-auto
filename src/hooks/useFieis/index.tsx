@@ -101,6 +101,7 @@ export function useFieis() {
                     }
                 }
             },
+            populate: ['comunidade'],
             pagination: {
                 page: selectedPage,
                 pageSize: 10

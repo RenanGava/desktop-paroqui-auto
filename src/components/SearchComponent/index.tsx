@@ -78,6 +78,8 @@ export function SearchComponent({
                 placeholder='Selecione a Comunidade'
                 onChange={(val) => {
                     const findCommunity = comunities.find(com => com.documentId === val)
+                    console.log(findCommunity);
+                    
 
                     setSelectedCommunity(findCommunity!)
                 }}

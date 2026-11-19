@@ -101,8 +101,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
             })
 
             window.local.saveData({
-                Email: theosPassword,
-                Senha: theosPassword
+                Email: theosEmail,
+                Senha: theosPassword 
             })
 
             const resParoqui = await api.post('/paroquias', {
