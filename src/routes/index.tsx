@@ -20,6 +20,7 @@ import { RegisterRoutes } from "./ConfigLayout";
 import { LoginPage } from "../pages/Home/Login";
 import { RegisterPage } from "../pages/Home/Register";
 import { ConfigContextProvider } from "../context/Config";
+import { ConfigUsers } from "../pages/ConfigUsers";
 
 
 interface IPrivateProps {
@@ -74,7 +75,8 @@ export function MainRouter() {
             <Route element={<ColetaDash />} path="/coleta" />
             <Route element={<OfertaDash />} path="/oferta" />
             <Route element={<FieisDash />} path="/fieis" />
-            <Route element={<ConfigColetas />} path="coletas" />
+            <Route element={<ConfigColetas />} path="/conf-coletas" />
+            <Route element={<ConfigUsers/>} path="/conf-users"/>
           </Route>
           <Route element={
             <ConfigContextProvider>

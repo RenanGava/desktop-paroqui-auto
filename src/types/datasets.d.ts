@@ -120,4 +120,13 @@ declare global {
       centroCustoId: string;
     }
   }
+
+  interface IBlockedUser{
+    id: number
+    key: number | string
+    documentId: string
+    blocked: boolean
+    username: string
+    comunidade: IListComunidades
+  }
 }

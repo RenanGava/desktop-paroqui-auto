@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Container, Content, HeaderMenu } from "./style";
-import { Menu } from "antd";
 import type { MenuProps } from "antd";
 import { Link, useLocation } from "react-router";
 
@@ -25,20 +24,16 @@ const items: MenuItem[] = [
   {
     key: 'config',
     label: 'Config App',
-    disabled: true,
+    disabled: false,
     children: [
       {
-        label: (<Link to={"config/coletas"}>Configurar Lançamentos e Coletas</Link>),
+        label: (<Link to={"/conf-coletas"}>Configurar Lançamentos e Coletas</Link>),
         key: 'config-coletas',
       },
       {
-        label: (<Link to={"/config/fieis"}>Configurar Fieis</Link>),
-        key: 'config-fieis',
+        label: (<Link to={"/conf-users"}>Liberar Acesso de Usuários</Link>),
+        key: 'users-access',
       },
-      {
-        label: (<Link to={"/config/comunidades"}>Configurar Comunidades</Link>),
-        key: 'config-comunidades',
-      }
     ]
   }
 ]

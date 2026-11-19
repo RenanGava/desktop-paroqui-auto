@@ -50,7 +50,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }, [])
 
 
-
     async function login(identifier: string, password: string) {
         try {
             setIsLoading(true)
@@ -58,15 +57,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 identifier: identifier,
                 password: password
             })
-
-            console.log(resLogin);
-
-
-            setUser(resLogin.data.user)
             window.localStorage.setItem('@jwt', resLogin.data.jwt)
             window.localStorage.setItem('@rf-jwt', resLogin.data.refreshToken)
 
-            return resLogin.data.user
+            const { data: userData } = await api.get(`/users/${resLogin.data.user.id}?populate[0]=paroquia`)
+            
+
+            setUser(userData)
+
+            return userData
         }
         catch (error) {
             console.log(error);
@@ -91,19 +90,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 username
             })
 
-            const {user, jwt, refreshToken} = resResgister.data
+            const { user, jwt, refreshToken } = resResgister.data
 
             window.localStorage.setItem('@jwt', jwt)
             window.localStorage.setItem('@rf-jwt', refreshToken)
 
             const theosData = await window.api.loginTheos({
                 Email: theosEmail,
-                Senha: theosPassword 
+                Senha: theosPassword
             })
 
             window.local.saveData({
                 Email: theosPassword,
-                Senha: theosPassword 
+                Senha: theosPassword
             })
 
             const resParoqui = await api.post('/paroquias', {
@@ -116,16 +115,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
                     }
                 }
             }, {
-                headers:{
+                headers: {
                     Authorization: `Bearer ${jwt}`
                 }
             })
             // pvaguadalupe@gmail.com
 
-            setUser({...user, paroquia: resParoqui.data.data})
+            setUser({ ...user, paroquia: resParoqui.data.data })
 
 
-            return {...user, paroquia: resParoqui.data.data}
+            return { ...user, paroquia: resParoqui.data.data }
         }
         catch (error) {
             setIsLoading(false)
