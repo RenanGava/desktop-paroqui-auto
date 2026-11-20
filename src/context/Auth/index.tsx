@@ -119,7 +119,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                     Authorization: `Bearer ${jwt}`
                 }
             })
-            // pvaguadalupe@gmail.com
+            
 
             setUser({ ...user, paroquia: resParoqui.data.data })
 
