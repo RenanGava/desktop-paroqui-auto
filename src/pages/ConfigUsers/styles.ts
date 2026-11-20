@@ -6,11 +6,11 @@ import styled from 'styled-components'
 export const Container = styled.div`
     width: 100%;
     border-radius: 5px;
+    height: 100vh;
     background-color: aliceblue;
     display: flex;
     flex-direction: column;
     align-items: center;
-    
 
 
 

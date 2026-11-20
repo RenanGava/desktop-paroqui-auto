@@ -1,6 +1,5 @@
-import React, {  } from "react";
+import React, { useRef } from "react";
 import { Button, Table, Switch, Flex, Tooltip, Popconfirm } from "antd";
-
 import { Container, Content } from "./styles";
 import Column from "antd/es/table/Column";
 import { PencilLine, SendHorizonal, Trash } from "lucide-react"
@@ -18,7 +17,7 @@ export function ConfigColetas() {
     handleToggleStatus
   } = useConfigColetaApp();
 
-
+  
   return (
     <Container>
 

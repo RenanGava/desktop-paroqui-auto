@@ -126,7 +126,9 @@ declare global {
     key: number | string
     documentId: string
     blocked: boolean
+    confirmed: boolean
     username: string
+    email: string
     comunidade: IListComunidades
   }
 }

@@ -20,12 +20,13 @@ const theosApi = axios.create({
 
 theosApi.interceptors.response.use(
   (config) => {
+    console.log('Respostas',config.status);
     
     return config;
   },
   async (error: AxiosError) => {
 
-    console.log(error.response?.status);
+    console.log('Resposta Erro',error.response?.status);
     
     
     if (error.response?.status === 401 || error.response?.status === 500) {

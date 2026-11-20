@@ -1,14 +1,9 @@
 import axios, {
   AxiosError,
-  AxiosInterceptorManager,
-  InternalAxiosRequestConfig,
 } from "axios";
 
-const URL = import.meta.env.DEV ? 'http://localhost:1337/api': import.meta.env.VITE_API_URL
+const URL = import.meta.env.DEV ? 'http://localhost:80/api': import.meta.env.VITE_API_URL
 
-console.log("URL FRONT",import.meta.env.DEV);
-console.log("URL FRONT", URL);
-console.log("URL FRONT",import.meta.env.VITE_API_URL);
 
 const api = axios.create({
   baseURL: URL,

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Button, Table, Switch, Flex, Tooltip, Popconfirm, TabPaneProps, TableProps } from "antd";
+import { Button, Table, Switch, Flex, Tooltip, Popconfirm, TabPaneProps, TableProps, message } from "antd";
 
 import { Container, Content } from "./styles";
 import { api } from "../../utils/axios";
 import { stringify } from "qs";
 import { useAuth } from "../../context/Auth";
-import { SwitchChangeEventHandler } from "antd/es/switch";
 
 const cols: TableProps<IBlockedUser>['columns'] = [
   {
@@ -30,6 +29,7 @@ export function ConfigUsers() {
   const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const [blockedUsers, setBlockedUsers] = useState<IBlockedUser[]>([])
+  const [messageApi, context] = message.useMessage()
 
   const { Column } = Table
 
@@ -60,20 +60,28 @@ export function ConfigUsers() {
 
 
   async function handleChangeStatus(status: boolean, user: IBlockedUser) {
-    console.log(!status);
-    
-    const updatedUser = await api.put(`users/${user.id}`, {
-      data:{
-        blocked: !status
-      }
-    })
 
-    console.log('Teste',updatedUser.data);
-    
+    try {
+      await api.post(`/auth/send-email-confirmation`, {
+        email: user.email
+      })
+
+      messageApi.success(`Usuário ${user.username} Liberado`)
+      setBlockedUsers(prevState => prevState.map(usr => {
+
+        if (usr.documentId === user.documentId) {
+          usr.confirmed = status
+        }
+        return usr
+      }))
+    } catch (error) {
+      messageApi.error(`Ocorreu um Erro ao Liberar${user.username}`)
+    }
 
   }
   return (
     <Container>
+      {context}
       <h5>Liberar Usuários</h5>
       <Content>
         <Table<IBlockedUser>
@@ -86,7 +94,7 @@ export function ConfigUsers() {
               title: 'Liberado?',
               render(val) {
                 return <Switch
-                  checked={!val.blocked}
+                  checked={val.confirmed}
                   onChange={(e) => {
                     handleChangeStatus(e, val as IBlockedUser)
                   }
